@@ -1,0 +1,9 @@
+/.idea
+/.gradle
+/config.json
+/src/test
+/build
+/gradle
+/profile
+/data
+/settings
