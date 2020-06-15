@@ -1,6 +1,6 @@
 package de.mtorials.dial.entities
 
-import de.mtorials.dial.actions.UserFuture
+import de.mtorials.dial.entityfutures.UserFuture
 
 interface Member : Entity {
     val user: UserFuture

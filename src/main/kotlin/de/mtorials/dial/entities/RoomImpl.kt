@@ -1,7 +1,7 @@
 package de.mtorials.dial.entities
 
-import de.mtorials.dial.actions.RoomFuture
-import de.mtorials.dial.actions.UserFuture
+import de.mtorials.dial.entityfutures.RoomFuture
+import de.mtorials.dial.entityfutures.UserFuture
 import de.mtorials.dial.enums.JoinRule
 import de.mtorials.dial.enums.Membership
 import de.mtorials.dial.mevents.room.MRoomJoinRules

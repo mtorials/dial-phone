@@ -2,12 +2,12 @@
 
 *Work in progress*
 
-A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK written in Kotlin for JVM
-using coroutines.
+A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK written in Kotlin for JVM.
+The library uses Jackson and Kotlin coroutines.
 
 ## Getting Started
 
-Currently, you have to include the SDK as jar file. Download it under releases.
+Currently, you have to include the SDK as jar file. Download it under releases (if available).
 
 To use the SDK first create the DialPhone object.
 ```kotlin
@@ -34,10 +34,24 @@ To react to events you have to implement either the `Listener` interface
 or one of the abstract classes `Listener Adapter` or `Command Adapter` if you want to use
 the command feature of this SDK to use it as a bot.
 You can pass these as parameters of the `DialPhone` constructor or by adding them with:
-All events and entities also have a `phone` property to access the `DialPhone` object.
+All events, entity futures and entities also have a `phone` property to access the `DialPhone` object.
 
 ```kotlin
 phone.addListener(MyListener())
+```
+
+### Entities
+
+To get a Room or User you first have to get the corresponding EntityFuture object.
+```kotlin
+val myRoomFuture : RoomFuture = phone.getJoinedRoomFutureById("!YIqYutrrBUdGDombnI:mtorials.de")
+    ?: throw Exception("Not Found!")
+```
+You can perform actions on the EntityFuture. To get the entity data you have to receive it first:
+```kotlin
+myRoomFuture.sendMessage("Hi!")
+val myRoom : Room = myRoomFuture.receive()
+println(myRoom.name)
 ```
 
 ### Sending Events
@@ -47,6 +61,6 @@ phone.addListener(MyListener())
 There are infix extension functions that allow you to react to an event easily.
 
 ```kotlin
-// RoomMessageReceivedEvent
+// if event is RoomMessageReceivedEvent
 event answer "I received a message!"
 ```

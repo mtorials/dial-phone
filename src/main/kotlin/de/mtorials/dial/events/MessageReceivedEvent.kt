@@ -1,7 +1,7 @@
 package de.mtorials.dial.events
 
 import de.mtorials.dial.DialPhone
-import de.mtorials.dial.actions.RoomFuture
+import de.mtorials.dial.entityfutures.RoomFuture
 import de.mtorials.dial.mevents.room.MRoomMessage
 
 class MessageReceivedEvent(

@@ -26,7 +26,7 @@ fun main() {
     val job1 = GlobalScope.launch { phone.sync() }
     runBlocking {
         val myRoom : Room = (phone.getJoinedRoomFutureById("!YIqYutrrBUdGDombnI:mtorials.de")
-            ?: throw RuntimeException("Not Found")).complete()
+            ?: throw RuntimeException("Not Found")).receive()
         myRoom.members.forEach { member -> println(member.displayName) }
         println(myRoom.avatarUrl)
         println(myRoom.name)

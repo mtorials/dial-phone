@@ -1,8 +1,7 @@
 package de.mtorials.dial
 
-import de.mtorials.dial.actions.RoomFuture
-import de.mtorials.dial.actions.UserFuture
-import de.mtorials.dial.responses.DiscoveredRoom
+import de.mtorials.dial.entityfutures.RoomFuture
+import de.mtorials.dial.entityfutures.UserFuture
 import kotlinx.coroutines.runBlocking
 import de.mtorials.dial.listener.Listener
 
