@@ -34,7 +34,6 @@ To react to events you have to implement either the `Listener` interface
 or one of the abstract classes `Listener Adapter` or `Command Adapter` if you want to use
 the command feature of this SDK to use it as a bot.
 You can pass these as parameters to the `DialPhone` constructor or add them later with:
-All events, entity futures and entities also have a `phone` property to access the `DialPhone` object.
 
 ```kotlin
 phone.addListener(MyListener())
@@ -53,6 +52,7 @@ myRoomFuture.sendMessage("Hi!")
 val myRoom : Room = myRoomFuture.receive()
 println(myRoom.name)
 ```
+All events, entity futures and entities also have a `phone` property to access the `DialPhone` object.
 
 ### Sending Events
 
