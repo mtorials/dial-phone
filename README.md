@@ -5,8 +5,6 @@
 A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK written in Kotlin for JVM.
 The library uses Jackson and Kotlin coroutines.
 
-![Made for Matrix](https://matrix.org/docs/projects/images//made-for-matrix.png)
-
 ## Getting Started
 
 Currently, you have to include the SDK as jar file. Download it under releases (if available).
