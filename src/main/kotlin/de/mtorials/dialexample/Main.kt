@@ -9,18 +9,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.File
 
+// Simple config Map
 val config : Map<String, String> =
     jacksonObjectMapper().readValue(File("config.json").readText(Charsets.UTF_8))
 
-val bridgedRoomIDAndServerIDChannelIDPair: MutableList<Pair<Pair<String, String>, String>> = mutableListOf()
-
 fun main() {
 
-    var listener : BridgeListener
+    val myListener = ExampleListener()
 
     val phone = DialPhone(
         homeServerURL = config["homeServerUrl"] ?: throw Error(),
-        token = config["matrixToken"] ?: throw Error()
+        token = config["matrixToken"] ?: throw Error(),
+        listeners = listOf(myListener)
     )
 
     val job1 = GlobalScope.launch { phone.sync() }
@@ -35,4 +35,3 @@ fun main() {
         job1.join()
     }
 }
-
