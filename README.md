@@ -1,5 +1,7 @@
 # DialPhone
 
+*Work in progress*
+
 A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK written in Kotlin for JVM
 using coroutines.
 
