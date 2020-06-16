@@ -20,7 +20,7 @@ class APIRequests(
     subTypes: Array<KClass<out MatrixEvent>>
 ) {
     private val mapper = jacksonObjectMapper()
-    private var tid = Random(System.currentTimeMillis().toInt()).nextInt()
+    private val random = Random(System.currentTimeMillis().toInt() * 2834)
 
     init { subTypes.forEach { mapper.registerSubtypes(it.java) } }
 
@@ -34,7 +34,7 @@ class APIRequests(
             .filterIsInstance<JsonTypeName>()[0].value
         return request<EventResponse>(
             method = Method.PUT,
-            path = "rooms/${encode(roomID)}/send/${typeName}/$tid",
+            path = "rooms/${encode(roomID)}/send/${typeName}/${random.nextInt()}",
             parameters = mutableListOf(),
             body = content
         ).id
@@ -52,7 +52,6 @@ class APIRequests(
         request["Authorization"] = "Bearer ${phone.token}"
         request["Content-Type"] = "application/json"
         if (body != null) request.jsonBody(mapper.writeValueAsString(body))
-        tid = Random(tid).nextInt()
         request
             .awaitStringResponseResult().third
             .fold<Unit>(
