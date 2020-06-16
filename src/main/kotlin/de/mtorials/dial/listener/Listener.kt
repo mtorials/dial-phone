@@ -1,10 +1,8 @@
 package de.mtorials.dial.listener
 
-import de.mtorials.dial.events.MessageReceivedEvent
-import de.mtorials.dial.events.PresenceChangeEvent
+import de.mtorials.dial.DialPhone
+import de.mtorials.dial.mevents.MatrixEvent
 
 interface Listener {
-    suspend fun onRoomMessageReceive(event: MessageReceivedEvent)
-    suspend fun onPrivateMessageReceive(event: MessageReceivedEvent)
-    suspend fun onPresenceChange(event: PresenceChangeEvent)
+    fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone)
 }

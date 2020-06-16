@@ -45,11 +45,7 @@ class Synchronizer(
                         "An Event of Type ${event.javaClass.name} occurred in Room with ID $roomID \n" +
                         "The content is ${event.content}."
                     )
-                    when (event) {
-                        is MRoomMessage -> GlobalScope.launch {
-                            listeners.forEach { it.onRoomMessageReceive(MessageReceivedEvent(roomID, event, phone)) }
-                        }
-                    }
+                    listeners.forEach { it.onRoomEvent(event, roomID, phone) }
                 }
             }
         }
