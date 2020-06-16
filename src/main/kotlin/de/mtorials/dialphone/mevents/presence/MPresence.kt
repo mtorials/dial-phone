@@ -11,7 +11,7 @@ import de.mtorials.example.cutstomevents.PositionEvent
 class MPresence(
         override val sender: String,
         override val content: PresenceContent
-) : MatrixEvent(sender, content) {
+) : MatrixEvent {
     @ContentEventType(MPresence::class)
     data class PresenceContent(
         val presence: String,

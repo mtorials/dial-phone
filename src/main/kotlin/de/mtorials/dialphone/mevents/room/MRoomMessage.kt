@@ -6,14 +6,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName
 import de.mtorials.dialphone.ContentEventType
 import de.mtorials.dialphone.mevents.EventContent
 import de.mtorials.dialphone.mevents.MatrixEvent
+import de.mtorials.dialphone.mevents.MatrixMessageEvent
+import de.mtorials.dialphone.mevents.MatrixStateEvent
 
 @JsonTypeName("m.room.message")
 class MRoomMessage(
-        override val sender: String,
-        @JsonProperty("event_id")
-        val id: String,
-        override val content: Content
-) : MatrixEvent(sender, content) {
+    override val sender: String,
+    @JsonProperty("event_id")
+    override val id: String,
+    override val content: Content
+) : MatrixMessageEvent {
     @JsonIgnoreProperties(ignoreUnknown = true)
     @ContentEventType(MRoomMessage::class)
     data class Content(

@@ -2,9 +2,9 @@ package de.mtorials.dialphone.mevents
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 class EventDefault(
-    sender: String,
-    content: DefaultContent
-) : MatrixEvent(sender, content) {
+    override val sender: String,
+    override val content: DefaultContent
+) : MatrixEvent {
     @JsonIgnoreProperties(ignoreUnknown = true)
     class DefaultContent : EventContent
 }
