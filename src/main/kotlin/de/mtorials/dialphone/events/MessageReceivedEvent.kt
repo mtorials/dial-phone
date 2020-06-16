@@ -7,7 +7,7 @@ import de.mtorials.dialphone.mevents.room.MRoomMessage
 class MessageReceivedEvent(
     val roomFuture: RoomFuture,
     val senderId: String,
-    val content: MRoomMessage.MessageContent,
+    val content: MRoomMessage.Content,
     override val id: String,
     override val phone: DialPhone
 ) : Event(id, phone) {

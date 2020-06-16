@@ -11,7 +11,7 @@ suspend fun RoomActions.sendAndGet(message: String) =
     MessageFuture(this@sendAndGet.sendTextMessage(message), this@sendAndGet.phone)
 
 suspend fun RoomActions.sendTextMessage(content: String) : String = this.sendEvent(
-    content = MRoomMessage.MessageContent(
+    content = MRoomMessage.Content(
         msgType = "m.text",
         body = content
     )
