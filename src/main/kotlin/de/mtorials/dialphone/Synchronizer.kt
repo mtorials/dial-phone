@@ -10,7 +10,6 @@ import de.mtorials.dialphone.responses.SyncResponse
 import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
 
-
 class Synchronizer(
     private val listeners: MutableList<Listener>,
     private val phone: DialPhone,
@@ -58,10 +57,7 @@ class Synchronizer(
             .awaitStringResponseResult().third
             .fold<Unit>(
                 { data -> return@getSyncResponse mapper.readValue(data) },
-                { error ->
-                    println("An error of type ${error.exception} happened: ${error.message}")
-                    throw RuntimeException("Problem Syncing")
-                }
+                { _ -> throw RuntimeException("Problem Syncing") }
             )
         throw RuntimeException("Dont know")
     }
