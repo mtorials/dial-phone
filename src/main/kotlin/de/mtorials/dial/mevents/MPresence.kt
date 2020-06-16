@@ -1,7 +1,9 @@
 package de.mtorials.dial.mevents
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonTypeName
 
+@JsonTypeName("m.presence")
 class MPresence(
         override val sender: String,
         override val content: PresenceContent

@@ -1,26 +1,36 @@
 package de.mtorials.dial
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import de.mtorials.dial.events.MessageReceivedEvent
 import de.mtorials.dial.listener.Listener
-import de.mtorials.dial.responses.SyncResponse
+import de.mtorials.dial.mevents.MPresence
+import de.mtorials.dial.mevents.MatrixEvent
+import de.mtorials.dial.mevents.room.MRoomAvatar
 import de.mtorials.dial.mevents.room.MRoomMessage
+import de.mtorials.dial.mevents.room.MRoomName
+import de.mtorials.dial.responses.SyncResponse
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlin.reflect.KClass
+
 
 class Synchronizer(
     private val listeners: MutableList<Listener>,
-    private val phone: DialPhone
+    private val phone: DialPhone,
+    subTypes: Array<KClass<out MatrixEvent>>
 ) {
 
-    private val syncMapper = jacksonObjectMapper()
+    private val mapper = jacksonObjectMapper()
     private var lastTimeBatch: String? = null
 
     init {
+        subTypes.forEach { mapper.registerSubtypes(it.java) }
         runBlocking {
             // Do not get old events
             lastTimeBatch = getSyncResponse().nextBatch
@@ -60,7 +70,7 @@ class Synchronizer(
         req
             .awaitStringResponseResult().third
             .fold<Unit>(
-                { data -> return@getSyncResponse syncMapper.readValue(data) },
+                { data -> return@getSyncResponse mapper.readValue(data) },
                 { error ->
                     println("An error of type ${error.exception} happened: ${error.message}")
                     throw RuntimeException("Problem Syncing")
