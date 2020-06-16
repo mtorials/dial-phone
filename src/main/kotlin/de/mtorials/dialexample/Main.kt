@@ -16,12 +16,10 @@ val config : Map<String, String> =
 
 fun main() {
 
-    val myListener = ExampleListener()
-
     val phone = DialPhone(
         homeServerURL = config["homeServerUrl"] ?: throw Error(),
         token = config["matrixToken"] ?: throw Error(),
-        listeners = listOf(myListener),
+        listeners = listOf(ExampleListener()),
         customEventTypes = arrayOf(PositionEvent::class)
     )
 

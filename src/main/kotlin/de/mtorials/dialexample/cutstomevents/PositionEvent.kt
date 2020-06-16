@@ -9,9 +9,9 @@ class PositionEvent(
     sender: String,
     content: Content
 ) : MatrixEvent(sender, content) {
-    class Content (
-        x: Int,
-        y: Int,
-        z: Int
+    data class Content(
+        val x: Int,
+        val y: Int,
+        val z: Int
     ) : EventContent
 }
