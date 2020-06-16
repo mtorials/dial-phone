@@ -36,10 +36,6 @@ class Synchronizer(
             val roomEventsByID = a.roomSync.join
             roomEventsByID.forEach { (roomID, roomEvents) ->
                 roomEvents.timeline.events.forEach { event ->
-                    println(
-                        "An Event of Type ${event.javaClass.name} occurred in Room with ID $roomID \n" +
-                        "The content is ${event.content}."
-                    )
                     listeners.forEach { it.onRoomEvent(event, roomID, phone) }
                 }
             }
