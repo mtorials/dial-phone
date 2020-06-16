@@ -9,6 +9,6 @@ class ExampleListener: ListenerAdapter() {
         // Don't answer to your own messages
         if (event.senderId == event.phone.ownId) return
         println("user ${event.senderId} send ${event.content.body}")
-        event answer "Hi!"
+        event answer "Hi"
     }
 }

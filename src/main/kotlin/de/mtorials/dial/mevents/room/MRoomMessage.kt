@@ -3,6 +3,7 @@ package de.mtorials.dial.mevents.room
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeName
+import de.mtorials.dial.mevents.EventContent
 import de.mtorials.dial.mevents.MatrixEvent
 
 @JsonTypeName("m.room.message")
@@ -17,5 +18,5 @@ class MRoomMessage(
         @JsonProperty("msgtype")
         val msgType: String,
         val body: String
-    )
+    ) : EventContent
 }

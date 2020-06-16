@@ -3,7 +3,7 @@ package de.mtorials.dial.mevents
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.databind.annotation.JsonTypeResolver
+import de.mtorials.dial.mevents.presence.MPresence
 import de.mtorials.dial.mevents.room.*
 
 
@@ -29,5 +29,5 @@ import de.mtorials.dial.mevents.room.*
 )
 abstract class MatrixEvent (
     open val sender: String,
-    open val content: Any
+    open val content: EventContent
 )

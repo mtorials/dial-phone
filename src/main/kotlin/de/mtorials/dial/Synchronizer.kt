@@ -1,18 +1,13 @@
 package de.mtorials.dial
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import de.mtorials.dial.events.MessageReceivedEvent
 import de.mtorials.dial.listener.Listener
-import de.mtorials.dial.mevents.MPresence
 import de.mtorials.dial.mevents.MatrixEvent
-import de.mtorials.dial.mevents.room.MRoomAvatar
 import de.mtorials.dial.mevents.room.MRoomMessage
-import de.mtorials.dial.mevents.room.MRoomName
 import de.mtorials.dial.responses.SyncResponse
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
