@@ -19,7 +19,7 @@ fun main() {
     val phone = DialPhone(
         homeServerURL = config["homeServerUrl"] ?: throw Error(),
         token = config["matrixToken"] ?: throw Error(),
-        listeners = listOf(ExampleListener()),
+        listeners = listOf(ExampleListener(), PositionListener()),
         customEventTypes = arrayOf(PositionEvent::class)
     )
 
