@@ -52,7 +52,6 @@ class APIRequests(
         request["Content-Type"] = "application/json"
         if (body != null) request.jsonBody(mapper.writeValueAsString(body))
         tid = Random(tid).nextInt()
-        println(request)
         request
             .awaitStringResponseResult().third
             .fold<Unit>(

@@ -64,3 +64,31 @@ There are infix extension functions that allow you to react to an event easily.
 // if event is RoomMessageReceivedEvent
 event answer "I received a message!"
 ```
+
+## Custom Events
+
+This library has the ability to send custom events. To do so, you have to first create a class that inherits from
+the `MatrixEvent` abstract class. The content field has to be an extra class marked with the
+`EventContent` interface. To specify the name of the event use the `@JsonTypeName` annotation of the Jackson library.
+
+```kotlin
+@JsonTypeName("com.example.matrix.events.myevent")
+class MyEvent(
+    sender: String,
+    content: Content
+) : MatrixEvent(sender, content) {
+    data class Content(
+        val payload: String
+    ) : EventContent
+}
+```
+
+If you want to receive you custom event you have to register it when initializing `DailPhone`.
+
+```kotlin
+val phone = DialPhone(
+    homeServerURL = "matrix.example.com",
+    token = "Your token",
+    customEventTypes = arrayOf(MyEvent::class)
+)
+```

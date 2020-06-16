@@ -19,5 +19,5 @@ class RoomFuture(
             body = content
         )
     ), entityId)
-    //suspend fun sendEvent(event: MatrixEvent) = phone.requestObject.sendEvent()
+    suspend fun sendEvent(event: MatrixEvent) = phone.requestObject.sendEvent(event, entityId)
 }
