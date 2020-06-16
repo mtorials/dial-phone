@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.mevents
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import de.mtorials.dialphone.mevents.presence.MPresence
@@ -27,7 +28,7 @@ import de.mtorials.dialphone.mevents.room.*
     JsonSubTypes.Type(value = MRoomMessage::class),
     JsonSubTypes.Type(value = MRoomAvatar::class)
 )
-abstract class MatrixEvent (
-    open val sender: String,
-    open val content: EventContent
-)
+interface MatrixEvent {
+    val sender: String
+    val content: EventContent
+}
