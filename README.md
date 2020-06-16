@@ -103,7 +103,7 @@ class MyEvent(
 }
 ```
 
-If you want to receive your custom(s) event you have to register these when initializing `DailPhone`.
+If you want to receive your custom events you have to register these when initializing `DailPhone`.
 
 ```kotlin
 val phone = DialPhone(
