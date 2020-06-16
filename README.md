@@ -94,9 +94,9 @@ val phone = DialPhone(
 )
 ```
 
-### Sending Custom Events
+### Send Custom Events
 
-To send a custom event just use the `sendEvent(event: MatrixEvent)` function in the `Room` entity or `RoomFuture`.
+To send a custom event just use the `sendEvent(event: MatrixEvent)` function on the `Room` entity or `RoomFuture`.
 
 ### Receive Custom Events
 
@@ -105,7 +105,7 @@ To receive custom events you have to implement the abstract class `MatrixEventAd
 ```kotlin
 class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class) {
     override fun onMatrixEvent(event: MyEvent, roomFuture: RoomFuture) {
-        println("Received custom event!" + event.content.payload)
+        println("Received custom event with payload ${event.content.payload}.")
     }
 }
 ```
