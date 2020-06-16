@@ -29,18 +29,7 @@ runBlocking {
 }
 ```
 
-### Listening for Events
-
-To react to events you have to implement either the `Listener` interface
-or one of the abstract classes `Listener Adapter` or `Command Adapter` if you want to use
-the command feature of this SDK to use it as a bot.
-You can pass these as parameters to the `DialPhone` constructor or add them later with:
-
-```kotlin
-phone.addListener(MyListener())
-```
-
-### Entities
+## Entities
 
 To get a Room or User you first have to get the corresponding EntityFuture object.
 ```kotlin
@@ -55,7 +44,35 @@ println(myRoom.name)
 ```
 All events, entity futures and entities also have a `phone` property to access the `DialPhone` object.
 
+## Events
+
+### Listening for Events
+
+To react to events you have to implement either the `Listener` interface
+or one of the abstract classes `Listener Adapter` or `Command Adapter` if you want to use
+the command feature of this SDK to use it as a bot.
+You can pass these as parameters to the `DialPhone` constructor or add them later with:
+
+```kotlin
+phone.addListener(MyListener())
+```
+
+
 ### Sending Events
+
+You can use the `sendEvent` method on every type which inherits from RoomActions. These are RoomFuture and Room.
+
+```kotlin
+myRoomFuture.sendEvent(MRoomMessage.Content("Hi!"))
+```
+
+You can also use the extension functions to send specific events like for example:
+
+```kotlin
+myRoomFuture.sendTextMessage("Hi!")
+```
+
+Both examples are equivalent.
 
 #### Reacting to an event
 
@@ -71,6 +88,7 @@ event answer "I received a message!"
 This library has the ability to send custom events. To do so, you have to first create a class that inherits from
 the `MatrixEvent` abstract class. The content field has to be an extra class marked with the
 `EventContent` interface. To specify the name of the event use the `@JsonTypeName` annotation of the Jackson library.
+Use the `@ContentEventType` annotation to specify the according event type of the `EventContent` type.
 
 ```kotlin
 @JsonTypeName("com.example.matrix.events.myevent")
@@ -78,6 +96,7 @@ class MyEvent(
     sender: String,
     content: Content
 ) : MatrixEvent(sender, content) {
+    @ContentEventType(MyEvent::class)
     data class Content(
         val payload: String
     ) : EventContent
