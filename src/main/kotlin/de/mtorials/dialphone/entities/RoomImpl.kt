@@ -40,6 +40,6 @@ class RoomImpl(
         }
     }
 
-    override suspend fun sendEvent(eventType: KClass<out MatrixEvent>, content: EventContent): String =
-        RoomFuture(id, phone).sendEvent(eventType, content)
+    override suspend fun sendEvent(content: EventContent): String =
+        RoomFuture(id, phone).sendEvent(content)
 }
