@@ -13,6 +13,6 @@ class RoomFuture(
     phone: DialPhone
 ) : EntityFuture<Room>(roomID, phone), RoomActions {
     override suspend fun receive() : Room = RoomImpl(this, requestObject.getRoomsState(entityId))
-    override suspend fun sendEvent(eventType: KClass<out MatrixEvent>, content: EventContent) : String =
-        phone.requestObject.sendEvent(eventType, content, entityId)
+    override suspend fun sendEvent(content: EventContent) : String =
+        phone.requestObject.sendEvent(content, entityId)
 }
