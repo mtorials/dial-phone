@@ -115,7 +115,7 @@ val phone = DialPhone(
 
 ### Send Custom Events
 
-To send a custom event just use the `sendEvent(event: MatrixEvent)` function on the `Room` entity or `RoomFuture`.
+To send a custom event just use the `sendEvent(EventContent)`.
 
 ### Receive Custom Events
 
