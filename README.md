@@ -28,6 +28,7 @@ runBlocking {
     phone.sync()
 }
 ```
+
 ### Listening for Events
 
 To react to events you have to implement either the `Listener` interface
@@ -83,7 +84,7 @@ class MyEvent(
 }
 ```
 
-If you want to receive you custom event you have to register it when initializing `DailPhone`.
+If you want to receive your custom(s) event you have to register it when initializing `DailPhone`.
 
 ```kotlin
 val phone = DialPhone(
