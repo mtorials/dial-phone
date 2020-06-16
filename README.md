@@ -115,7 +115,7 @@ val phone = DialPhone(
 
 ### Send Custom Events
 
-To send a custom event just use the `sendEvent(EventContent)`.
+To send a custom event just use the `sendEvent(EventContent)` function.
 
 ### Receive Custom Events
 
