@@ -2,9 +2,11 @@ package de.mtorials.dial.mevents.room
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonTypeName
 import de.mtorials.dial.enums.Membership
 import de.mtorials.dial.mevents.MatrixEvent
 
+@JsonTypeName("m.room.member")
 class MRoomMember(
     sender: String,
     @JsonProperty("event_id")

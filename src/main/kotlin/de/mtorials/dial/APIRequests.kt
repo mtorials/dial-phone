@@ -10,23 +10,27 @@ import de.mtorials.dial.entities.User
 import de.mtorials.dial.responses.*
 import de.mtorials.dial.mevents.MatrixEvent
 import java.net.URLEncoder
+import kotlin.reflect.KClass
 
 class APIRequests(
-    val phone: DialPhone
+    val phone: DialPhone,
+    subTypes: Array<KClass<out MatrixEvent>>
 ) {
     private val mapper = jacksonObjectMapper()
+
+    init { subTypes.forEach { mapper.registerSubtypes(it.java) } }
 
     suspend fun discoverRooms() : RoomDiscovery = request(Method.GET, "publicRooms")
     suspend fun getJoinedRooms() : JoinedRooms = request(Method.GET, "joined_rooms")
     suspend fun getMe() : UserResponse = request(Method.GET, "account/whoami")
     suspend fun getRoomsState(id: String) : Array<MatrixEvent> = request(Method.GET, "rooms/${id}/state")
     suspend fun getUserById(id: String) : User = request(Method.GET, "profile/${id}")
-    suspend fun sendPlainMessage(content: String, roomID: String) : String = request<EventResponse>(
+    suspend fun sendEvent(content: String, roomID: String) : String = request<EventResponse>(
         method = Method.POST,
         path = "rooms/${encode(roomID)}/send/${MESSAGE_EVENT_TYPE}",
         parameters = mutableListOf(),
         body = Message(
-            body = content
+            body = mapper.writeValueAsString(content)
         )).id
 
     private suspend inline fun <reified T> request(
