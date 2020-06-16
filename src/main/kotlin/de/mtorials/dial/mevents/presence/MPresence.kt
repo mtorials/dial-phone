@@ -1,7 +1,9 @@
-package de.mtorials.dial.mevents
+package de.mtorials.dial.mevents.presence
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeName
+import de.mtorials.dial.mevents.EventContent
+import de.mtorials.dial.mevents.MatrixEvent
 
 @JsonTypeName("m.presence")
 class MPresence(
@@ -14,5 +16,5 @@ class MPresence(
         val lastActiveAgo: Int,
         @JsonProperty("currently_active")
         val currentlyActive: Boolean
-    )
+    ) : EventContent
 }

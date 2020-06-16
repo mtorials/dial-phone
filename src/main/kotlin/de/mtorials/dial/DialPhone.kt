@@ -4,7 +4,6 @@ import de.mtorials.dial.entityfutures.RoomFuture
 import de.mtorials.dial.entityfutures.UserFuture
 import kotlinx.coroutines.runBlocking
 import de.mtorials.dial.listener.Listener
-import de.mtorials.dial.mevents.MPresence
 import de.mtorials.dial.mevents.MatrixEvent
 import kotlin.reflect.KClass
 

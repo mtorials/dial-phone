@@ -2,7 +2,7 @@ package de.mtorials.dial.mevents.room
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeName
-import de.mtorials.dial.mevents.EventType
+import de.mtorials.dial.mevents.EventContent
 import de.mtorials.dial.mevents.MatrixEvent
 
 @JsonTypeName("m.room.avatar")
@@ -14,5 +14,5 @@ class MRoomAvatar(
 ) : MatrixEvent(sender, content) {
     data class Content(
         val url: String
-    )
+    ) : EventContent
 }

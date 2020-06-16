@@ -4,8 +4,6 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import de.mtorials.dial.DialPhone
 import de.mtorials.dial.entities.Room
-import de.mtorials.dial.mevents.MPresence
-import de.mtorials.dial.mevents.room.MRoomMessage
 import de.mtorials.dialexample.cutstomevents.PositionEvent
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
