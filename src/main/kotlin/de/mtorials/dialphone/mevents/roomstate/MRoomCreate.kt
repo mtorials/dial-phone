@@ -1,15 +1,12 @@
-package de.mtorials.dialphone.mevents.room
+package de.mtorials.dialphone.mevents.roomstate
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeName
 import de.mtorials.dialphone.ContentEventType
 import de.mtorials.dialphone.mevents.EventContent
-import de.mtorials.dialphone.mevents.MatrixEvent
-import de.mtorials.dialphone.mevents.MatrixStateEvent
-import de.mtorials.example.cutstomevents.PositionEvent
 
-@JsonTypeName("m.room.avatar")
-class MRoomAvatar(
+@JsonTypeName("m.room.create")
+class MRoomCreate(
     override val sender: String,
     @JsonProperty("event_id")
     override val id: String,
@@ -19,8 +16,10 @@ class MRoomAvatar(
     @JsonProperty("prev_content")
     override val prevContent: Content?
 ) : MatrixStateEvent {
-    @ContentEventType(MRoomAvatar::class)
+    @ContentEventType(MRoomCreate::class)
     data class Content(
-        val url: String
-    ) : EventContent
+        @JsonProperty("room_version")
+        val roomVersion: Int,
+        val creator: String
+    ) : StateEventContent
 }

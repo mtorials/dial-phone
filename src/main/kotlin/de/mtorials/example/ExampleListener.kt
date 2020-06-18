@@ -11,6 +11,6 @@ class ExampleListener: ListenerAdapter() {
         if (event.senderId == event.phone.ownId) return
         println("user ${event.senderId} send ${event.content.body}")
         event answer "Hi"
-        event.roomFuture.sendEvent(PositionEvent.Content(1, 3, 5))
+        event.roomFuture.sendMessageEvent(PositionEvent.Content(1, 3, 5))
     }
 }
