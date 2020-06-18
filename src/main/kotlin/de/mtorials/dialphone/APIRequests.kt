@@ -28,7 +28,9 @@ class APIRequests(
     suspend fun discoverRooms() : RoomDiscovery = request(Method.GET, "publicRooms")
     suspend fun getJoinedRooms() : JoinedRooms = request(Method.GET, "joined_rooms")
     suspend fun getMe() : UserResponse = request(Method.GET, "account/whoami")
-    suspend fun getRoomsState(id: String) : Array<MatrixStateEvent> = request(Method.GET, "rooms/${id}/state")
+    suspend fun getRoomsState(id: String) : Array<MatrixStateEvent> =
+        request<Array<MatrixEvent>>(Method.GET, "rooms/${id}/state")
+            .filterIsInstance<MatrixStateEvent>().toTypedArray()
     suspend fun getUserById(id: String) : User = request(Method.GET, "profile/${id}")
     suspend fun sendMessageEvent(
         eventType: KClass<out MatrixEvent>,
