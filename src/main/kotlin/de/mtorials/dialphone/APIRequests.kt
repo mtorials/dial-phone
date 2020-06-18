@@ -34,7 +34,7 @@ class APIRequests(
         content: EventContent,
         roomID: String
     ) : String {
-        val typename = eventType::class.annotations.filterIsInstance<JsonTypeName>()[0].value
+        val typename = eventType.annotations.filterIsInstance<JsonTypeName>()[0].value
         return request<EventResponse>(
             method = Method.PUT,
             path = "rooms/${encode(roomID)}/send/${typename}/${random.nextInt()}",
@@ -48,7 +48,7 @@ class APIRequests(
         roomID: String,
         stateKey: String
     ) : String {
-        val typename = eventType::class.annotations.filterIsInstance<JsonTypeName>()[0].value
+        val typename = eventType.annotations.filterIsInstance<JsonTypeName>()[0].value
         return request<EventResponse>(
             method = Method.PUT,
             path = "rooms/${encode(roomID)}/state/${typename}/${stateKey}",

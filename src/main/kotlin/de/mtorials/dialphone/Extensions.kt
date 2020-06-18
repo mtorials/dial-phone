@@ -2,7 +2,7 @@ package de.mtorials.dialphone
 
 import de.mtorials.dialphone.entities.actions.RoomActions
 import de.mtorials.dialphone.entities.entityfutures.MessageFuture
-import de.mtorials.dialphone.mevents.room.MRoomMessage
+import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

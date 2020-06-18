@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import de.mtorials.dialphone.mevents.presence.MPresence
-import de.mtorials.dialphone.mevents.room.*
-import de.mtorials.dialphone.mevents.roomstate.MRoomCreate
-import de.mtorials.dialphone.mevents.roomstate.MRoomJoinRules
-import de.mtorials.dialphone.mevents.roomstate.MRoomName
+import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
+import de.mtorials.dialphone.mevents.roomstate.*
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
