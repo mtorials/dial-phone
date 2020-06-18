@@ -31,7 +31,7 @@ class APIRequests(
     suspend fun getRoomsState(id: String) : Array<MatrixStateEvent> =
         request<Array<MatrixEvent>>(Method.GET, "rooms/${id}/state")
             .filterIsInstance<MatrixStateEvent>().toTypedArray()
-    suspend fun getUserById(id: String) : User = request(Method.GET, "profile/${id}")
+    suspend fun getUserById(id: String) : UserResponse = request(Method.GET, "profile/${id}")
     suspend fun getEventByIdAndRoomId(id: String, roomId: String) : MatrixEvent =
         request(Method.GET, "rooms/${encode(roomId)}/event/${encode(id)}")
     suspend fun sendMessageEvent(

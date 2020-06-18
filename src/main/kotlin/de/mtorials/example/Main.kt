@@ -36,6 +36,8 @@ fun main() {
         myRoom.members.forEach { member -> println(member.displayName) }
         println(myRoom.avatarUrl)
         println(myRoom.name)
+        val dn = phone.getUserFutureById("@universum:mtorials.de").receive().displayName
+        println(dn)
     }
     runBlocking {
         job1.join()
