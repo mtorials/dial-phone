@@ -15,7 +15,6 @@ suspend fun RoomActions.sendAndGet(message: String) =
 
 suspend fun RoomActions.sendTextMessage(content: String) : String = this.sendMessageEvent(
     content = MRoomMessage.Content(
-        msgType = "m.text",
         body = content
     )
 )
