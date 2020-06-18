@@ -4,6 +4,8 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.Room
+import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
+import de.mtorials.dialphone.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.mevents.roomstate.MRoomName
 import de.mtorials.example.cutstomevents.PositionEvent
 import kotlinx.coroutines.GlobalScope
@@ -31,7 +33,6 @@ fun main() {
         myRoom.members.forEach { member -> println(member.displayName) }
         println(myRoom.avatarUrl)
         println(myRoom.name)
-        // Forbidden
         myRoom.sendStateEvent(MRoomName.Content(name = "Test from kotlin"))
     }
     runBlocking {

@@ -1,20 +1,15 @@
 package de.mtorials.dialphone.entities
 
-import de.mtorials.dialphone.entities.entityfutures.RoomFuture
+import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import de.mtorials.dialphone.entities.entityfutures.UserFuture
 import de.mtorials.dialphone.enums.JoinRule
 import de.mtorials.dialphone.enums.Membership
-import de.mtorials.dialphone.mevents.roomstate.MRoomMember
-import de.mtorials.dialphone.mevents.MatrixEvent
-import de.mtorials.dialphone.mevents.roomstate.MRoomAvatar
 import de.mtorials.dialphone.mevents.roommessage.MessageEventContent
-import de.mtorials.dialphone.mevents.roomstate.MRoomJoinRules
-import de.mtorials.dialphone.mevents.roomstate.MRoomName
-import de.mtorials.dialphone.mevents.roomstate.StateEventContent
+import de.mtorials.dialphone.mevents.roomstate.*
 
 class RoomImpl(
-    action: RoomFuture,
-    stateEvents: Array<MatrixEvent>
+    action: RoomFutureImpl,
+    stateEvents: Array<MatrixStateEvent>
 ) : Room {
     override val phone = action.phone
 
@@ -41,8 +36,8 @@ class RoomImpl(
     }
 
     override suspend fun sendMessageEvent(content: MessageEventContent): String =
-        RoomFuture(id, phone).sendMessageEvent(content)
+        RoomFutureImpl(id, phone).sendMessageEvent(content)
 
     override suspend fun sendStateEvent(content: StateEventContent, stateKey: String): String =
-        RoomFuture(id, phone).sendStateEvent(content, stateKey)
+        RoomFutureImpl(id, phone).sendStateEvent(content, stateKey)
 }

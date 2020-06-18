@@ -1,7 +1,7 @@
 package de.mtorials.dialphone
 
 
-import de.mtorials.dialphone.entities.entityfutures.RoomFuture
+import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import de.mtorials.dialphone.entities.entityfutures.UserFuture
 import kotlinx.coroutines.runBlocking
 import de.mtorials.dialphone.listener.Listener
@@ -29,14 +29,14 @@ class DialPhone(
 
     fun addListener(listener: Listener) = syncObject.addListener(listener)
 
-    suspend fun getJoinedRoomFutures() : List<RoomFuture> =
-        requestObject.getJoinedRooms().roomIds.map { id -> RoomFuture(id, this@DialPhone) }
+    suspend fun getJoinedRoomFutures() : List<RoomFutureImpl> =
+        requestObject.getJoinedRooms().roomIds.map { id -> RoomFutureImpl(id, this@DialPhone) }
 
     fun getUserFutureById(id: String) = UserFuture(id, this)
 
-    suspend fun getJoinedRoomFutureById(id: String) : RoomFuture? =
+    suspend fun getJoinedRoomFutureById(id: String) : RoomFutureImpl? =
         when (getJoinedRoomFutures().map { it.entityId }.contains(id)) {
-            true -> RoomFuture(id, this)
+            true -> RoomFutureImpl(id, this)
             false -> null
         }
 
