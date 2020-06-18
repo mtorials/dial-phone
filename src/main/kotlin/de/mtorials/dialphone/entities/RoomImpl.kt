@@ -18,7 +18,6 @@ class RoomImpl(
 ) : Room {
     override val phone = action.phone
 
-
     override var name: String = "init"
     override val members: MutableList<Member> = mutableListOf()
     override val id: String = action.entityId
