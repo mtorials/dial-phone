@@ -37,7 +37,6 @@ fun main() {
         println(myRoom.avatarUrl)
         println(myRoom.name)
     }
-    myRoom rename "The Name!"
     runBlocking {
         job1.join()
     }
