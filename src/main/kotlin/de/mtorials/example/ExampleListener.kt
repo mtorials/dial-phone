@@ -8,7 +8,6 @@ import de.mtorials.example.cutstomevents.PositionEvent
 
 class ExampleListener: ListenerAdapter() {
     override suspend fun onRoomMessageReceive(event: MessageReceivedEvent) {
-        // Don't answer to your own messages
         if (event.senderId == event.phone.ownId) return
         event.roomFuture rename "[Demo] ${event.content.body}"
     }

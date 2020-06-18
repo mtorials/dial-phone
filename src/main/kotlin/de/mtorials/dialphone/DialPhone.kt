@@ -32,7 +32,7 @@ class DialPhone(
     suspend fun getJoinedRoomFutures() : List<RoomFutureImpl> =
         requestObject.getJoinedRooms().roomIds.map { id -> RoomFutureImpl(id, this@DialPhone) }
 
-    fun getUserFutureById(id: String) = UserFuture(id, this)
+    suspend fun getUserByID(id: String) = requestObject.getUserById(id)
 
     suspend fun getJoinedRoomFutureById(id: String) : RoomFutureImpl? =
         when (getJoinedRoomFutures().map { it.id }.contains(id)) {
