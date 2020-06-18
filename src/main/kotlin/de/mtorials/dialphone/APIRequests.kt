@@ -10,6 +10,7 @@ import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import de.mtorials.dialphone.entities.User
 import de.mtorials.dialphone.mevents.*
 import de.mtorials.dialphone.mevents.roommessage.MatrixMessageEvent
+import de.mtorials.dialphone.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.responses.*
 import java.net.URLEncoder
 import kotlin.random.Random
@@ -27,7 +28,7 @@ class APIRequests(
     suspend fun discoverRooms() : RoomDiscovery = request(Method.GET, "publicRooms")
     suspend fun getJoinedRooms() : JoinedRooms = request(Method.GET, "joined_rooms")
     suspend fun getMe() : UserResponse = request(Method.GET, "account/whoami")
-    suspend fun getRoomsState(id: String) : Array<MatrixEvent> = request(Method.GET, "rooms/${id}/state")
+    suspend fun getRoomsState(id: String) : Array<MatrixStateEvent> = request(Method.GET, "rooms/${id}/state")
     suspend fun getUserById(id: String) : User = request(Method.GET, "profile/${id}")
     suspend fun sendMessageEvent(
         eventType: KClass<out MatrixEvent>,
