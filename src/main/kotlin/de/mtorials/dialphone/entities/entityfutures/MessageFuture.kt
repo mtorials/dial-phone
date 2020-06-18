@@ -4,9 +4,9 @@ import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.Message
 
 class MessageFuture(
-    entityId: String,
-    phone: DialPhone
-) : EntityFutureImpl<Message>(entityId, phone) {
+    val entityId: String,
+    val phone: DialPhone
+) : EntityFuture<Message> {
     override suspend fun receive(): Message {
         TODO("Not yet implemented")
     }
