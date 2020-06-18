@@ -18,14 +18,14 @@ import java.io.File
 val config : Map<String, String> =
     jacksonObjectMapper().readValue(File("config.json").readText(Charsets.UTF_8))
 
-fun main() {
+val phone = DialPhone(
+    homeServerURL = config["homeServerUrl"] ?: throw Error(),
+    token = config["matrixToken"] ?: throw Error(),
+    listeners = listOf(ExampleListener(), PositionListener(), StateListener(), MessageEventListener()),
+    customEventTypes = arrayOf(PositionEvent::class)
+)
 
-    val phone = DialPhone(
-        homeServerURL = config["homeServerUrl"] ?: throw Error(),
-        token = config["matrixToken"] ?: throw Error(),
-        listeners = listOf(ExampleListener(), PositionListener(), StateListener(), MessageEventListener()),
-        customEventTypes = arrayOf(PositionEvent::class)
-    )
+fun main() {
 
     val job1 = GlobalScope.launch { phone.sync() }
 
@@ -36,7 +36,7 @@ fun main() {
         myRoom.members.forEach { member -> println(member.displayName) }
         println(myRoom.avatarUrl)
         println(myRoom.name)
-        val dn = phone.getUserFutureById("@universum:mtorials.de").receive().displayName
+        val dn = phone.getUserByID("@mtorials:mtorials.de").displayName
         println(dn)
     }
     runBlocking {
