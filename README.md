@@ -3,7 +3,7 @@
 *Work in progress*
 
 A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK written in Kotlin for JVM.
-The library uses Jackson and Kotlin coroutines. This SDK is not (yet) intended to be used as full client.
+The library uses Jackson and Kotlin coroutines. This SDK is not (yet) intended to be used as a full client.
 It does only listen to new events and does not keep state of these.
 
 ## Getting Started
