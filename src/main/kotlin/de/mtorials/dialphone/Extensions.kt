@@ -10,7 +10,7 @@ infix fun RoomActions.write(message: String) = GlobalScope.launch { this@write.s
 suspend fun RoomActions.sendAndGet(message: String) =
     MessageFuture(this@sendAndGet.sendTextMessage(message), this@sendAndGet.phone)
 
-suspend fun RoomActions.sendTextMessage(content: String) : String = this.sendEvent(
+suspend fun RoomActions.sendTextMessage(content: String) : String = this.sendMessageEvent(
     content = MRoomMessage.Content(
         msgType = "m.text",
         body = content

@@ -6,9 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName
 import de.mtorials.dialphone.ContentEventType
 import de.mtorials.dialphone.enums.Membership
 import de.mtorials.dialphone.mevents.EventContent
-import de.mtorials.dialphone.mevents.MatrixEvent
-import de.mtorials.dialphone.mevents.MatrixStateEvent
-import de.mtorials.example.cutstomevents.PositionEvent
+import de.mtorials.dialphone.mevents.roomstate.MatrixStateEvent
+import de.mtorials.dialphone.mevents.roomstate.StateEventContent
 
 @JsonTypeName("m.room.member")
 class MRoomMember(
@@ -29,5 +28,5 @@ class MRoomMember(
         val avatarURL: String?,
         @JsonProperty("displayname")
         val displayName: String?
-    ) : EventContent
+    ) : StateEventContent
 }

@@ -8,9 +8,9 @@ import com.github.kittinunf.fuel.core.Method
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import de.mtorials.dialphone.entities.User
-import de.mtorials.dialphone.mevents.EventContent
+import de.mtorials.dialphone.mevents.*
+import de.mtorials.dialphone.mevents.roommessage.MatrixMessageEvent
 import de.mtorials.dialphone.responses.*
-import de.mtorials.dialphone.mevents.MatrixEvent
 import java.net.URLEncoder
 import kotlin.random.Random
 import kotlin.reflect.KClass
@@ -29,12 +29,29 @@ class APIRequests(
     suspend fun getMe() : UserResponse = request(Method.GET, "account/whoami")
     suspend fun getRoomsState(id: String) : Array<MatrixEvent> = request(Method.GET, "rooms/${id}/state")
     suspend fun getUserById(id: String) : User = request(Method.GET, "profile/${id}")
-    suspend fun sendEvent(content: EventContent, roomID: String) : String {
-        val typeName: String = content::class.annotations.filterIsInstance<ContentEventType>()[0].type.annotations
-            .filterIsInstance<JsonTypeName>()[0].value
+    suspend fun sendMessageEvent(
+        eventType: KClass<out MatrixEvent>,
+        content: EventContent,
+        roomID: String
+    ) : String {
+        val typename = eventType::class.annotations.filterIsInstance<JsonTypeName>()[0].value
         return request<EventResponse>(
             method = Method.PUT,
-            path = "rooms/${encode(roomID)}/send/${typeName}/${random.nextInt()}",
+            path = "rooms/${encode(roomID)}/send/${typename}/${random.nextInt()}",
+            parameters = mutableListOf(),
+            body = content
+        ).id
+    }
+    suspend fun sendStateEvent(
+        eventType: KClass<out MatrixEvent>,
+        content: EventContent,
+        roomID: String,
+        stateKey: String
+    ) : String {
+        val typename = eventType::class.annotations.filterIsInstance<JsonTypeName>()[0].value
+        return request<EventResponse>(
+            method = Method.PUT,
+            path = "rooms/${encode(roomID)}/state/${typename}/${stateKey}",
             parameters = mutableListOf(),
             body = content
         ).id
