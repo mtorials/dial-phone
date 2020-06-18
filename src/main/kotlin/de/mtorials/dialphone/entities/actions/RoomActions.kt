@@ -1,17 +1,25 @@
 package de.mtorials.dialphone.entities.actions
 
 import de.mtorials.dialphone.DialPhone
-import de.mtorials.dialphone.mevents.EventContent
 import de.mtorials.dialphone.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.mevents.roomstate.StateEventContent
 
+/**
+ * All actions you can perform on a room
+ */
 interface RoomActions {
     val phone: DialPhone
     /**
-     * Sends an MatrixEvent and returns the Id
+     * Sends an MatrixMessageEvent and returns the Id
      * @param content An EventContent annotated with the event
      * @return The event Id
      */
     suspend fun sendMessageEvent(content: MessageEventContent) : String
+    /**
+     * Sends an MatrixStateEvent and returns the Id
+     * @param content An EventContent annotated with the event
+     * @param stateKey The state key. Mostly empty. See matrix specifications
+     * @return The event Id
+     */
     suspend fun sendStateEvent(content: StateEventContent, stateKey: String = "") : String
 }

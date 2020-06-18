@@ -8,17 +8,11 @@ import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.mevents.roomstate.*
 
 
+/**
+ * Representation of a matrix event
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", defaultImpl = EventDefault::class)
-//@JsonSubTypes(
-//    JsonSubTypes.Type(name = "m.presence", value = MPresence::class),
-//    JsonSubTypes.Type(name = "m.room.join.rules", value = MRoomJoinRules::class),
-//    JsonSubTypes.Type(name = "m.room.create", value = MRoomCreate::class),
-//    JsonSubTypes.Type(name = "m.room.member", value = MRoomMember::class),
-//    JsonSubTypes.Type(name = "m.room.message", value = MRoomMessage::class),
-//    JsonSubTypes.Type(name = "m.room.avatar", value = MRoomAvatar::class),
-//    JsonSubTypes.Type(name = "m.room.name", value = MRoomName::class)
-//)
 @JsonSubTypes(
     JsonSubTypes.Type(value = MPresence::class),
     JsonSubTypes.Type(value = MRoomJoinRules::class),

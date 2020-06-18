@@ -146,7 +146,8 @@ See *Sending Events*.
 
 ### Receive Custom Events
 
-To receive custom events you have to implement the abstract class `MatrixEventAdapter`:
+To receive custom events you have to implement the interface `Listener` directly or
+the abstract class `MatrixEventAdapter`:
 
 ```kotlin
 class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class) {
