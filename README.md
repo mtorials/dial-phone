@@ -3,7 +3,8 @@
 *Work in progress*
 
 A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK written in Kotlin for JVM.
-The library uses Jackson and Kotlin coroutines.
+The library uses Jackson and Kotlin coroutines. This SDK is not (yet) intended to be used as full client.
+It does only listen to new events and does not keep state of these.
 
 ## Getting Started
 
@@ -46,6 +47,28 @@ All events, entity futures and entities also have a `phone` property to access t
 
 ## Events
 
+### Types of events
+
+There classes that represent native Matrix events, all inheriting from `MatrixEvent`, but there are also DialPhone
+events. These DialPhone events offer a higher level api and are more convenient to use.
+
+#### DialPhone Events
+
+- inherit from `DialEvent`
+- are passed to the `ListenerAdapter`
+- contain the `DialPhone` object
+
+These events are passed to the ListenerAdapter and represent a native Matrix event.
+
+#### Matrix Native Events
+
+- inherit from `MatrixEvent`
+- there are multiple sub types (`RoomStateEvent`, `RoomMessageEvent`)
+- can be sent by using the `sendMessageEvent` or `sendStateEvent` method on `RoomAction`.
+- you can use custom matrix events (see *Custom Events*)
+
+See the matrix.org specifications on how Matrix events work.
+
 ### Listening for Events
 
 To react to events you have to implement either the `Listener` interface
@@ -57,13 +80,15 @@ You can pass these as parameters to the `DialPhone` constructor or add them late
 phone.addListener(MyListener())
 ```
 
-
 ### Sending Events
 
-You can use the `sendEvent` method on every type which inherits from RoomActions. These are RoomFuture and Room.
+You can use the `sendMessageEvent` or `sendStateEvent` method on every type which inherits from RoomActions.
+These are RoomFuture and Room.
+To send the event you have to instantiate the Content class inside the actual event class.
+Only matrix events are supported.
 
 ```kotlin
-myRoomFuture.sendEvent(MRoomMessage.Content("Hi!"))
+myRoomFuture.sendMessageEvent(MRoomMessage.Content("Hi!"))
 ```
 
 You can also use the extension functions to send specific events like for example:
@@ -72,11 +97,11 @@ You can also use the extension functions to send specific events like for exampl
 myRoomFuture.sendTextMessage("Hi!")
 ```
 
-Both examples are equivalent.
+In this case both examples are equivalent.
 
 #### Reacting to an event
 
-There are infix extension functions that allow you to react to an event easily.
+There are (infix) extension functions that allow you to react to an DialPhone event easily.
 
 ```kotlin
 // if event is RoomMessageReceivedEvent
@@ -85,21 +110,23 @@ event answer "I received a message!"
 
 ## Custom Events
 
-This library has the ability to send custom events. To do so, you have to first create a class that inherits from
-the `MatrixEvent` abstract class. The content field has to be an extra class marked with the
-`EventContent` interface. To specify the name of the event use the `@JsonTypeName` annotation of the Jackson library.
+This library has the ability to send custom events. To do so, you have to first create a class inheriting from
+the `MatrixEvent` interface or sub classes depending on what type of event you want to create.
+The content field has to be an extra class marked with the according `EventContent` interface.
+To specify the name of the event use the `@JsonTypeName` annotation of the Jackson library.
 Use the `@ContentEventType` annotation to specify the according event type of the `EventContent` type.
 
+An example for a room message event.
 ```kotlin
 @JsonTypeName("com.example.matrix.events.myevent")
 class MyEvent(
     sender: String,
     content: Content
-) : MatrixEvent(sender, content) {
+) : MatrixMessageEvent(sender, content) {
     @ContentEventType(MyEvent::class)
     data class Content(
         val payload: String
-    ) : EventContent
+    ) : MesssageEventContent
 }
 ```
 
@@ -115,7 +142,7 @@ val phone = DialPhone(
 
 ### Send Custom Events
 
-To send a custom event just use the `sendEvent(EventContent)` function.
+See *Sending Events*.
 
 ### Receive Custom Events
 
@@ -128,3 +155,13 @@ class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class) {
     }
 }
 ```
+
+# Possible Future Features
+
+- support for the most used native Matrix events
+- support for all native Matrix events
+- error handling
+- DialPhone events for most used native Matrix events
+- usability for full clients
+- Application API support
+- lazy loading
