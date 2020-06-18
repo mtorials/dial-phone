@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeName
 import de.mtorials.dialphone.ContentEventType
+import de.mtorials.dialphone.enums.MessageType
 
 @JsonTypeName("m.room.message")
 class MRoomMessage(
@@ -16,7 +17,7 @@ class MRoomMessage(
     @ContentEventType(MRoomMessage::class)
     data class Content(
         @JsonProperty("msgtype")
-        val msgType: String = "m.text",
+        val msgType: MessageType = MessageType.TEXT,
         val body: String
     ) : MessageEventContent
 }
