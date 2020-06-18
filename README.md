@@ -47,7 +47,7 @@ All events, entity futures and entities also have a `phone` property to access t
 
 ## Events
 
-### Types of events
+### Types of Events
 
 There classes that represent native Matrix events, all inheriting from `MatrixEvent`, but there are also DialPhone
 events. These DialPhone events offer a higher level api and are more convenient to use.
@@ -60,7 +60,7 @@ events. These DialPhone events offer a higher level api and are more convenient 
 
 These events are passed to the ListenerAdapter and represent a native Matrix event.
 
-#### Matrix Native Events
+#### Matrix Events
 
 - inherit from `MatrixEvent`
 - there are multiple sub types (`RoomStateEvent`, `RoomMessageEvent`)
@@ -160,7 +160,7 @@ class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class) {
 # Possible Future Features
 
 - support for the most used native Matrix events
-- support for all native Matrix events
+- support for all Matrix events
 - error handling
 - DialPhone events for most used native Matrix events
 - usability for full clients
