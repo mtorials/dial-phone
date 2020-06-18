@@ -13,5 +13,5 @@ interface RoomActions {
      * @return The event Id
      */
     suspend fun sendMessageEvent(content: MessageEventContent) : String
-    suspend fun sendStateEvent(content: StateEventContent, stateKey: String) : String
+    suspend fun sendStateEvent(content: StateEventContent, stateKey: String = "") : String
 }

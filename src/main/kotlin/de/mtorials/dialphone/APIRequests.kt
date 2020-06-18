@@ -75,6 +75,7 @@ class APIRequests(
                 { data -> return@request mapper.readValue(data) },
                 { error ->
                     println("An error of type ${error.exception} happened: ${error.message}. Response is ${error.response.responseMessage}")
+                    println(request)
                     throw RuntimeException("Problem Requesting")
                 }
             )
