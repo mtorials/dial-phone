@@ -9,5 +9,5 @@ class MemberImpl(
     override val avatarUrl: String?,
     override val phone: DialPhone
 ) : Member {
-    override val id = user.entityId
+    override val id : String = user.id
 }

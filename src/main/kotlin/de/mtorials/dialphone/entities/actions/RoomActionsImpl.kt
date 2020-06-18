@@ -9,15 +9,15 @@ import kotlin.reflect.KClass
 
 open class RoomActionsImpl(
     override val phone: DialPhone,
-    private val entityId: String
+    override val id: String
 ) : RoomActions {
     override suspend fun sendMessageEvent(content: MessageEventContent) : String {
         val type : KClass<out MatrixEvent> = content::class.annotations.filterIsInstance<ContentEventType>()[0].type
-        return phone.requestObject.sendMessageEvent(type, content, entityId)
+        return phone.requestObject.sendMessageEvent(type, content, id)
     }
 
     override suspend fun sendStateEvent(content: StateEventContent, stateKey: String): String {
         val type : KClass<out MatrixEvent> = content::class.annotations.filterIsInstance<ContentEventType>()[0].type
-        return phone.requestObject.sendStateEvent(type, content, entityId, stateKey)
+        return phone.requestObject.sendStateEvent(type, content, id, stateKey)
     }
 }

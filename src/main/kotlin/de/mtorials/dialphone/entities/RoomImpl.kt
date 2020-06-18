@@ -15,7 +15,7 @@ class RoomImpl(
 
     override var name: String = "init"
     override val members: MutableList<Member> = mutableListOf()
-    override val id: String = action.entityId
+    override val id: String = action.id
     override var avatarUrl: String? = null
     override var joinRule : JoinRule = JoinRule.INVITE
 

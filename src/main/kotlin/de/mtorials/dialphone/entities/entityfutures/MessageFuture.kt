@@ -4,7 +4,8 @@ import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.Message
 
 class MessageFuture(
-    val entityId: String,
+    val id: String,
+    val roomId: String,
     val phone: DialPhone
 ) : EntityFuture<Message> {
     override suspend fun receive(): Message {
