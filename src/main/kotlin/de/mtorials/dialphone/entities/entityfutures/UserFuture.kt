@@ -4,10 +4,10 @@ import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.User
 
 class UserFuture(
-    val entityId: String,
+    val id: String,
     val phone: DialPhone
 ) : EntityFuture<User> {
     override suspend fun receive(): User {
-        return phone.requestObject.getUserById(entityId)
+        return phone.requestObject.getUserById(id)
     }
 }

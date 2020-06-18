@@ -35,7 +35,7 @@ class DialPhone(
     fun getUserFutureById(id: String) = UserFuture(id, this)
 
     suspend fun getJoinedRoomFutureById(id: String) : RoomFutureImpl? =
-        when (getJoinedRoomFutures().map { it.entityId }.contains(id)) {
+        when (getJoinedRoomFutures().map { it.id }.contains(id)) {
             true -> RoomFutureImpl(id, this)
             false -> null
         }

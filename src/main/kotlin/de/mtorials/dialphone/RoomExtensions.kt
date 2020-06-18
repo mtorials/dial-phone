@@ -11,7 +11,7 @@ infix fun RoomActions.write(message: String) = GlobalScope.launch { this@write.s
 infix fun RoomActions.rename(name: String) = setName(name)
 
 suspend fun RoomActions.sendAndGet(message: String) =
-    MessageFuture(this@sendAndGet.sendTextMessage(message), this@sendAndGet.phone)
+    MessageFuture(this@sendAndGet.sendTextMessage(message), this@sendAndGet.id, this@sendAndGet.phone)
 
 suspend fun RoomActions.sendTextMessage(content: String) : String = this.sendMessageEvent(
     content = MRoomMessage.Content(
