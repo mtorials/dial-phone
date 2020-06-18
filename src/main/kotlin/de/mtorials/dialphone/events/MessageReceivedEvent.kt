@@ -2,7 +2,7 @@ package de.mtorials.dialphone.events
 
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
-import de.mtorials.dialphone.mevents.room.MRoomMessage
+import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
 
 class MessageReceivedEvent(
     val roomFuture: RoomFuture,

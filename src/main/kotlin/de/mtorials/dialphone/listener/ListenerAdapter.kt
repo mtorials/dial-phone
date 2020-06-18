@@ -4,7 +4,7 @@ import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.events.MessageReceivedEvent
 import de.mtorials.dialphone.events.PresenceChangeEvent
 import de.mtorials.dialphone.mevents.MatrixEvent
-import de.mtorials.dialphone.mevents.room.MRoomMessage
+import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

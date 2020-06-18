@@ -4,17 +4,16 @@ import de.mtorials.dialphone.entities.entityfutures.RoomFuture
 import de.mtorials.dialphone.entities.entityfutures.UserFuture
 import de.mtorials.dialphone.enums.JoinRule
 import de.mtorials.dialphone.enums.Membership
-import de.mtorials.dialphone.mevents.EventContent
-import de.mtorials.dialphone.mevents.room.MRoomMember
+import de.mtorials.dialphone.mevents.roomstate.MRoomMember
 import de.mtorials.dialphone.mevents.MatrixEvent
-import de.mtorials.dialphone.mevents.room.MRoomAvatar
+import de.mtorials.dialphone.mevents.roomstate.MRoomAvatar
 import de.mtorials.dialphone.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.mevents.roomstate.MRoomJoinRules
 import de.mtorials.dialphone.mevents.roomstate.MRoomName
 import de.mtorials.dialphone.mevents.roomstate.StateEventContent
 
 class RoomImpl(
-    private val action: RoomFuture,
+    action: RoomFuture,
     stateEvents: Array<MatrixEvent>
 ) : Room {
     override val phone = action.phone
