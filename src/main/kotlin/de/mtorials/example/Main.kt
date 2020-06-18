@@ -7,6 +7,7 @@ import de.mtorials.dialphone.entities.Room
 import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.mevents.roomstate.MRoomName
+import de.mtorials.dialphone.rename
 import de.mtorials.example.cutstomevents.PositionEvent
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -27,14 +28,16 @@ fun main() {
     )
 
     val job1 = GlobalScope.launch { phone.sync() }
+
+    val myRoom : Room
     runBlocking {
-        val myRoom : Room = (phone.getJoinedRoomFutureById("!YIqYutrrBUdGDombnI:mtorials.de")
+        myRoom = (phone.getJoinedRoomFutureById("!YIqYutrrBUdGDombnI:mtorials.de")
             ?: throw RuntimeException("Not Found")).receive()
         myRoom.members.forEach { member -> println(member.displayName) }
         println(myRoom.avatarUrl)
         println(myRoom.name)
-        myRoom.sendStateEvent(MRoomName.Content(name = "Test from kotlin"))
     }
+    myRoom rename "The Name!"
     runBlocking {
         job1.join()
     }
