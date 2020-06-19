@@ -2,7 +2,7 @@
 
 *Work in progress*
 
-A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK written in Kotlin for JVM.
+A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK for the JVM written in Kotlin.
 The library uses Jackson and Kotlin coroutines. This SDK is not (yet) intended to be used as a full client.
 It does only listen to new events and does not keep state of these.
 
@@ -49,7 +49,7 @@ All events, entity futures and entities also have a `phone` property to access t
 
 ### Types of Events
 
-There classes that represent native Matrix events, all inheriting from `MatrixEvent`, but there are also DialPhone
+There are classes that represent native Matrix events, all inheriting from `MatrixEvent`, but there are also DialPhone
 events. These DialPhone events offer a higher level api and are more convenient to use.
 
 #### DialPhone Events
@@ -58,7 +58,7 @@ events. These DialPhone events offer a higher level api and are more convenient 
 - are passed to the `ListenerAdapter`
 - contain the `DialPhone` object
 
-These events are passed to the ListenerAdapter and represent a native Matrix event.
+These events are passed to the ListenerAdapter.
 
 #### Matrix Events
 
@@ -161,6 +161,7 @@ class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class) {
 
 - support for the most used native Matrix events
 - full room management
+- event relations
 - support for all Matrix events
 - error handling
 - DialPhone events for most used native Matrix events
