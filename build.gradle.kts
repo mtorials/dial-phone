@@ -1,7 +1,11 @@
 plugins {
     kotlin("jvm") version "1.3.72"
     id("org.jetbrains.dokka") version "0.10.0"
+    `maven-publish` apply true
 }
+
+group = "de.mtorials"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
@@ -21,4 +25,19 @@ dependencies {
 tasks.dokka {
     outputFormat = "html"
     outputDirectory = "$buildDir/javadoc"
+}
+
+publishing {
+    repositories {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/mtorials/dial-phone")
+                credentials {
+                    username = project.findProperty("gpr.user") as String? ?: System.getenv("GH_ACTOR")
+                    password = project.findProperty("gpr.key") as String? ?: System.getenv("GH_TOKEN")
+                }
+            }
+        }
+    }
 }

@@ -6,6 +6,8 @@ import de.mtorials.dialphone.entities.entityfutures.UserFuture
 import kotlinx.coroutines.runBlocking
 import de.mtorials.dialphone.listener.Listener
 import de.mtorials.dialphone.mevents.MatrixEvent
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 class DialPhone(
@@ -40,7 +42,7 @@ class DialPhone(
             false -> null
         }
 
-    suspend fun sync() {
+    fun sync() = GlobalScope.launch {
         syncObject.sync()
     }
 
