@@ -1,9 +1,8 @@
-package de.mtorials.example.cutstomevents
+package de.mtorials.dpexample.cutstomevents
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeName
 import de.mtorials.dialphone.ContentEventType
-import de.mtorials.dialphone.mevents.EventContent
 import de.mtorials.dialphone.mevents.roommessage.MatrixMessageEvent
 import de.mtorials.dialphone.mevents.roommessage.MessageEventContent
 

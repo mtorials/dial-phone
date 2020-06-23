@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName
 import de.mtorials.dialphone.ContentEventType
 import de.mtorials.dialphone.mevents.EventContent
 import de.mtorials.dialphone.mevents.MatrixEvent
-import de.mtorials.example.cutstomevents.PositionEvent
 
 @JsonTypeName("m.presence")
 class MPresence(
