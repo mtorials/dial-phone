@@ -24,7 +24,7 @@ val phone = DialPhone(
 
 fun main() {
 
-    val job1 = GlobalScope.launch { phone.sync() }
+    val job1 = phone.sync()
 
     val myRoom : Room
     runBlocking {
