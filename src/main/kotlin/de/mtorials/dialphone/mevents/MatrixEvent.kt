@@ -27,5 +27,4 @@ import de.mtorials.dialphone.mevents.roomstate.*
 interface MatrixEvent {
     val sender: String
     val content: EventContent
-    class Content : EventContent
 }

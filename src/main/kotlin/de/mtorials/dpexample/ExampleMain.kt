@@ -1,14 +1,11 @@
-package de.mtorials.example
+package de.mtorials.dpexample
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.Room
-import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
-import de.mtorials.dialphone.mevents.roommessage.MessageEventContent
-import de.mtorials.dialphone.mevents.roomstate.MRoomName
-import de.mtorials.dialphone.rename
-import de.mtorials.example.cutstomevents.PositionEvent
+import de.mtorials.dpexample.cutstomevents.PositionEvent
+import de.mtorials.dpexample.cutstomevents.TestStateEvent
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -22,7 +19,7 @@ val phone = DialPhone(
     homeServerURL = config["homeServerUrl"] ?: throw Error(),
     token = config["matrixToken"] ?: throw Error(),
     listeners = listOf(ExampleListener(), PositionListener(), StateListener(), MessageEventListener()),
-    customEventTypes = arrayOf(PositionEvent::class)
+    customEventTypes = arrayOf(PositionEvent::class, TestStateEvent::class)
 )
 
 fun main() {
@@ -39,6 +36,7 @@ fun main() {
         val dn = phone.getUserByID("@mtorials:mtorials.de").displayName
         println(dn)
     }
+
     runBlocking {
         job1.join()
     }
