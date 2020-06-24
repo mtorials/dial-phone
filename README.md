@@ -13,7 +13,7 @@ Currently, you have to include the SDK as jar file. Download it under releases (
 To use the SDK first create the DialPhone object.
 ```kotlin
 val phone = DialPhone(
-    homeServerURL = "matrix.example.com",
+    homeserverUrl = "matrix.example.com",
     token = "Your token",
     // Optional. If you want to use it as bot, ! by default
     commandPrefix = "&",
@@ -22,22 +22,23 @@ val phone = DialPhone(
 )
 ```
 
-To receive events you have to start syncing.
+To receive events you have to start syncing. Do not forget to wait for the returned job. Otherwise, your code
+will just stop executing at the end of the main function.
 
 ```kotlin
-runBlocking {
-    phone.sync()
-}
+val syncJob = phone.sync()
+// ...
+syncJob.join()
 ```
 
 ## Entities
 
-To get a Room or User you first have to get the corresponding EntityFuture object.
+To get a room you first have to get the corresponding entity future object.
 ```kotlin
 val myRoomFuture : RoomFuture = phone.getJoinedRoomFutureById("!YIqYutrrBUdGDombnI:mtorials.de")
     ?: throw Exception("Not Found!")
 ```
-You can perform actions on the EntityFuture. To get the entity data you have to receive it first:
+You can perform actions on the entity future. To get the entity data you have to receive it first:
 ```kotlin
 myRoomFuture.sendMessage("Hi!")
 val myRoom : Room = myRoomFuture.receive()
@@ -134,7 +135,7 @@ If you want to receive your custom events you have to register these when initia
 
 ```kotlin
 val phone = DialPhone(
-    homeServerURL = "matrix.example.com",
+    homeserverUrl = "matrix.example.com",
     token = "Your token",
     customEventTypes = arrayOf(MyEvent::class)
 )
@@ -159,7 +160,7 @@ class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class) {
 
 # TODO
 
-- support for the most used native Matrix events
+- support for the most used Matrix events
 - full room management
 - event relations
 - support for all Matrix events

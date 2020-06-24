@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
 
 class DialPhoneImpl(
     override val token: String,
-    override val homeServerUrl: String,
+    override val homeserverUrl: String,
     listeners: List<Listener> = listOf(),
     override val commandPrefix: String = "!",
     customEventTypes: Array<KClass<out MatrixEvent>> = arrayOf()
