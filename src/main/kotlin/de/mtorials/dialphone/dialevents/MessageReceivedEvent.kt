@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.events
+package de.mtorials.dialphone.dialevents
 
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
@@ -10,6 +10,6 @@ class MessageReceivedEvent(
     val content: MRoomMessage.Content,
     override val id: String,
     override val phone: DialPhone
-) : DialEvents(id, phone) {
+) : DialEvent(id, phone) {
     constructor(roomID: String, event: MRoomMessage, phone: DialPhone) : this(RoomFutureImpl(roomID, phone), event.sender, event.content, event.id, phone)
 }

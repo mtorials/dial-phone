@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.events
+package de.mtorials.dialphone.dialevents
 
 import de.mtorials.dialphone.sendTextMessage
 
