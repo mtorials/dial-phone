@@ -1,8 +1,8 @@
 package de.mtorials.dialphone.listener
 
 import de.mtorials.dialphone.DialPhone
-import de.mtorials.dialphone.events.MessageReceivedEvent
-import de.mtorials.dialphone.events.PresenceChangeEvent
+import de.mtorials.dialphone.dialevents.MessageReceivedEvent
+import de.mtorials.dialphone.dialevents.PresenceChangeEvent
 import de.mtorials.dialphone.mevents.MatrixEvent
 import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
 import kotlinx.coroutines.GlobalScope

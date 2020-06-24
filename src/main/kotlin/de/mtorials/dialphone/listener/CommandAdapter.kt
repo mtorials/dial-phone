@@ -1,6 +1,6 @@
 package de.mtorials.dialphone.listener
 
-import de.mtorials.dialphone.events.MessageReceivedEvent
+import de.mtorials.dialphone.dialevents.MessageReceivedEvent
 
 abstract class CommandAdapter(
     val invoke: String

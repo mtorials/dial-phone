@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.events
+package de.mtorials.dialphone.dialevents
 
 import de.mtorials.dialphone.DialPhone
 
@@ -7,4 +7,4 @@ class PresenceChangeEvent(
     val senderId: String,
     val newStatus: String,
     override val phone: DialPhone
-) : DialEvents(id, phone)
+) : DialEvent(id, phone)
