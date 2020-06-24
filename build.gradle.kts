@@ -1,7 +1,9 @@
+import org.gradle.jvm.tasks.Jar
+
 plugins {
     kotlin("jvm") version "1.3.72"
     id("org.jetbrains.dokka") version "0.10.0"
-    `maven-publish` apply true
+    `maven-publish`
 }
 
 group = "de.mtorials"
@@ -27,16 +29,34 @@ tasks.dokka {
     outputDirectory = "$buildDir/javadoc"
 }
 
+val dokkaJar by tasks.creating(Jar::class) {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    description = "Assembles Kotlin docs with Dokka"
+    from(tasks.dokka)
+}
+
 publishing {
+    publications {
+        //create<MavenPublication>("default") {
+        //    from(components["java"])
+        //    artifact(dokkaJar)
+        //}
+        create<MavenPublication>("gpr") {
+            run {
+                artifact(dokkaJar)
+            }
+        }
+    }
     repositories {
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/mtorials/dial-phone")
-                credentials {
-                    username = project.findProperty("gpr.user") as String? ?: System.getenv("GH_ACTOR")
-                    password = project.findProperty("gpr.key") as String? ?: System.getenv("GH_TOKEN")
-                }
+        maven {
+            url = uri("$buildDir/repository")
+        }
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/mtorials/dial-phone")
+            credentials {
+                username = System.getenv("GH_ACTOR") ?: File("username").readText()
+                password = System.getenv("GH_TOKEN") ?: File("ghtoken").readText()
             }
         }
     }

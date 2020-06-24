@@ -1,5 +1,7 @@
 /.idea
 /.gradle
+username
+ghtoken
 /config.json
 /src/test
 /build
