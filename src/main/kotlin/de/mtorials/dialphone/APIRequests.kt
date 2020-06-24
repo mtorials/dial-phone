@@ -7,9 +7,7 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Method
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
-import de.mtorials.dialphone.entities.User
 import de.mtorials.dialphone.mevents.*
-import de.mtorials.dialphone.mevents.roommessage.MatrixMessageEvent
 import de.mtorials.dialphone.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.responses.*
 import java.net.URLEncoder
@@ -68,7 +66,7 @@ class APIRequests(
         parameters: MutableList<Pair<String, String>> = mutableListOf(),
         body: Any? = null
     ) : T {
-        val rightPath = phone.homeServerUrl + DialPhone.MATRIX_PATH + path
+        val rightPath = phone.homeserverUrl + DialPhone.MATRIX_PATH + path
         val parameterEncoded = parameters.map { Pair(it.first, URLEncoder.encode(it.second, "utf-8")) }
         val request = Fuel.request(method, rightPath, parameterEncoded)
         request["Authorization"] = "Bearer ${phone.token}"

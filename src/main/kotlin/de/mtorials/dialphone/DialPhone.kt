@@ -20,7 +20,7 @@ interface DialPhone {
     /**
      * The url of the homeserver
      */
-    val homeServerUrl: String
+    val homeserverUrl: String
 
     /**
      * The command prefix you specified optionally
