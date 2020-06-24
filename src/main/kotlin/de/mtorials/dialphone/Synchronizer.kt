@@ -47,7 +47,7 @@ class Synchronizer(
         if (lastTimeBatch != null) parameters.add(Pair("since", lastTimeBatch as String))
         parameters.add(Pair("timeout", DialPhone.TIMEOUT))
         parameters.add(Pair("full_state", "false"))
-        val req = Fuel.get(phone.homeServerURL + DialPhone.MATRIX_PATH + "sync", parameters)
+        val req = Fuel.get(phone.homeServerUrl + DialPhone.MATRIX_PATH + "sync", parameters)
         req["Authorization"] = "Bearer ${phone.token}"
         req
             .awaitStringResponseResult().third

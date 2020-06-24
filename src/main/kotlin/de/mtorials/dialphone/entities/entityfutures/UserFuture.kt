@@ -10,6 +10,7 @@ class UserFuture(
 ) : EntityFuture<User> {
     override suspend fun receive(): User {
         val response = phone.requestObject.getUserById(id)
+            ?: throw Error("Cant find user to future")
         return UserImpl(
             id = id,
             displayName = response.displayName,
