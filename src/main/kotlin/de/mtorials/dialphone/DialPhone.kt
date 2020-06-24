@@ -1,50 +1,24 @@
 package de.mtorials.dialphone
 
-
-import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
-import de.mtorials.dialphone.entities.entityfutures.UserFuture
-import kotlinx.coroutines.runBlocking
+import de.mtorials.dialphone.entities.User
+import de.mtorials.dialphone.entities.entityfutures.RoomFuture
 import de.mtorials.dialphone.listener.Listener
-import de.mtorials.dialphone.mevents.MatrixEvent
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlin.reflect.KClass
+import kotlinx.coroutines.Job
 
-class DialPhone(
-    val token: String,
-    val homeServerURL: String,
-    listeners: List<Listener> = listOf(),
-    val commandPrefix: String = "!",
-    customEventTypes: Array<KClass<out MatrixEvent>> = arrayOf()
-) {
+interface DialPhone {
 
+    val token: String
     val ownId: String
-    val requestObject = APIRequests(this, customEventTypes)
+    val homeServerUrl: String
+    val commandPrefix: String
+    val requestObject: APIRequests
 
-    private val syncObject = Synchronizer(listeners.toMutableList(), this, customEventTypes)
+    fun sync() : Job
+    fun addListener(listener: Listener)
 
-    init {
-        ownId = runBlocking {
-            requestObject.getMe().id
-        }
-    }
-
-    fun addListener(listener: Listener) = syncObject.addListener(listener)
-
-    suspend fun getJoinedRoomFutures() : List<RoomFutureImpl> =
-        requestObject.getJoinedRooms().roomIds.map { id -> RoomFutureImpl(id, this@DialPhone) }
-
-    suspend fun getUserByID(id: String) = requestObject.getUserById(id)
-
-    suspend fun getJoinedRoomFutureById(id: String) : RoomFutureImpl? =
-        when (getJoinedRoomFutures().map { it.id }.contains(id)) {
-            true -> RoomFutureImpl(id, this)
-            false -> null
-        }
-
-    fun sync() = GlobalScope.launch {
-        syncObject.sync()
-    }
+    suspend fun getJoinedRoomFutures() : List<RoomFuture>
+    suspend fun getUserById(id: String) : User?
+    suspend fun getJoinedRoomFutureById(id: String) : RoomFuture?
 
     companion object {
         const val MATRIX_PATH = "/_matrix/client/r0/"

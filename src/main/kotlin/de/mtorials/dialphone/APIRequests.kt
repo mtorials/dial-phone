@@ -31,7 +31,7 @@ class APIRequests(
     suspend fun getRoomsState(id: String) : Array<MatrixStateEvent> =
         request<Array<MatrixEvent>>(Method.GET, "rooms/${id}/state")
             .filterIsInstance<MatrixStateEvent>().toTypedArray()
-    suspend fun getUserById(id: String) : UserWithoutIDResponse = request(Method.GET, "profile/${id}")
+    suspend fun getUserById(id: String) : UserWithoutIDResponse? = request(Method.GET, "profile/${id}")
     suspend fun getEventByIdAndRoomId(id: String, roomId: String) : MatrixEvent =
         request(Method.GET, "rooms/${encode(roomId)}/event/${encode(id)}")
     suspend fun sendMessageEvent(
@@ -68,7 +68,7 @@ class APIRequests(
         parameters: MutableList<Pair<String, String>> = mutableListOf(),
         body: Any? = null
     ) : T {
-        val rightPath = phone.homeServerURL + DialPhone.MATRIX_PATH + path
+        val rightPath = phone.homeServerUrl + DialPhone.MATRIX_PATH + path
         val parameterEncoded = parameters.map { Pair(it.first, URLEncoder.encode(it.second, "utf-8")) }
         val request = Fuel.request(method, rightPath, parameterEncoded)
         request["Authorization"] = "Bearer ${phone.token}"
