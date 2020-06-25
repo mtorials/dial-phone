@@ -49,17 +49,4 @@ publishing {
             }
         }
     }
-    repositories {
-        maven {
-            url = uri("$buildDir/repository")
-        }
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/mtorials/dial-phone")
-            credentials {
-                username = System.getenv("GH_ACTOR") ?: File("username").readText()
-                password = System.getenv("GH_TOKEN") ?: File("ghtoken").readText()
-            }
-        }
-    }
 }
