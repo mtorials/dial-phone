@@ -7,12 +7,14 @@ plugins {
 }
 
 group = "de.mtorials"
-version = "0.1.0"
+version = "v0.1.0-alpha"
 
 repositories {
     mavenCentral()
     jcenter()
 }
+
+val artifactID = "dial-phone"
 
 dependencies {
     implementation(kotlin("stdlib"))
