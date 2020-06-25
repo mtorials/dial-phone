@@ -12,7 +12,7 @@ Currently, you have to include the SDK as jar file. Download it under releases (
 
 To use the SDK first create the DialPhone object.
 ```kotlin
-val phone = DialPhone(
+val phone = DialPhoneImpl(
     homeserverUrl = "matrix.example.com",
     token = "Your token",
     // Optional. If you want to use it as bot, ! by default
