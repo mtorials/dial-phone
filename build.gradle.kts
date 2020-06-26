@@ -36,17 +36,3 @@ val dokkaJar by tasks.creating(Jar::class) {
     description = "Assembles Kotlin docs with Dokka"
     from(tasks.dokka)
 }
-
-publishing {
-    publications {
-        //create<MavenPublication>("default") {
-        //    from(components["java"])
-        //    artifact(dokkaJar)
-        //}
-        create<MavenPublication>("gpr") {
-            run {
-                artifact(dokkaJar)
-            }
-        }
-    }
-}
