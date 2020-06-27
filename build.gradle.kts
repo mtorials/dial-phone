@@ -4,6 +4,7 @@ plugins {
     kotlin("jvm") version "1.3.72"
     id("org.jetbrains.dokka") version "0.10.0"
     maven
+    java
 }
 
 group = "de.mtorials"
@@ -47,3 +48,6 @@ artifacts {
     archives(dokkaJar)
 }
 
+tasks.test {
+    useJUnit()
+}
