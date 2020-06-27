@@ -37,7 +37,23 @@ val dokkaJar by tasks.creating(Jar::class) {
     from(tasks.dokka)
 }
 
-java {
-    withSourcesJar()
-    withJavadocJar()
+val sourcesJar by tasks.creating(Jar::class) {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
 }
+
+publishing {
+    publications {
+        //create<MavenPublication>("default") {
+        //    from(components["java"])
+        //    artifact(dokkaJar)
+        //}
+        create<MavenPublication>("default") {
+            run {
+                artifact(dokkaJar)
+                artifact(sourcesJar)
+            }
+        }
+    }
+}
+
