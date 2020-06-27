@@ -1,5 +1,7 @@
 # DialPhone
 
+[![](https://jitci.com/gh/mtorials/dial-phone/svg)](https://jitci.com/gh/mtorials/dial-phone)
+
 *Work in progress*
 
 A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK for the JVM written in Kotlin.
