@@ -3,7 +3,7 @@ import org.gradle.jvm.tasks.Jar
 plugins {
     kotlin("jvm") version "1.3.72"
     id("org.jetbrains.dokka") version "0.10.0"
-    `maven-publish`
+    maven
 }
 
 group = "de.mtorials"
@@ -33,7 +33,7 @@ tasks.dokka {
 
 val dokkaJar by tasks.creating(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
-    description = "Assembles Kotlin docs with Dokka"
+    description = "Documentation for DialPhone."
     from(tasks.dokka)
 }
 
@@ -42,18 +42,8 @@ val sourcesJar by tasks.creating(Jar::class) {
     from(sourceSets.main.get().allSource)
 }
 
-publishing {
-    publications {
-        //create<MavenPublication>("default") {
-        //    from(components["java"])
-        //    artifact(dokkaJar)
-        //}
-        create<MavenPublication>("default") {
-            run {
-                artifact(dokkaJar)
-                artifact(sourcesJar)
-            }
-        }
-    }
+artifacts {
+    archives(sourcesJar)
+    archives(dokkaJar)
 }
 
