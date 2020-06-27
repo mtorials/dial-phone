@@ -6,6 +6,45 @@ A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK for
 The library uses Jackson and Kotlin coroutines. This SDK is not (yet) intended to be used as a full client.
 It does only listen to new events and does not keep state of these.
 
+## Installation
+
+The library is published with [JitPack]("https://jitpack.io/").
+
+#### Maven
+
+Add the repo:
+
+```xml
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
+```
+
+Add the dependencies:
+
+```xml
+<dependency>
+    <groupId>de.mtorials</groupId>
+    <artifactId>dial-phone</artifactId>
+    <version>SEE RELEASES</version>
+</dependency>
+```
+
+#### Gradle
+
+Add to repositories:
+
+```groovy
+maven { url 'https://jitpack.io' }
+```
+
+Add to dependencies:
+
+```groovy
+implementation 'de.mtorials:dial-phone:<SEE_RELEASES>'
+```
+
 ## Getting Started
 
 Currently, you have to include the SDK as jar file. Download it under releases (if available).
