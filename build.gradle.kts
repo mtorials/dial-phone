@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "de.mtorials"
-version = "v0.1.0-alpha"
+version = "v0.1.1-alpha"
 
 repositories {
     mavenCentral()
@@ -37,19 +37,7 @@ val dokkaJar by tasks.creating(Jar::class) {
     from(tasks.dokka)
 }
 
-publishing {
-    publications {
-        //create<MavenPublication>("default") {
-        //    from(components["java"])
-        //    artifact(dokkaJar)
-        //}
-        create<MavenPublication>("gpr") {
-            run {
-                artifact(dokkaJar)
-            }
-        }
-    }
-    repositories {
-        mavenLocal()
-    }
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
