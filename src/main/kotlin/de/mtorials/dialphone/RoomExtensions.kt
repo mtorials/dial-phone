@@ -19,6 +19,14 @@ suspend fun RoomActions.sendTextMessage(content: String) : String = this.sendMes
     )
 )
 
+suspend fun RoomActions.sendHtmlMessage(content: String, nonFormattedContent: String? = null) : String = this.sendMessageEvent(
+    content = MRoomMessage.Content(
+        body = nonFormattedContent ?: content,
+        format = MRoomMessage.htmlFormat,
+        formattedBody = content
+    )
+)
+
 fun RoomActions.setName(name: String) = GlobalScope.launch {
     this@setName.sendStateEvent(MRoomName.Content(name = name))
 }
