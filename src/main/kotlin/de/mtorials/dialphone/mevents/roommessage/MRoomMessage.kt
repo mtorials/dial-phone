@@ -18,6 +18,13 @@ class MRoomMessage(
     data class Content(
         @JsonProperty("msgtype")
         val msgType: MessageType = MessageType.TEXT,
-        val body: String
+        val body: String,
+        val format: String? = null,
+        @JsonProperty("formatted_body")
+        val formattedBody: String? = null
     ) : MessageEventContent
+
+    companion object {
+        const val htmlFormat = "org.matrix.custom.html"
+    }
 }
