@@ -1,5 +1,6 @@
 package de.mtorials.dialphone
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonTypeName
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -18,7 +19,7 @@ class APIRequests(
     val phone: DialPhone,
     subTypes: Array<KClass<out MatrixEvent>>
 ) {
-    private val mapper = jacksonObjectMapper()
+    private val mapper = jacksonObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)
     private val random = Random(System.currentTimeMillis().toInt() * 2834)
 
     init { subTypes.forEach { mapper.registerSubtypes(it.java) } }
@@ -71,6 +72,7 @@ class APIRequests(
         val request = Fuel.request(method, rightPath, parameterEncoded)
         request["Authorization"] = "Bearer ${phone.token}"
         request["Content-Type"] = "application/json"
+        //println(mapper.writeValueAsString(body))
         if (body != null) request.jsonBody(mapper.writeValueAsString(body))
         request
             .awaitStringResponseResult().third

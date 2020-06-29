@@ -14,16 +14,23 @@ suspend fun RoomActions.sendAndGet(message: String) =
     MessageFuture(this@sendAndGet.sendTextMessage(message), this@sendAndGet.id, this@sendAndGet.phone)
 
 suspend fun RoomActions.sendTextMessage(content: String) : String = this.sendMessageEvent(
-    content = MRoomMessage.Content(
+    content = MRoomMessage.TextContent(
         body = content
     )
 )
 
 suspend fun RoomActions.sendHtmlMessage(content: String, nonFormattedContent: String? = null) : String = this.sendMessageEvent(
-    content = MRoomMessage.Content(
+    content = MRoomMessage.TextContent(
         body = nonFormattedContent ?: content,
         format = MRoomMessage.htmlFormat,
         formattedBody = content
+    )
+)
+
+suspend fun RoomActions.sendImageWithUrl(url: String, title: String? = null) : String = this.sendMessageEvent(
+    content = MRoomMessage.ImageContent(
+        body = title ?: "image send with dial-phone",
+        url = url
     )
 )
 
