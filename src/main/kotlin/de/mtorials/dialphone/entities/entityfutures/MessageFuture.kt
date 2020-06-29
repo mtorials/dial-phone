@@ -12,6 +12,6 @@ class MessageFuture(
     override suspend fun receive(): Message {
         val event = phone.requestObject.getEventByIdAndRoomId(id, roomId)
         if (event !is MRoomMessage) throw Error("Expected other event type!")
-        return Message(event.content.body, event.content.msgType)
+        return Message(event.content.body, event.content::class)
     }
 }
