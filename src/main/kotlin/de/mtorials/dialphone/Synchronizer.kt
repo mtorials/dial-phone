@@ -33,9 +33,13 @@ class Synchronizer(
         while(true) {
             val a = getSyncResponse()
             lastTimeBatch = a.nextBatch
-            val roomEventsByID = a.roomSync.join
-            roomEventsByID.forEach { (roomID, roomEvents) ->
+            a.roomSync.join.forEach { (roomID, roomEvents) ->
                 roomEvents.timeline.events.forEach { event ->
+                    listeners.forEach { it.onRoomEvent(event, roomID, phone) }
+                }
+            }
+            a.roomSync.invite.forEach { (roomID, roomEvents) ->
+                roomEvents.inviteState.events.forEach { event ->
                     listeners.forEach { it.onRoomEvent(event, roomID, phone) }
                 }
             }

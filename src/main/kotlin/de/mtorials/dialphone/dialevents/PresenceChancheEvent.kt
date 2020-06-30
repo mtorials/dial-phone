@@ -7,4 +7,4 @@ class PresenceChangeEvent(
     val senderId: String,
     val newStatus: String,
     override val phone: DialPhone
-) : DialEvent(id, phone)
+) : DialEvent(phone, id)
