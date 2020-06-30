@@ -16,7 +16,8 @@ class SyncResponse(
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     class SyncRooms(
-            val join: Map<String, RoomsRoom>
+            val join: Map<String, RoomsRoom>,
+            val invite: Map<String, RoomsInvite>
     ) {
         @JsonIgnoreProperties(ignoreUnknown = true)
         class RoomsRoom(
@@ -24,7 +25,18 @@ class SyncResponse(
         ) {
             @JsonIgnoreProperties(ignoreUnknown = true)
             class RoomTimeline(
-                    val events: List<MatrixEvent>
+                val events: List<MatrixEvent>
+            )
+        }
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        class RoomsInvite(
+            @JsonProperty("invite_state")
+            val inviteState: InviteState
+        ) {
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            class InviteState(
+                val events: List<MatrixEvent>
             )
         }
     }

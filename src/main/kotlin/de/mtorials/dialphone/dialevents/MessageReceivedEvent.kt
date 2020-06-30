@@ -10,6 +10,6 @@ class MessageReceivedEvent(
     val content: MRoomMessage.MRoomMessageContent,
     override val id: String,
     override val phone: DialPhone
-) : DialEvent(id, phone) {
+) : DialEvent(phone, id) {
     constructor(roomID: String, event: MRoomMessage, phone: DialPhone) : this(RoomFutureImpl(roomID, phone), event.sender, event.content, event.id, phone)
 }

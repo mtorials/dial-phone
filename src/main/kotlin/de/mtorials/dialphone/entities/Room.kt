@@ -2,7 +2,6 @@ package de.mtorials.dialphone.entities
 
 import de.mtorials.dialphone.entities.actions.RoomActions
 import de.mtorials.dialphone.enums.JoinRule
-import de.mtorials.dialphone.mevents.MatrixEvent
 
 /**
  * A matrix room

@@ -10,7 +10,7 @@ import de.mtorials.dialphone.mevents.EventContent
 class MRoomJoinRules(
     override val sender: String,
     @JsonProperty("event_id")
-    override val id: String,
+    override val id: String?,
     override val content: Content,
     @JsonProperty("state_key")
     override val stateKey: String,

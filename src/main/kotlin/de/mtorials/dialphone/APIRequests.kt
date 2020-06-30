@@ -33,6 +33,8 @@ class APIRequests(
     suspend fun getUserById(id: String) : UserWithoutIDResponse? = request(Method.GET, "profile/${id}")
     suspend fun getEventByIdAndRoomId(id: String, roomId: String) : MatrixEvent =
         request(Method.GET, "rooms/${encode(roomId)}/event/${encode(id)}")
+    suspend fun joinRoomWithId(id: String) : RoomResponse =
+        request(Method.POST, "rooms/${encode(id)}/join")
     suspend fun sendMessageEvent(
         eventType: KClass<out MatrixEvent>,
         content: EventContent,
