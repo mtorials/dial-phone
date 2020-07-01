@@ -12,7 +12,7 @@ class MRoomMessage(
 ) : MatrixMessageEvent {
 
     @ContentEventType(MRoomMessage::class)
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "msgtype", defaultImpl = TextContent::class)
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "msgtype", defaultImpl = EmptyContent::class)
     @JsonSubTypes(
         JsonSubTypes.Type(value = TextContent::class),
         JsonSubTypes.Type(value = ImageContent::class)
@@ -30,6 +30,11 @@ class MRoomMessage(
         @JsonProperty("formatted_body")
         val formattedBody: String? = null
     ) : MRoomMessageContent
+
+    @ContentEventType(MRoomMessage::class)
+    @JsonTypeName("")
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class EmptyContent(override val body: String = "") : MRoomMessageContent
 
     @JsonTypeName("m.image")
     @ContentEventType(MRoomMessage::class)
