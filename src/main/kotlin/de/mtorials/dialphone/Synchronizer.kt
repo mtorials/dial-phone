@@ -31,7 +31,7 @@ class Synchronizer(
 
     suspend fun sync() {
         while(true) {
-            val a = getSyncResponse()
+            val a : SyncResponse = getSyncResponse()
             lastTimeBatch = a.nextBatch
             a.roomSync.join.forEach { (roomID, roomEvents) ->
                 roomEvents.timeline.events.forEach { event ->

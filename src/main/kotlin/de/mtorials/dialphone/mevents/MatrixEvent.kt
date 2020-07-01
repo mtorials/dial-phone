@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import de.mtorials.dialphone.mevents.presence.MPresence
 import de.mtorials.dialphone.mevents.roommessage.MRoomEncrypted
 import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
+import de.mtorials.dialphone.mevents.roommessage.MRoomRedaction
 import de.mtorials.dialphone.mevents.roomstate.*
 
 
@@ -22,7 +23,8 @@ import de.mtorials.dialphone.mevents.roomstate.*
     JsonSubTypes.Type(value = MRoomMember::class),
     JsonSubTypes.Type(value = MRoomMessage::class),
     JsonSubTypes.Type(value = MRoomEncrypted::class),
-    JsonSubTypes.Type(value = MRoomAvatar::class)
+    JsonSubTypes.Type(value = MRoomAvatar::class),
+    JsonSubTypes.Type(value = MRoomRedaction::class)
 )
 interface MatrixEvent {
     val sender: String
