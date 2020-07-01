@@ -2,11 +2,6 @@ package de.mtorials.dialphone.mevents.roommessage
 
 import com.fasterxml.jackson.annotation.*
 import de.mtorials.dialphone.ContentEventType
-import de.mtorials.dialphone.enums.MessageType
-import de.mtorials.dialphone.mevents.DefaultEvent
-import de.mtorials.dialphone.mevents.presence.MPresence
-import jdk.jfr.Experimental
-import javax.management.monitor.StringMonitor
 
 @JsonTypeName("m.room.message")
 class MRoomMessage(
@@ -42,7 +37,6 @@ class MRoomMessage(
     data class ImageContent(
         override val body: String,
         val url: String?,
-        @Experimental
         val file: String? = null
     ) : MRoomMessageContent
 
