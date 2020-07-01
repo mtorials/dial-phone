@@ -35,6 +35,8 @@ class APIRequests(
         request(Method.GET, "rooms/${encode(roomId)}/event/${encode(id)}")
     suspend fun joinRoomWithId(id: String) : RoomResponse =
         request(Method.POST, "rooms/${encode(id)}/join")
+    suspend fun redactEventWithIdInRoom(roomId: String, id: String, reason: String? = null) : EventResponse =
+        request(method = Method.PUT, path = "rooms/${encode(roomId)}/redact/${encode(id)}/${random.nextInt()}", body = Reason(reason))
     suspend fun sendMessageEvent(
         eventType: KClass<out MatrixEvent>,
         content: EventContent,

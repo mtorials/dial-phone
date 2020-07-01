@@ -7,8 +7,8 @@ abstract class CommandAdapter(
 ) : ListenerAdapter() {
     override suspend fun onRoomMessageReceive(event: MessageReceivedEvent) {
         if (event.phone.ownId == event.senderId) return
-        if (!event.content.body.startsWith(event.phone.commandPrefix + invoke)) return
-        val parameters = event.content.body.split(" ").toMutableList()
+        if (!event.message.body.startsWith(event.phone.commandPrefix + invoke)) return
+        val parameters = event.message.body.split(" ").toMutableList()
         parameters.removeAt(0)
         execute(event, parameters.toTypedArray())
     }
