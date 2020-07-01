@@ -8,7 +8,7 @@ import de.mtorials.dialphone.ContentEventType
 class MRoomAvatar(
     override val sender: String,
     @JsonProperty("event_id")
-    override val id: String,
+    override val id: String?,
     override val content: Content,
     @JsonProperty("state_key")
     override val stateKey: String,
