@@ -202,12 +202,11 @@ class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class) {
 # TODO
 
 - support for the most used Matrix events
-- full room management
-- event relations
+- complete room management
 - support for all Matrix events
-- error handling
-- DialPhone events for most used native Matrix events
-- usability for full clients
+- better error handling
+- DialPhone events for the most used native Matrix events
+- usability as full clients
 - Application API support
 - lazy loading
 - encryption

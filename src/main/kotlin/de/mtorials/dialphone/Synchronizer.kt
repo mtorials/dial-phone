@@ -1,5 +1,6 @@
 package de.mtorials.dialphone
 
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.kittinunf.fuel.Fuel
@@ -23,7 +24,11 @@ class Synchronizer(
         subTypes.forEach { mapper.registerSubtypes(it.java) }
         runBlocking {
             // Do not get old events
-            lastTimeBatch = getSyncResponse().nextBatch
+            try {
+                lastTimeBatch = getSyncResponse().nextBatch
+            } catch (e: UnrecognizedPropertyException) {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -31,17 +36,21 @@ class Synchronizer(
 
     suspend fun sync() {
         while(true) {
-            val a : SyncResponse = getSyncResponse()
-            lastTimeBatch = a.nextBatch
-            a.roomSync.join.forEach { (roomID, roomEvents) ->
-                roomEvents.timeline.events.forEach { event ->
-                    listeners.forEach { it.onRoomEvent(event, roomID, phone) }
+            try {
+                val a : SyncResponse = getSyncResponse()
+                lastTimeBatch = a.nextBatch
+                a.roomSync.join.forEach { (roomID, roomEvents) ->
+                    roomEvents.timeline.events.forEach { event ->
+                        listeners.forEach { it.onRoomEvent(event, roomID, phone) }
+                    }
                 }
-            }
-            a.roomSync.invite.forEach { (roomID, roomEvents) ->
-                roomEvents.inviteState.events.forEach { event ->
-                    listeners.forEach { it.onRoomEvent(event, roomID, phone) }
+                a.roomSync.invite.forEach { (roomID, roomEvents) ->
+                    roomEvents.inviteState.events.forEach { event ->
+                        listeners.forEach { it.onRoomEvent(event, roomID, phone) }
+                    }
                 }
+            } catch (e: UnrecognizedPropertyException) {
+                e.printStackTrace()
             }
         }
     }
@@ -56,9 +65,11 @@ class Synchronizer(
         req
             .awaitStringResponseResult().third
             .fold<Unit>(
-                { data -> return@getSyncResponse mapper.readValue(data) },
+                { data ->
+                    return@getSyncResponse mapper.readValue(data)
+                },
                 { _ -> throw RuntimeException("Problem Syncing") }
             )
-        throw RuntimeException("Dont know")
+        throw RuntimeException("Problem syncing")
     }
 }
