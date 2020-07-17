@@ -14,7 +14,12 @@ import de.mtorials.dialphone.mevents.roomstate.*
  * Representation of a matrix event
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", defaultImpl = DefaultEvent::class)
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type",
+    defaultImpl = DefaultEvent::class
+)
 @JsonSubTypes(
     JsonSubTypes.Type(value = MPresence::class),
     JsonSubTypes.Type(value = MRoomJoinRules::class),
