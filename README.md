@@ -152,6 +152,38 @@ There are (infix) extension functions that allow you to react to an DialPhone ev
 event answer "I received a message!"
 ```
 
+#### Redacting
+
+To delete a message the message class has a according method:
+
+```kotlin
+val m: Message // could be for instance event.message
+m.redact()
+```
+
+To redact other types of events you have you have to use this function:
+
+```kotlin
+val phone: DialPhone // phone is a property of every entity in the library
+phone.requestObject.redactEventWithIdInRoom(roomId = roomId, id = eventId)
+```
+
+## Rooms
+
+Room menagement is not fully implemented yet.
+
+### Invite Listener and Join
+
+This example listenns for an invite event and joins it.
+
+```kotlin
+class InviteListener : ListenerAdapter() {
+    override suspend fun onRoomInvite(event: RoomInviteEvent) {
+        event.invitedRoomActions.join()
+    }
+}
+```
+
 ## Custom Events
 
 This library has the ability to send custom events. To do so, you have to first create a class inheriting from
@@ -160,17 +192,21 @@ The content field has to be an extra class marked with the according `EventConte
 To specify the name of the event use the `@JsonTypeName` annotation of the Jackson library.
 Use the `@ContentEventType` annotation to specify the according event type of the `EventContent` type.
 
-An example for a room message event.
+An example of a room message event that carries a positional data (x,y,z coordinates):
 ```kotlin
-@JsonTypeName("com.example.matrix.events.myevent")
-class MyEvent(
-    sender: String,
-    content: Content
-) : MatrixMessageEvent(sender, content) {
-    @ContentEventType(MyEvent::class)
+@JsonTypeName("com.example.matrix.event.position")
+class PositionEvent(
+    override val sender: String,
+    @JsonProperty("event_id")
+    override val id: String,
+    override val content: Content
+) : MatrixMessageEvent {
+    @ContentEventType(PositionEvent::class)
     data class Content(
-        val payload: String
-    ) : MesssageEventContent
+        val x: Int,
+        val y: Int,
+        val z: Int
+    ) : MessageEventContent
 }
 ```
 
@@ -190,8 +226,7 @@ See *Sending Events*.
 
 ### Receive Custom Events
 
-To receive custom events you have to implement the interface `Listener` directly or
-the abstract class `MatrixEventAdapter`:
+To receive custom events you have to implement the interface `Listener` directly:
 
 ```kotlin
 class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class) {
@@ -208,8 +243,9 @@ class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class) {
 - support for all Matrix events
 - better error handling
 - DialPhone events for the most used native Matrix events
-- usability as full clients
+- usability as full client
 - Application API support
 - lazy loading
 - encryption
 - group management
+
