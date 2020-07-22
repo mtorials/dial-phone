@@ -14,8 +14,17 @@ import kotlin.reflect.KClass
  * @param type The class of the event type you want to listen for
  *
  */
-abstract class MatrixEventAdapter<T : MatrixEvent>(private val type : KClass<T>) : Listener {
-    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+abstract class MatrixEventAdapter<T : MatrixEvent>(
+    private val type : KClass<T>,
+    private val receivePastEvent: Boolean = false
+) : Listener {
+    @Suppress
+    override fun onNewRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+        if (type.isInstance(event)) onMatrixEvent(event as T, RoomFutureImpl(roomId, phone))
+    }
+    @Suppress
+    override fun onOldRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+        if (!receivePastEvent) return
         if (type.isInstance(event)) onMatrixEvent(event as T, RoomFutureImpl(roomId, phone))
     }
 

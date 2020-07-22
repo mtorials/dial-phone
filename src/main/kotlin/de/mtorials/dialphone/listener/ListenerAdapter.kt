@@ -11,12 +11,22 @@ import de.mtorials.dialphone.mevents.roomstate.MRoomMember
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-abstract class ListenerAdapter : Listener {
+abstract class ListenerAdapter(
+    private val receivePastEvents: Boolean = false
+) : Listener {
     open suspend fun onRoomMessageReceive(event: MessageReceivedEvent) = Unit
     open suspend fun onRoomInvite(event: RoomInviteEvent) = Unit
     //open suspend fun onPresenceChange(event: PresenceChangeEvent) = Unit
 
-    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+    override fun onNewRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+        onEvent(event, roomId, phone)
+    }
+
+    override fun onOldRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+        if (receivePastEvents) onEvent(event, roomId, phone)
+    }
+
+    private fun onEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
         when(event) {
             is MRoomMessage -> GlobalScope.launch { onRoomMessageReceive(MessageReceivedEvent(
                 roomID = roomId,

@@ -25,7 +25,18 @@ class Synchronizer(
         runBlocking {
             // Do not get old events
             try {
-                lastTimeBatch = getSyncResponse().nextBatch
+                val res = getSyncResponse()
+                lastTimeBatch = res.nextBatch
+                res.roomSync.join.forEach { (roomID, roomEvents) ->
+                    roomEvents.timeline.events.forEach { event ->
+                        listeners.forEach { it.onOldRoomEvent(event, roomID, phone) }
+                    }
+                }
+                res.roomSync.invite.forEach { (roomID, roomEvents) ->
+                    roomEvents.inviteState.events.forEach { event ->
+                        listeners.forEach { it.onOldRoomEvent(event, roomID, phone) }
+                    }
+                }
             } catch (e: UnrecognizedPropertyException) {
                 e.printStackTrace()
             }
@@ -37,16 +48,16 @@ class Synchronizer(
     suspend fun sync() {
         while(true) {
             try {
-                val a : SyncResponse = getSyncResponse()
-                lastTimeBatch = a.nextBatch
-                a.roomSync.join.forEach { (roomID, roomEvents) ->
+                val res : SyncResponse = getSyncResponse()
+                lastTimeBatch = res.nextBatch
+                res.roomSync.join.forEach { (roomID, roomEvents) ->
                     roomEvents.timeline.events.forEach { event ->
-                        listeners.forEach { it.onRoomEvent(event, roomID, phone) }
+                        listeners.forEach { it.onNewRoomEvent(event, roomID, phone) }
                     }
                 }
-                a.roomSync.invite.forEach { (roomID, roomEvents) ->
+                res.roomSync.invite.forEach { (roomID, roomEvents) ->
                     roomEvents.inviteState.events.forEach { event ->
-                        listeners.forEach { it.onRoomEvent(event, roomID, phone) }
+                        listeners.forEach { it.onNewRoomEvent(event, roomID, phone) }
                     }
                 }
             } catch (e: UnrecognizedPropertyException) {
