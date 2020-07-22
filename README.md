@@ -56,7 +56,7 @@ Currently, you have to include the SDK as jar file. Download it under releases (
 To use the SDK first create the DialPhone object.
 ```kotlin
 val phone = DialPhoneImpl(
-    homeserverUrl = "matrix.example.com",
+    homeserverUrl = "https://matrix.example.com",
     token = "Your token",
     // Optional. If you want to use it as bot, ! by default
     commandPrefix = "&",
@@ -174,7 +174,7 @@ Room menagement is not fully implemented yet.
 
 ### Invite Listener and Join
 
-This example listenns for an invite event and joins it.
+This example listens for an invite event and joins the room.
 
 ```kotlin
 class InviteListener : ListenerAdapter() {
@@ -214,7 +214,7 @@ If you want to receive your custom events you have to register these when initia
 
 ```kotlin
 val phone = DialPhone(
-    homeserverUrl = "matrix.example.com",
+    homeserverUrl = "https://matrix.example.com",
     token = "Your token",
     customEventTypes = arrayOf(MyEvent::class)
 )
