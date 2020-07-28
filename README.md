@@ -55,7 +55,7 @@ Login and registration with username and password will be availibe in the future
 ```kotlin
 val phone = DialPhone { // this: DialPhoneBuilder
     homeserverUrl = "<YOUR_HOMESERVER_URL>" // This is 
-    withToken("<YOUR TOKEN>) // If you want to login with an access token
+    withToken("<YOUR TOKEN>") // If you want to login with an access token
     asGuets() // If you want to create a guest account
     addListeners {
         add(ExampleListener())
