@@ -1,7 +1,7 @@
 package de.mtorials.dialphone.entities
 
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
-import de.mtorials.dialphone.entities.entityfutures.UserFuture
+import de.mtorials.dialphone.entities.entityfutures.UserFutureImpl
 import de.mtorials.dialphone.enums.JoinRule
 import de.mtorials.dialphone.enums.Membership
 import de.mtorials.dialphone.mevents.roommessage.MessageEventContent
@@ -26,10 +26,9 @@ class RoomImpl(
                 is MRoomJoinRules -> joinRule = event.content.joinRule
                 is MRoomAvatar -> avatarUrl = event.content.url
                 is MRoomMember -> if (event.content.membership == Membership.JOIN) members.add(MemberImpl(
-                    user = UserFuture(event.sender, phone),
-                    displayName = event.content.displayName,
-                    avatarUrl = event.content.avatarURL,
-                    phone = phone
+                    id = event.stateKey,
+                    phone = phone,
+                    roomId = this.id
                 ))
             }
         }

@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.entities.entityfutures
 
 import de.mtorials.dialphone.DialPhone
+import de.mtorials.dialphone.entities.MemberImpl
 import de.mtorials.dialphone.entities.Message
 import de.mtorials.dialphone.entities.actions.MessageActionsImpl
 import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
@@ -18,7 +19,12 @@ class MessageFuture(
             messageType = event.content::class,
             phone = phone,
             roomFuture = RoomFutureImpl(roomId, phone),
-            id = id
+            id = id,
+            author = MemberImpl(
+                id = event.sender,
+                roomId = roomId,
+                phone = phone
+            )
         )
     }
 }
