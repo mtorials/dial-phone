@@ -48,18 +48,25 @@ implementation 'de.mtorials:dial-phone:<SEE_RELEASES>'
 
 ## Getting Started
 
-Currently, you have to include the SDK as jar file. Download it under releases (if available).
-
 To use the SDK first create the DialPhone object.
+
+Use can create a guestAccount or login with a access token.
+Login and registration with username and password will be availibe in the future.
 ```kotlin
-val phone = DialPhoneImpl(
-    homeserverUrl = "https://matrix.example.com",
-    token = "Your token",
-    // Optional. If you want to use it as bot, ! by default
-    commandPrefix = "&",
-    // Optional, see Listeners
-    listeners = listOf(MyListener1(), MyListener2())
-)
+val phone = DialPhone { // this: DialPhoneBuilder
+    homeserverUrl = "<YOUR_HOMESERVER_URL>" // This is 
+    withToken("<YOUR TOKEN>) // If you want to login with an access token
+    asGuets() // If you want to create a guest account
+    addListeners {
+        add(ExampleListener())
+        // use add() to add as many listeners you want
+    }
+    addCustomEventTypes {
+        add(TestStateEvent::class)
+        // use add to add more custom events
+    }
+}
+
 ```
 
 To receive events you have to start syncing. Do not forget to wait for the returned job. Otherwise, your code
@@ -210,15 +217,7 @@ class PositionEvent(
 }
 ```
 
-If you want to receive your custom events you have to register these when initializing `DailPhone`.
-
-```kotlin
-val phone = DialPhone(
-    homeserverUrl = "https://matrix.example.com",
-    token = "Your token",
-    customEventTypes = arrayOf(MyEvent::class)
-)
-```
+If you want to receive your custom events you have to register these when creating the `DailPhone` object.
 
 ### Send Custom Events
 
