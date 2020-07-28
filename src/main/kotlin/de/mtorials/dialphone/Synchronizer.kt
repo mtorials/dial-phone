@@ -5,6 +5,10 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
+import de.mtorials.dialphone.entities.actions.InvitedRoomActions
+import de.mtorials.dialphone.entities.actions.InvitedRoomActionsImpl
+import de.mtorials.dialphone.entities.entityfutures.RoomFuture
+import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import de.mtorials.dialphone.listener.Listener
 import de.mtorials.dialphone.mevents.MatrixEvent
 import de.mtorials.dialphone.responses.SyncResponse
@@ -13,7 +17,7 @@ import kotlin.reflect.KClass
 
 class Synchronizer(
     private val listeners: MutableList<Listener>,
-    private val phone: DialPhone,
+    private val phone: DialPhoneImpl,
     subTypes: Array<KClass<out MatrixEvent>>
 ) {
 
@@ -28,11 +32,13 @@ class Synchronizer(
                 val res = getSyncResponse()
                 lastTimeBatch = res.nextBatch
                 res.roomSync.join.forEach { (roomID, roomEvents) ->
+                    phone.cache.joinedRooms.add(RoomFutureImpl(roomID, phone))
                     roomEvents.timeline.events.forEach { event ->
                         listeners.forEach { it.onOldRoomEvent(event, roomID, phone) }
                     }
                 }
                 res.roomSync.invite.forEach { (roomID, roomEvents) ->
+                    phone.cache.invitedRooms.add(InvitedRoomActionsImpl(phone, roomID))
                     roomEvents.inviteState.events.forEach { event ->
                         listeners.forEach { it.onOldRoomEvent(event, roomID, phone) }
                     }
@@ -47,19 +53,25 @@ class Synchronizer(
 
     suspend fun sync() {
         while(true) {
+            var joinedRooms: MutableList<RoomFuture> = mutableListOf()
+            var invitedRooms: MutableList<InvitedRoomActions> = mutableListOf()
             try {
                 val res : SyncResponse = getSyncResponse()
                 lastTimeBatch = res.nextBatch
                 res.roomSync.join.forEach { (roomID, roomEvents) ->
+                    joinedRooms.add(RoomFutureImpl(roomID, phone))
                     roomEvents.timeline.events.forEach { event ->
                         listeners.forEach { it.onNewRoomEvent(event, roomID, phone) }
                     }
                 }
                 res.roomSync.invite.forEach { (roomID, roomEvents) ->
+                    invitedRooms.add(InvitedRoomActionsImpl(phone, roomID))
                     roomEvents.inviteState.events.forEach { event ->
                         listeners.forEach { it.onNewRoomEvent(event, roomID, phone) }
                     }
                 }
+                phone.cache.joinedRooms = joinedRooms
+                phone.cache.invitedRooms = invitedRooms
             } catch (e: UnrecognizedPropertyException) {
                 e.printStackTrace()
             }

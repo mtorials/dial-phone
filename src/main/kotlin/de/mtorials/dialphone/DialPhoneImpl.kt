@@ -25,6 +25,9 @@ class DialPhoneImpl internal constructor(
     userId: String? = null
 ) : DialPhone {
 
+    // cache
+    val cache = PhoneCache()
+
     override val requestObject = APIRequests(this, customEventTypes)
 
     override val ownId: String = userId ?: runBlocking {
@@ -37,8 +40,11 @@ class DialPhoneImpl internal constructor(
         syncObject.addListener(listener)
     }
 
-    override suspend fun getJoinedRoomFutures() : List<RoomFuture> =
-        requestObject.getJoinedRooms().roomIds.map { id -> RoomFutureImpl(id, this@DialPhoneImpl) }
+    override suspend fun getJoinedRoomFutures(): List<RoomFuture> = cache.joinedRooms
+    override suspend fun getInvitedRoomActions(): List<InvitedRoomActions> = cache.invitedRooms
+
+    //override suspend fun getJoinedRoomFutures() : List<RoomFuture> =
+    //    requestObject.getJoinedRooms().roomIds.map { id -> RoomFutureImpl(id, this@DialPhoneImpl) }
 
     override suspend fun getUserById(id: String) : User? {
         val u : UserWithoutIDResponse = requestObject.getUserById(id) ?: return null
