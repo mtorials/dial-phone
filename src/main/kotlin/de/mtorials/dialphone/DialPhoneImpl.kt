@@ -13,7 +13,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
-class DialPhoneImpl(
+class DialPhoneImpl internal constructor(
     override val token: String,
     override val homeserverUrl: String,
     listeners: List<Listener> = listOf(),
