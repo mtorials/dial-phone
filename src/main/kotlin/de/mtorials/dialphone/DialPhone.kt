@@ -48,9 +48,14 @@ interface DialPhone {
     fun addListener(listener: Listener)
 
     /**
-     * @return Return the entity futures of all rooms the user has joined
+     * @return Returns the entity futures of all rooms the user has joined
      */
     suspend fun getJoinedRoomFutures() : List<RoomFuture>
+
+    /**
+     * @return Returns the room actions for all invited rooms
+     */
+    suspend fun getInvitedRoomActions() : List<InvitedRoomActions>
 
     /**
      * @param id The id of the user you want to get
