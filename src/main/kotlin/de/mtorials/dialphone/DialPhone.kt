@@ -1,8 +1,11 @@
 package de.mtorials.dialphone
 
 import de.mtorials.dialphone.entities.User
+import de.mtorials.dialphone.entities.actions.InvitedRoomActions
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
 import de.mtorials.dialphone.listener.Listener
+import de.mtorials.dialphone.responses.DiscordedRoomImpl
+import de.mtorials.dialphone.responses.DiscoveredRoom
 import kotlinx.coroutines.Job
 
 interface DialPhone {
@@ -60,6 +63,12 @@ interface DialPhone {
      * @return Returns the room future. If not found: null
      */
     suspend fun getJoinedRoomFutureById(id: String) : RoomFuture?
+
+    /**
+     * @return Returns the a list of Pairs containing first the room action which can be used to join the room.
+     * @return As second it returns the actual information.
+     */
+    suspend fun discoverRooms() : List<Pair<InvitedRoomActions, DiscoveredRoom>>
 
     companion object {
         const val MATRIX_PATH = "/_matrix/client/r0/"
