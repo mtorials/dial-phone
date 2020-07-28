@@ -1,12 +1,9 @@
 # DialPhone
 
-[![](https://jitci.com/gh/mtorials/dial-phone/svg)](https://jitci.com/gh/mtorials/dial-phone)
-
 *Work in progress*
 
 A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK for the JVM written in Kotlin.
 The library uses Jackson and Kotlin coroutines. This SDK is not (yet) intended to be used as a full client.
-It does only listen to new events and does not keep state of these.
 
 See my [dial-bot](https://github.com/mtorials/dialbot) repository for a reference bot implementation.
 
@@ -124,6 +121,9 @@ You can pass these as parameters to the `DialPhone` constructor or add them late
 phone.addListener(MyListener())
 ```
 
+You can set in the constructor of each of these abstract classes 
+whether you want to listen to new events only or also receive past events on startup.
+
 ### Sending Events
 
 You can use the `sendMessageEvent` or `sendStateEvent` method on every type which inherits from RoomActions.
@@ -227,9 +227,10 @@ See *Sending Events*.
 ### Receive Custom Events
 
 To receive custom events you have to implement the interface `Listener` directly:
+With the second constructor parameter you can control wether you want to receive past events also.
 
 ```kotlin
-class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class) {
+class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class, true) {
     override fun onMatrixEvent(event: MyEvent, roomFuture: RoomFuture) {
         println("Received custom event with payload ${event.content.payload}.")
     }
