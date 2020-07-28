@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.entities.actions
 
 import de.mtorials.dialphone.DialPhone
+import de.mtorials.dialphone.entities.entityfutures.RoomFuture
 
 interface InvitedRoomActions {
     val phone: DialPhone
@@ -9,5 +10,5 @@ interface InvitedRoomActions {
     /**
      * Join the room you are invited in
      */
-    suspend fun join()
+    suspend fun join() : RoomFuture
 }
