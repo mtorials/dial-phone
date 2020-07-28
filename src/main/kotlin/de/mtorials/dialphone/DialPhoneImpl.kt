@@ -34,6 +34,8 @@ class DialPhoneImpl internal constructor(
         requestObject.getMe().id
     }
 
+    override val profile = Profile(this, ownId)
+
     private val syncObject = Synchronizer(listeners.toMutableList(), this, customEventTypes)
 
     override fun addListener(listener: Listener) {
