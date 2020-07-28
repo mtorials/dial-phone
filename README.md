@@ -50,7 +50,7 @@ implementation 'de.mtorials:dial-phone:<SEE_RELEASES>'
 
 To use the SDK first create the DialPhone object.
 
-Use can create a guestAccount or login with a access token.
+Use can create a guest account or login with a access token.
 Login and registration with username and password will be availibe in the future.
 ```kotlin
 val phone = DialPhone { // this: DialPhoneBuilder
