@@ -11,7 +11,8 @@ class Message(
     id: String,
     phone: DialPhone,
     val roomFuture: RoomFuture,
-    val messageType: KClass<out MRoomMessage.MRoomMessageContent>
+    val messageType: KClass<out MRoomMessage.MRoomMessageContent>,
+    val author: Member
 ) : MessageActionsImpl(
     id = id,
     phone = phone,

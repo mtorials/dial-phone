@@ -5,7 +5,6 @@ import de.mtorials.dialphone.entities.User
 import de.mtorials.dialphone.entities.UserImpl
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
-import de.mtorials.dialphone.entities.entityfutures.UserFuture
 import kotlinx.coroutines.runBlocking
 import de.mtorials.dialphone.listener.Listener
 import de.mtorials.dialphone.mevents.MatrixEvent
