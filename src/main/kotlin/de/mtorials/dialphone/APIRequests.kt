@@ -65,6 +65,20 @@ class APIRequests(
         ).id
     }
 
+
+    //Profile
+    suspend fun getDisplayName(userId: String) : DisplayNameResponse =
+        request(Method.GET, "profile/${encode(userId)}/displayname")
+    //Profile
+    suspend fun setDisplayName(userId: String, displayName: String) : EmptyResponse =
+        request(
+            method = Method.PUT,
+            path = "profile/${encode(userId)}/displayname",
+            body = object {
+                val displayname: String = displayName
+            }
+        )
+
     private suspend inline fun <reified T> request(
         method: Method,
         path: String,

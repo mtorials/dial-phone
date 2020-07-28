@@ -21,6 +21,11 @@ interface DialPhone {
     val ownId: String
 
     /**
+     * Profile information
+     */
+    val profile: Profile
+
+    /**
      * The url of the homeserver
      */
     val homeserverUrl: String
