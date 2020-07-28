@@ -69,6 +69,12 @@ interface DialPhone {
     suspend fun getUserById(id: String) : User?
 
     /**
+     * @param alias The room alias
+     * @return Returns the object to join the room
+     */
+    suspend fun getRoomByAlias(alias: String) : InvitedRoomActions
+
+    /**
      * @param id The id of the room you want to get
      * @return Returns the room future. If not found: null
      */

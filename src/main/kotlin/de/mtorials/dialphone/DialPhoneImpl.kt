@@ -58,6 +58,9 @@ class DialPhoneImpl internal constructor(
         )
     }
 
+    override suspend fun getRoomByAlias(alias: String): InvitedRoomActions =
+        InvitedRoomActionsImpl(this, requestObject.getRoomIdForAlias(alias).roomId)
+
     override suspend fun getJoinedRoomFutureById(id: String) : RoomFuture? =
         when (getJoinedRoomFutures().map { it.id }.contains(id)) {
             true -> RoomFutureImpl(id, this)
