@@ -29,7 +29,6 @@ class MatrixID(
         @JvmStatic
         @JsonCreator
         fun fromString(serialized: String) : MatrixID {
-            println(serialized)
             val split = serialized.split(SEPARATOR)
             return MatrixID(
                 homeServerName = split[1],

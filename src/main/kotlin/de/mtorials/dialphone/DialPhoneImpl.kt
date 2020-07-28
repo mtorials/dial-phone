@@ -19,19 +19,17 @@ class DialPhoneImpl(
     override val homeserverUrl: String,
     listeners: List<Listener> = listOf(),
     override val commandPrefix: String = "!",
-    customEventTypes: Array<KClass<out MatrixEvent>> = arrayOf()
+    customEventTypes: Array<KClass<out MatrixEvent>> = arrayOf(),
+    userId: String? = null
 ) : DialPhone {
 
-    override val ownId: String
     override val requestObject = APIRequests(this, customEventTypes)
 
-    private val syncObject = Synchronizer(listeners.toMutableList(), this, customEventTypes)
-
-    init {
-        ownId = runBlocking {
-            requestObject.getMe().id
-        }
+    override val ownId: String = userId ?: runBlocking {
+        requestObject.getMe().id
     }
+
+    private val syncObject = Synchronizer(listeners.toMutableList(), this, customEventTypes)
 
     override fun addListener(listener: Listener) {
         syncObject.addListener(listener)
