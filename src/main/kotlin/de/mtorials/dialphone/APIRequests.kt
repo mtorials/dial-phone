@@ -4,13 +4,11 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonTypeName
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.core.Method
-import com.github.kittinunf.fuel.core.extensions.jsonBody
-import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import de.mtorials.dialphone.mevents.*
 import de.mtorials.dialphone.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.responses.*
+import org.http4k.client.OkHttp
+import org.http4k.core.Method
 import java.net.URLEncoder
 import kotlin.random.Random
 import kotlin.reflect.KClass
@@ -21,6 +19,8 @@ class APIRequests(
 ) {
     private val mapper = jacksonObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)
     private val random = Random(System.currentTimeMillis().toInt() * 2834)
+
+    private val client = OkHttp()
 
     init { subTypes.forEach { mapper.registerSubtypes(it.java) } }
 
@@ -48,7 +48,6 @@ class APIRequests(
         return request<EventResponse>(
             method = Method.PUT,
             path = "rooms/${encode(roomID)}/send/${typename}/${random.nextInt()}",
-            parameters = mutableListOf(),
             body = content
         ).id
     }
@@ -62,7 +61,6 @@ class APIRequests(
         return request<EventResponse>(
             method = Method.PUT,
             path = "rooms/${encode(roomID)}/state/${typename}/${stateKey}",
-            parameters = mutableListOf(),
             body = content
         ).id
     }
@@ -72,7 +70,6 @@ class APIRequests(
     //Profile
     suspend fun getDisplayName(userId: String) : DisplayNameResponse =
         request(Method.GET, "profile/${encode(userId)}/displayname")
-    //Profile
     suspend fun setDisplayName(userId: String, displayName: String) : EmptyResponse =
         request(
             method = Method.PUT,
@@ -81,31 +78,23 @@ class APIRequests(
                 val displayname: String = displayName
             }
         )
-
+ 
     private suspend inline fun <reified T> request(
         method: Method,
         path: String,
-        parameters: MutableList<Pair<String, String>> = mutableListOf(),
+        vararg parameters: Pair<String, String> = arrayOf(),
         body: Any? = null
     ) : T {
-        val rightPath = phone.homeserverUrl + DialPhone.MATRIX_PATH + path
-        val parameterEncoded = parameters.map { Pair(it.first, URLEncoder.encode(it.second, "utf-8")) }
-        val request = Fuel.request(method, rightPath, parameterEncoded)
-        request["Authorization"] = "Bearer ${phone.token}"
-        request["Content-Type"] = "application/json"
-        //println(mapper.writeValueAsString(body))
-        if (body != null) request.jsonBody(mapper.writeValueAsString(body))
-        request
-            .awaitStringResponseResult().third
-            .fold<Unit>(
-                { data -> return@request mapper.readValue(data) },
-                { error ->
-                    println("An error of type ${error.exception} happened: ${error.message}. Response is ${error.response.responseMessage}")
-                    println(request)
-                    throw RuntimeException("Problem Requesting")
-                }
-            )
-        throw RuntimeException("Dont know")
+        val newPath = phone.homeserverUrl + DialPhone.MATRIX_PATH + path
+        var request = org.http4k.core.Request(method, newPath)
+            .header("Authorization", "Bearer ${phone.token}")
+            .header("Content-Type", "application/json")
+        for (pair in parameters) {
+            request = request.query(pair.first, pair.second)
+        }
+        if (body != null) request = request.body(mapper.writeValueAsString(body))
+        val resString = client(request).bodyString()
+        return jacksonObjectMapper().readValue(resString)
     }
 
     private fun encode(input: String) = URLEncoder.encode(input, "utf-8")

@@ -25,8 +25,8 @@ dependencies {
     implementation("com.github.kittinunf.fuel:fuel-coroutines:2.2.2")
     implementation("org.requirementsascode:moonwlker:0.0.6")
     testImplementation("junit:junit:4.12")
-    //implementation(group = "org.http4k", name = "http4k-core", version = "3.254.0")
-    //implementation(group = "org.http4k", name = "http4k-client-okhttp", version = "3.254.0")
+    implementation(group = "org.http4k", name = "http4k-core", version = "3.254.0")
+    implementation(group = "org.http4k", name = "http4k-client-okhttp", version = "3.254.0")
 }
 
 tasks.dokka {

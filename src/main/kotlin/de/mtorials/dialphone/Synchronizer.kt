@@ -12,17 +12,24 @@ import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import de.mtorials.dialphone.listener.Listener
 import de.mtorials.dialphone.mevents.MatrixEvent
 import de.mtorials.dialphone.responses.SyncResponse
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import org.http4k.client.OkHttp
+import org.http4k.core.Method
+import org.http4k.core.Request
+import org.http4k.core.toCurl
 import kotlin.reflect.KClass
 
 class Synchronizer(
     private val listeners: MutableList<Listener>,
     private val phone: DialPhoneImpl,
-    subTypes: Array<KClass<out MatrixEvent>>
+    subTypes: Array<KClass<out MatrixEvent>>,
+    private val fullState: Boolean = false
 ) {
 
     private val mapper = jacksonObjectMapper()
     private var lastTimeBatch: String? = null
+    private val client = OkHttp()
 
     init {
         subTypes.forEach { mapper.registerSubtypes(it.java) }
@@ -53,9 +60,10 @@ class Synchronizer(
 
     suspend fun sync() {
         while(true) {
-            var joinedRooms: MutableList<RoomFuture> = mutableListOf()
-            var invitedRooms: MutableList<InvitedRoomActions> = mutableListOf()
+            val joinedRooms: MutableList<RoomFuture> = mutableListOf()
+            val invitedRooms: MutableList<InvitedRoomActions> = mutableListOf()
             try {
+                //println("again!")
                 val res : SyncResponse = getSyncResponse()
                 lastTimeBatch = res.nextBatch
                 res.roomSync.join.forEach { (roomID, roomEvents) ->
@@ -72,27 +80,21 @@ class Synchronizer(
                 }
                 phone.cache.joinedRooms = joinedRooms
                 phone.cache.invitedRooms = invitedRooms
+                //println(lastTimeBatch)
             } catch (e: UnrecognizedPropertyException) {
                 e.printStackTrace()
             }
+            //delay(10000)
         }
     }
 
     private suspend fun getSyncResponse() : SyncResponse {
-        val parameters: MutableList<Pair<String, String>> = mutableListOf()
-        if (lastTimeBatch != null) parameters.add(Pair("since", lastTimeBatch as String))
-        parameters.add(Pair("timeout", DialPhone.TIMEOUT))
-        parameters.add(Pair("full_state", "false"))
-        val req = Fuel.get(phone.homeserverUrl + DialPhone.MATRIX_PATH + "sync", parameters)
-        req["Authorization"] = "Bearer ${phone.token}"
-        req
-            .awaitStringResponseResult().third
-            .fold<Unit>(
-                { data ->
-                    return@getSyncResponse mapper.readValue(data)
-                },
-                { _ -> throw RuntimeException("Problem Syncing") }
-            )
-        throw RuntimeException("Problem syncing")
+        var request = Request(Method.GET, phone.homeserverUrl + DialPhone.MATRIX_PATH + "sync")
+            .query("timeout", DialPhone.TIMEOUT)
+            .query("full_state", fullState.toString())
+            .header("Authorization", "Bearer ${phone.token}")
+        if (lastTimeBatch != null) request = request.query("since", lastTimeBatch.toString())
+        //println("Body: " + request.bodyString())
+        return mapper.readValue(client(request).bodyString())
     }
 }
