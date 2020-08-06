@@ -35,7 +35,6 @@ class Synchronizer(
     init {
         subTypes.forEach { mapper.registerSubtypes(it.java) }
         runBlocking {
-            // Do not get old events
             try {
                 val res = getSyncResponse()
                 lastTimeBatch = res.nextBatch
