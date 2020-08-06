@@ -18,6 +18,7 @@ import org.http4k.client.OkHttp
 import org.http4k.core.Method
 import org.http4k.core.Request
 import org.http4k.core.toCurl
+import java.lang.RuntimeException
 import kotlin.reflect.KClass
 
 class Synchronizer(
@@ -83,6 +84,8 @@ class Synchronizer(
                 //println(lastTimeBatch)
             } catch (e: UnrecognizedPropertyException) {
                 e.printStackTrace()
+            } catch (e: RuntimeException) {
+                e.printStackTrace()
             }
             //delay(10000)
         }
@@ -94,7 +97,9 @@ class Synchronizer(
             .query("full_state", fullState.toString())
             .header("Authorization", "Bearer ${phone.token}")
         if (lastTimeBatch != null) request = request.query("since", lastTimeBatch.toString())
-        //println("Body: " + request.bodyString())
-        return mapper.readValue(client(request).bodyString())
+        val string = client(request).bodyString()
+        if (string.isEmpty()) throw RuntimeException("Response is empty.")
+        //println(string)
+        return mapper.readValue(string)
     }
 }
