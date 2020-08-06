@@ -19,9 +19,9 @@ import kotlin.reflect.KClass
 class DialPhoneImpl internal constructor(
     override val token: String,
     override val homeserverUrl: String,
-    listeners: List<Listener> = listOf(),
-    override val commandPrefix: String = "!",
-    customEventTypes: Array<KClass<out MatrixEvent>> = arrayOf(),
+    listeners: List<Listener>,
+    override val commandPrefix: String,
+    customEventTypes: Array<KClass<out MatrixEvent>>,
     userId: String? = null
 ) : DialPhone {
 

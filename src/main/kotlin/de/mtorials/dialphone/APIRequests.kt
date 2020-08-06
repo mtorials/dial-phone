@@ -2,6 +2,7 @@ package de.mtorials.dialphone
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonTypeName
+import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import de.mtorials.dialphone.mevents.*
@@ -9,6 +10,7 @@ import de.mtorials.dialphone.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.responses.*
 import org.http4k.client.OkHttp
 import org.http4k.core.Method
+import java.lang.RuntimeException
 import java.net.URLEncoder
 import kotlin.random.Random
 import kotlin.reflect.KClass
@@ -94,7 +96,11 @@ class APIRequests(
         }
         if (body != null) request = request.body(mapper.writeValueAsString(body))
         val resString = client(request).bodyString()
-        return jacksonObjectMapper().readValue(resString)
+        try {
+            return jacksonObjectMapper().readValue(resString)
+        } catch(e: MissingKotlinParameterException) {
+            throw RuntimeException(resString)
+        }
     }
 
     private fun encode(input: String) = URLEncoder.encode(input, "utf-8")
