@@ -88,7 +88,7 @@ interface DialPhone {
 
     companion object {
         const val MATRIX_PATH = "/_matrix/client/r0/"
-        const val TIMEOUT = "10000"
+        const val TIMEOUT = "8000"
 
         operator fun invoke(block: DialPhoneBuilder.() -> Unit) : DialPhone = DialPhoneBuilder(block).build()
     }
