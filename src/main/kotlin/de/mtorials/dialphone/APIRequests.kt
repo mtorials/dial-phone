@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import de.mtorials.dialphone.exceptions.APIException
 import de.mtorials.dialphone.mevents.*
 import de.mtorials.dialphone.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.responses.*
@@ -99,7 +100,7 @@ class APIRequests(
         try {
             return jacksonObjectMapper().readValue(resString)
         } catch(e: MissingKotlinParameterException) {
-            throw RuntimeException(resString)
+            throw jacksonObjectMapper().readValue<APIException>(resString)
         }
     }
 
