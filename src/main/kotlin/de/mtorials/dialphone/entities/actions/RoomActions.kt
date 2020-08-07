@@ -10,12 +10,14 @@ import de.mtorials.dialphone.mevents.roomstate.StateEventContent
 interface RoomActions {
     val phone: DialPhone
     val id: String
+
     /**
      * Sends an MatrixMessageEvent and returns the id
      * @param content An EventContent annotated with the event
      * @return The event Id
      */
     suspend fun sendMessageEvent(content: MessageEventContent) : String
+
     /**
      * Sends an MatrixStateEvent and returns the id
      * @param content An EventContent annotated with the event
