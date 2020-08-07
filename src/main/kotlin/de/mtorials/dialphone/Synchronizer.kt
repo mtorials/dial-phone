@@ -3,8 +3,6 @@ package de.mtorials.dialphone
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import de.mtorials.dialphone.entities.actions.InvitedRoomActions
 import de.mtorials.dialphone.entities.actions.InvitedRoomActionsImpl
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
@@ -12,13 +10,10 @@ import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import de.mtorials.dialphone.listener.Listener
 import de.mtorials.dialphone.mevents.MatrixEvent
 import de.mtorials.dialphone.responses.SyncResponse
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.http4k.client.OkHttp
 import org.http4k.core.Method
 import org.http4k.core.Request
-import org.http4k.core.toCurl
-import java.lang.RuntimeException
 import kotlin.reflect.KClass
 
 class Synchronizer(
