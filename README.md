@@ -56,7 +56,7 @@ Login and registration with username and password will be availibe in the future
 val phone = DialPhone { // this: DialPhoneBuilder
     homeserverUrl = "<YOUR_HOMESERVER_URL>" // This is 
     client withToken "<YOUR TOKEN>" // If you want to login with an access token
-    asGuets() // If you want to create a guest account
+    isGuets() // If you want to create a guest account
     client hasCommandPrefix "!" // If you want to use the command listener, default is "!"
     addListeners {
         add(ExampleListener())
