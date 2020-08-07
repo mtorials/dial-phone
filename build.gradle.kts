@@ -21,10 +21,6 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.+")
-    implementation("com.github.kittinunf.fuel:fuel:2.2.2")
-    implementation("com.github.kittinunf.fuel:fuel-coroutines:2.2.2")
-    implementation("org.requirementsascode:moonwlker:0.0.6")
-    testImplementation("junit:junit:4.12")
     implementation(group = "org.http4k", name = "http4k-core", version = "3.254.0")
     implementation(group = "org.http4k", name = "http4k-client-okhttp", version = "3.254.0")
 }
