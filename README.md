@@ -247,6 +247,10 @@ class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class, true) {
 If you want to contact me join the [#dial-phone:mtorials.de](https://matrix.to/#/#dial-phone:mtorials.de) room.
 You can of course also just open an issue.
 
+# Contributing
+
+Everyone is welcome to contribute. See the [CONTRIBUTING.md](https://github.com/mtorials/dial-phone/blob/master/CONTRIBUTING.md) for more information.
+
 # TODO
 
 - support for the most used Matrix events
