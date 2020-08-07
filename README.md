@@ -240,6 +240,10 @@ class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class, true) {
     }
 }
 ```
+# Contact
+
+If you want to contact me join the [#dial-phone:mtorials.de](https://matrix.to/#/#dial-phone:mtorials.de) room.
+You can of course also just open an issue.
 
 # TODO
 
