@@ -3,18 +3,20 @@ package de.mtorials.dialphone
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.coroutines.awaitStringResponse
+import org.http4k.client.OkHttp
+import org.http4k.core.Method
 
-object Registrator {
+object Registrar {
 
     private const val registrationEndpoint = "/_matrix/client/r0/register"
+    private val client = OkHttp()
 
     suspend fun registerGuest(homeserverUrl: String) : GuestResponse {
-        val response = Fuel.post(homeserverUrl + registrationEndpoint, listOf(Pair("kind", "guest")))
+        val request = org.http4k.core.Request(Method.POST, homeserverUrl + registrationEndpoint)
+            .query("kind", "guest")
             .body("{}")
-            .awaitStringResponse()
-        return jacksonObjectMapper().readValue(response.third)
+        val responseString = client(request).bodyString()
+        return jacksonObjectMapper().readValue(responseString)
     }
 
     data class GuestResponse(
