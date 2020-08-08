@@ -1,6 +1,6 @@
 package de.mtorials.dialphone.entities.actions
 
-import de.mtorials.dialphone.ContentEventType
+import net.micromes.makocommons.mevents.ContentEventType
 import de.mtorials.dialphone.DialPhone
 import net.micromes.makocommons.mevents.MatrixEvent
 import net.micromes.makocommons.mevents.roommessage.MessageEventContent
