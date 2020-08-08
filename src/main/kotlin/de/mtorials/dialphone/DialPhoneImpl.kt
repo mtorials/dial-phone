@@ -9,7 +9,7 @@ import de.mtorials.dialphone.entities.entityfutures.RoomFuture
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import kotlinx.coroutines.runBlocking
 import de.mtorials.dialphone.listener.Listener
-import de.mtorials.dialphone.mevents.MatrixEvent
+import net.micromes.makocommons.mevents.MatrixEvent
 import de.mtorials.dialphone.responses.DiscoveredRoom
 import de.mtorials.dialphone.responses.UserWithoutIDResponse
 import kotlinx.coroutines.GlobalScope

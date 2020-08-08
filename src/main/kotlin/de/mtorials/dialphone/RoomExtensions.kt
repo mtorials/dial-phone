@@ -2,8 +2,8 @@ package de.mtorials.dialphone
 
 import de.mtorials.dialphone.entities.actions.RoomActions
 import de.mtorials.dialphone.entities.entityfutures.MessageFuture
-import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
-import de.mtorials.dialphone.mevents.roomstate.MRoomName
+import net.micromes.makocommons.mevents.roommessage.MRoomMessage
+import net.micromes.makocommons.mevents.roomstate.MRoomName
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

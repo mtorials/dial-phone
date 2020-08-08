@@ -1,7 +1,7 @@
 package de.mtorials.dialphone
 
 import de.mtorials.dialphone.listener.Listener
-import de.mtorials.dialphone.mevents.MatrixEvent
+import net.micromes.makocommons.mevents.MatrixEvent
 import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
 
