@@ -1,8 +1,8 @@
 package de.mtorials.dialphone.entities.actions
 
 import de.mtorials.dialphone.DialPhone
-import de.mtorials.dialphone.mevents.roommessage.MessageEventContent
-import de.mtorials.dialphone.mevents.roomstate.StateEventContent
+import net.micromes.makocommons.mevents.roommessage.MessageEventContent
+import net.micromes.makocommons.mevents.roomstate.StateEventContent
 
 /**
  * All actions you can perform on a room

@@ -3,8 +3,7 @@ package de.mtorials.dialphone.dialevents
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.actions.InvitedRoomActions
 import de.mtorials.dialphone.entities.actions.InvitedRoomActionsImpl
-import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
-import de.mtorials.dialphone.mevents.roomstate.MRoomMember
+import net.micromes.makocommons.mevents.roomstate.MRoomMember
 
 class RoomInviteEvent(
     val invitedRoomActions: InvitedRoomActions,

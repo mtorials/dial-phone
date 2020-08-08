@@ -1,6 +1,6 @@
 package de.mtorials.dialphone
 
-import de.mtorials.dialphone.mevents.MatrixEvent
+import net.micromes.makocommons.mevents.MatrixEvent
 import kotlin.reflect.KClass
 
 /**

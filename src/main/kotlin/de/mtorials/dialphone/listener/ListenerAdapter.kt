@@ -2,12 +2,11 @@ package de.mtorials.dialphone.listener
 
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.dialevents.MessageReceivedEvent
-import de.mtorials.dialphone.dialevents.PresenceChangeEvent
 import de.mtorials.dialphone.dialevents.RoomInviteEvent
 import de.mtorials.dialphone.enums.Membership
-import de.mtorials.dialphone.mevents.MatrixEvent
-import de.mtorials.dialphone.mevents.roommessage.MRoomMessage
-import de.mtorials.dialphone.mevents.roomstate.MRoomMember
+import net.micromes.makocommons.mevents.MatrixEvent
+import net.micromes.makocommons.mevents.roommessage.MRoomMessage
+import net.micromes.makocommons.mevents.roomstate.MRoomMember
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

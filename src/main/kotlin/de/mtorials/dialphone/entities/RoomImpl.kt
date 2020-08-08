@@ -1,11 +1,11 @@
 package de.mtorials.dialphone.entities
 
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
-import de.mtorials.dialphone.entities.entityfutures.UserFutureImpl
 import de.mtorials.dialphone.enums.JoinRule
 import de.mtorials.dialphone.enums.Membership
-import de.mtorials.dialphone.mevents.roommessage.MessageEventContent
+import net.micromes.makocommons.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.mevents.roomstate.*
+import net.micromes.makocommons.mevents.roomstate.*
 
 class RoomImpl(
     action: RoomFutureImpl,
