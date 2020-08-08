@@ -9,7 +9,9 @@
 
 
 A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK for the JVM written in Kotlin.
-The library uses Jackson and Kotlin coroutines. This SDK is not (yet) intended to be used as a full client.
+The library uses Jackson and Kotlin coroutines.
+The SDK is primarily design to be used for bots and not yet intendet to be used for a fully featured client,
+although this is a goal for the future.
 
 See my [dial-bot](https://github.com/mtorials/dialbot) repository for a reference bot implementation.
 
