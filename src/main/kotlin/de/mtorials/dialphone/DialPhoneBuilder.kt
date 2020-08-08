@@ -25,7 +25,7 @@ class DialPhoneBuilder(
     }
 
     fun isGuest() {
-        val guest = runBlocking { Registrator.registerGuest(homeserverUrl ?: throwNoHomeserver()) }
+        val guest = runBlocking { Registrar.registerGuest(homeserverUrl ?: throwNoHomeserver()) }
         token = guest.token
         ownId = guest.userId
     }
