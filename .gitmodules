@@ -1,0 +1,3 @@
+[submodule "src/main/kotlin/net/micromes/makocommons"]
+	path = src/main/kotlin/net/micromes/makocommons
+	url = https://github.com/Micromes-Dev/mako-commons.git
