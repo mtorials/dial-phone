@@ -1,3 +1,6 @@
+<a href="https://matrix.org" target="_blank">
+<img align="right" width="98" height="41" src="https://matrix.org/docs/projects/images//made-for-matrix.png"></a>
+
 # DialPhone
 
 [![](https://jitci.com/gh/mtorials/dial-phone/svg)](https://jitci.com/gh/mtorials/dial-phone)
