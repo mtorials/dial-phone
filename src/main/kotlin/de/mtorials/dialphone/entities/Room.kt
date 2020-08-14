@@ -1,7 +1,7 @@
 package de.mtorials.dialphone.entities
 
 import de.mtorials.dialphone.entities.actions.RoomActions
-import de.mtorials.dialphone.enums.JoinRule
+import net.micromes.makocommons.enums.JoinRule
 
 /**
  * A matrix room
