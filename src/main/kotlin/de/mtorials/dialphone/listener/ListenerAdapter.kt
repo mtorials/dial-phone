@@ -3,7 +3,7 @@ package de.mtorials.dialphone.listener
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.dialevents.RoomInviteEvent
-import de.mtorials.dialphone.enums.Membership
+import net.micromes.makocommons.enums.Membership
 import net.micromes.makocommons.mevents.MatrixEvent
 import net.micromes.makocommons.mevents.roommessage.MRoomMessage
 import net.micromes.makocommons.mevents.roomstate.MRoomMember

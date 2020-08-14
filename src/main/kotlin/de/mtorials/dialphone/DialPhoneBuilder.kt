@@ -3,6 +3,7 @@ package de.mtorials.dialphone
 import de.mtorials.dialphone.listener.Listener
 import net.micromes.makocommons.mevents.MatrixEvent
 import kotlinx.coroutines.runBlocking
+import java.net.http.WebSocket
 import kotlin.reflect.KClass
 
 typealias CustomEventList = DialPhoneBuilder.BuilderList<KClass<out MatrixEvent>>
@@ -38,8 +39,16 @@ class DialPhoneBuilder(
         listenerList.block()
     }
 
+    fun addListeners(vararg listeners: Listener) {
+       this.listenerList.addAll(listeners as Array<Listener>)
+    }
+
     infix fun addCustomEventTypes(block: CustomEventList.() -> CustomEventList) {
         customEventList.block()
+    }
+
+    fun addCustomEventTypes(vararg types: KClass<out MatrixEvent>) {
+        customEventList.addAll(types as Array<KClass<out MatrixEvent>>)
     }
 
     infix fun hasCommandPrefix(commandPrefix: String) {
@@ -50,6 +59,10 @@ class DialPhoneBuilder(
         val list: MutableList<T> = mutableListOf()
         fun add(el: T): BuilderList<T> {
             list.add(el)
+            return this
+        }
+        fun addAll(listeners: Array<T>): BuilderList<T> {
+            list.addAll(listeners)
             return this
         }
     }
