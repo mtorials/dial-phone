@@ -261,11 +261,8 @@ Everyone is welcome to contribute. See the [CONTRIBUTING.md](https://github.com/
 - support for the most used Matrix events
 - complete room management
 - support for all Matrix events
-- better error handling
 - DialPhone events for the most used native Matrix events
 - usability as full client
-- Application API support
 - lazy loading
-- encryption
 - group management
 
