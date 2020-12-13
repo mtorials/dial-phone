@@ -3,7 +3,6 @@ package de.mtorials.dialphone
 import de.mtorials.dialphone.listener.Listener
 import net.mt32.makocommons.mevents.MatrixEvent
 import kotlinx.coroutines.runBlocking
-import java.net.http.WebSocket
 import kotlin.reflect.KClass
 
 typealias CustomEventList = DialPhoneBuilder.BuilderList<KClass<out MatrixEvent>>
