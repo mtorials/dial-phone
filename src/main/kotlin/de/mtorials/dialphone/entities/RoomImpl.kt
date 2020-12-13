@@ -4,7 +4,6 @@ import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import net.micromes.makocommons.enums.JoinRule
 import net.micromes.makocommons.enums.Membership
 import net.micromes.makocommons.mevents.roommessage.MessageEventContent
-import de.mtorials.dialphone.mevents.roomstate.*
 import net.micromes.makocommons.mevents.roomstate.*
 
 class RoomImpl(
