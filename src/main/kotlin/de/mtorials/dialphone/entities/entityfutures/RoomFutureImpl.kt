@@ -4,7 +4,7 @@ import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.Room
 import de.mtorials.dialphone.entities.RoomImpl
 import de.mtorials.dialphone.entities.actions.RoomActionsImpl
-import net.micromes.makocommons.mevents.roomstate.MatrixStateEvent
+import net.mt32.makocommons.mevents.roomstate.MatrixStateEvent
 
 class RoomFutureImpl(
     override val id: String,

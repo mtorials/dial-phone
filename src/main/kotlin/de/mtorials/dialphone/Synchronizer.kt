@@ -8,7 +8,7 @@ import de.mtorials.dialphone.entities.actions.InvitedRoomActionsImpl
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import de.mtorials.dialphone.listener.Listener
-import net.micromes.makocommons.mevents.MatrixEvent
+import net.mt32.makocommons.mevents.MatrixEvent
 import de.mtorials.dialphone.responses.SyncResponse
 import kotlinx.coroutines.runBlocking
 import org.http4k.client.OkHttp
