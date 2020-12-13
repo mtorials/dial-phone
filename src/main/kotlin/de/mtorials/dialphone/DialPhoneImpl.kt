@@ -49,6 +49,9 @@ class DialPhoneImpl internal constructor(
     //    requestObject.getJoinedRooms().roomIds.map { id -> RoomFutureImpl(id, this@DialPhoneImpl) }
 
     override suspend fun getUserById(id: String) : User? {
+        // Check cache
+        if (cache.users.containsKey(id)) return cache.users[id]
+
         val u : UserWithoutIDResponse = requestObject.getUserById(id) ?: return null
         return UserImpl(
             id = id,
