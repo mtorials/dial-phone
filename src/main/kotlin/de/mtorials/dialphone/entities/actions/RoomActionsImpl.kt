@@ -1,10 +1,10 @@
 package de.mtorials.dialphone.entities.actions
 
-import net.micromes.makocommons.mevents.ContentEventType
+import net.mt32.makocommons.mevents.ContentEventType
 import de.mtorials.dialphone.DialPhone
-import net.micromes.makocommons.mevents.MatrixEvent
-import net.micromes.makocommons.mevents.roommessage.MessageEventContent
-import net.micromes.makocommons.mevents.roomstate.StateEventContent
+import net.mt32.makocommons.mevents.MatrixEvent
+import net.mt32.makocommons.mevents.roommessage.MessageEventContent
+import net.mt32.makocommons.mevents.roomstate.StateEventContent
 import kotlin.reflect.KClass
 
 open class RoomActionsImpl(

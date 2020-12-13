@@ -6,10 +6,10 @@ import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import de.mtorials.dialphone.exceptions.APIException
-import net.micromes.makocommons.mevents.roomstate.MatrixStateEvent
+import net.mt32.makocommons.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.responses.*
-import net.micromes.makocommons.mevents.EventContent
-import net.micromes.makocommons.mevents.MatrixEvent
+import net.mt32.makocommons.mevents.EventContent
+import net.mt32.makocommons.mevents.MatrixEvent
 import org.http4k.client.OkHttp
 import org.http4k.core.Method
 import java.net.URLEncoder

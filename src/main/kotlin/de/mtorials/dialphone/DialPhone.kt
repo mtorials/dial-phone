@@ -48,7 +48,7 @@ interface DialPhone {
     fun sync() : Job
 
     /**
-     * Adds a listener
+     * Register a listener
      */
     fun addListener(listener: Listener)
 
