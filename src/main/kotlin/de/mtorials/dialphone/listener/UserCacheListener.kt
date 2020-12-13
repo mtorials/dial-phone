@@ -9,6 +9,14 @@ import net.mt32.makocommons.mevents.roomstate.MRoomMember
 
 class UserCacheListener(private val cache: PhoneCache) : Listener {
     override fun onNewRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+        cache(event, roomId, phone)
+    }
+
+    override fun onOldRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+        cache(event, roomId, phone)
+    }
+
+    private fun cache(event: MatrixEvent, roomId: String, phone: DialPhone) {
         if (event !is MRoomMember) return
         cache.users[event.stateKey] = UserImpl(
             id = event.stateKey,
@@ -16,9 +24,5 @@ class UserCacheListener(private val cache: PhoneCache) : Listener {
             displayName = event.content.displayName,
             phone = phone
         )
-    }
-
-    override fun onOldRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
-        return
     }
 }
