@@ -260,7 +260,6 @@ Everyone is welcome to contribute. See the [CONTRIBUTING.md](https://github.com/
 - complete room management
 - support for all Matrix events
 - DialPhone events for the most used native Matrix events
-- usability as full client
 - lazy loading
 - group management
 
