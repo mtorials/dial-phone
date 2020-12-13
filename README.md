@@ -13,8 +13,6 @@
 
 A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK for the JVM written in Kotlin.
 The library uses Jackson and Kotlin coroutines.
-The SDK is primarily design to be used for bots and not yet intendet to be used for a fully featured client,
-although this is a goal for the future.
 
 See my [dial-bot](https://github.com/mtorials/dialbot) repository for a reference bot implementation.
 
@@ -262,7 +260,6 @@ Everyone is welcome to contribute. See the [CONTRIBUTING.md](https://github.com/
 - complete room management
 - support for all Matrix events
 - DialPhone events for the most used native Matrix events
-- usability as full client
 - lazy loading
 - group management
 
