@@ -1,7 +1,7 @@
 import org.gradle.jvm.tasks.Jar
 
 plugins {
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm") version "1.4.20"
     id("org.jetbrains.dokka") version "0.10.0"
     maven
     java
