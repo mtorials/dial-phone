@@ -40,18 +40,21 @@ interface DialPhone {
      */
     val requestObject: APIRequests
 
+
     /**
      * Used to synchronize with the homeserver.
-     * Call this function to receive events.
-     * To use this job you need kotlinx.coroutines.
-     * For use without coroutines use
-     * @see syncBlocking()
-     * @return Return an infinite lasting job
+     * Call this method to receive events.
+     * To use the returning job you need kotlinx.coroutines.
+     * @see syncBlocking for a blocking method
+     * @return Returns an infinite lasting job
      */
     fun sync() : Job
 
     /**
-     * Like the Sync function but blocking
+     * Used to synchronize with the homeserver.
+     * Call this method to receive events.
+     * This method is blocking.
+     * @see sync for a non blocking method
      */
     fun syncBlocking()
 

@@ -13,6 +13,7 @@ import net.mt32.makocommons.mevents.MatrixEvent
 import de.mtorials.dialphone.responses.DiscoveredRoom
 import de.mtorials.dialphone.responses.UserWithoutIDResponse
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -74,7 +75,7 @@ class DialPhoneImpl internal constructor(
         return requestObject.discoverRooms().rooms.map { Pair(InvitedRoomActionsImpl(this, it.id), it) }
     }
 
-    override fun sync() = GlobalScope.launch {
+    override fun sync(): Job = GlobalScope.launch {
         syncObject.sync()
     }
 

@@ -79,8 +79,17 @@ val phone = DialPhone { // this: DialPhoneBuilder
 
 ```
 
-To receive events you have to start syncing. Do not forget to wait for the returned job. Otherwise, your code
-will just stop executing at the end of the main function.
+To receive events you have to start synchronizing.
+
+if you want to use the blocking sync method, use:
+
+```kotlin
+phone.syncBlocking()
+```
+
+If you want to use [koltinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+do not forget to wait for the returned job to join.
+Otherwise, your code will just stop executing at the end of your main function (you need to install kotlinx.coroutines).
 
 ```kotlin
 val syncJob = phone.sync()
