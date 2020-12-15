@@ -5,9 +5,6 @@
 
 [![](https://jitci.com/gh/mtorials/dial-phone/svg)](https://jitci.com/gh/mtorials/dial-phone)
 
-*Work in progress*
-
-
 ![dialphone-logo](https://raw.githubusercontent.com/mtorials/dial-phone/master/logo.png)
 
 
