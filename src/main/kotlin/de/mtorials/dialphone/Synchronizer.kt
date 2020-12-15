@@ -1,5 +1,6 @@
 package de.mtorials.dialphone
 
+import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -7,6 +8,7 @@ import de.mtorials.dialphone.entities.actions.InvitedRoomActions
 import de.mtorials.dialphone.entities.actions.InvitedRoomActionsImpl
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
+import de.mtorials.dialphone.exceptions.SyncException
 import de.mtorials.dialphone.listener.Listener
 import de.mtorials.dialphone.listener.UserCacheListener
 import net.mt32.makocommons.mevents.MatrixEvent
@@ -90,14 +92,20 @@ class Synchronizer(
     }
 
     private suspend fun getSyncResponse() : SyncResponse {
-        var request = Request(Method.GET, phone.homeserverUrl + DialPhone.MATRIX_PATH + "sync")
-            .query("timeout", DialPhone.TIMEOUT)
-            .query("full_state", fullState.toString())
-            .header("Authorization", "Bearer ${phone.token}")
-        if (lastTimeBatch != null) request = request.query("since", lastTimeBatch.toString())
-        val string = client(request).bodyString()
-        if (string.isEmpty()) throw RuntimeException("Response is empty.")
-        //println(string)
-        return mapper.readValue(string)
+        try {
+            var request = Request(Method.GET, phone.homeserverUrl + DialPhone.MATRIX_PATH + "sync")
+                .query("timeout", DialPhone.TIMEOUT)
+                .query("full_state", fullState.toString())
+                .header("Authorization", "Bearer ${phone.token}")
+            if (lastTimeBatch != null) request = request.query("since", lastTimeBatch.toString())
+            val string = client(request).bodyString()
+            if (string.isEmpty()) throw RuntimeException("Response is empty.")
+            //println(string)
+            return mapper.readValue(string)
+        } catch (mappingException: JsonMappingException) {
+            throw SyncException(mappingException, "Deserialization Exception while Syncing")
+        } catch (e: Exception) {
+            throw SyncException(e, "Exception while syncing")
+        }
     }
 }
