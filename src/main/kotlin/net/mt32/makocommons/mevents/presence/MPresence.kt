@@ -15,7 +15,7 @@ class MPresence(
     data class PresenceContent(
         val presence: String,
         @JsonProperty("last_active_ago")
-        val lastActiveAgo: Int,
+        val lastActiveAgo: Long,
         @JsonProperty("currently_active")
         val currentlyActive: Boolean
     ) : EventContent
