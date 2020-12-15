@@ -67,14 +67,13 @@ val phone = DialPhone { // this: DialPhoneBuilder
     client withToken "<YOUR TOKEN>" // If you want to login with an access token
     isGuets() // If you want to create a guest account
     client hasCommandPrefix "!" // If you want to use the command listener, default is "!"
-    addListeners {
-        add(ExampleListener())
-        // use add() to add as many listeners you want
-    }
-    addCustomEventTypes {
-        add(TestStateEvent::class)
-        // use add to add more custom events
-    }
+    addListeners(
+        ExampleListener(),
+        SecondExampleListener()
+    )
+    addCustomEventTypes(
+        TestStateEvent::class
+    )
 }
 
 ```
