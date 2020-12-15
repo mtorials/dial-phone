@@ -77,4 +77,8 @@ class DialPhoneImpl internal constructor(
     override fun sync() = GlobalScope.launch {
         syncObject.sync()
     }
+
+    override fun syncBlocking() = runBlocking {
+        syncObject.sync()
+    }
 }

@@ -42,10 +42,18 @@ interface DialPhone {
 
     /**
      * Used to synchronize with the homeserver.
-     * Call this function to receive events
+     * Call this function to receive events.
+     * To use this job you need kotlinx.coroutines.
+     * For use without coroutines use
+     * @see syncBlocking()
      * @return Return an infinite lasting job
      */
     fun sync() : Job
+
+    /**
+     * Like the Sync function but blocking
+     */
+    fun syncBlocking()
 
     /**
      * Register a listener
