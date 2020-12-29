@@ -16,7 +16,7 @@ class MRoomEncrypted(
     @ContentEventType(MRoomMessage::class)
     data class Content(
         @JsonProperty("sender_key")
-        val senderKey: String,
+        val senderKey: String? = null,
         @JsonProperty("ciphertext")
         val cipherText: String,
         @JsonProperty("session_id")
