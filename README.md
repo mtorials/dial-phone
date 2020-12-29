@@ -7,6 +7,7 @@
 
 ![dialphone-logo](https://raw.githubusercontent.com/mtorials/dial-phone/master/logo.png)
 
+*work in progress*
 
 A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK for the JVM written in Kotlin.
 The library uses Jackson and Kotlin coroutines.
