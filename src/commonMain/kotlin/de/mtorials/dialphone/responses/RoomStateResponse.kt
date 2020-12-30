@@ -1,11 +1,11 @@
 package de.mtorials.dialphone.responses
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import net.mt32.makocommons.mevents.MatrixEvent
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 class RoomStateResponse(
-    @JsonProperty("")
+    @SerialName("")
     val stateEvents: List<MatrixEvent>
 )

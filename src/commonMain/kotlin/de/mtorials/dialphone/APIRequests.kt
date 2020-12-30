@@ -2,22 +2,16 @@ package de.mtorials.dialphone
 
 import net.mt32.makocommons.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.responses.*
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.date.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer
-import net.mt32.makocommons.EventSerialization
 import net.mt32.makocommons.mevents.EventContent
 import net.mt32.makocommons.mevents.MatrixEvent
 import kotlin.random.Random
 import kotlin.reflect.KClass
-import kotlin.reflect.typeOf
 
 class APIRequests(
     val phone: DialPhone,
@@ -76,7 +70,7 @@ class APIRequests(
         ).id
     }
     suspend fun redactEventWithIdInRoom(roomId: String, id: String, reason: String? = null) : EventResponse =
-        request(httpMethod = HttpMethod.Put, path = "rooms/${encode(roomId)}/redact/${encode(id)}/${random.nextInt()}", bodyValue = Reason(reason))
+        request(httpMethod = HttpMethod.Put, path = "rooms/${encode(roomId)}/redact/${encode(id)}/${random.nextInt()}", bodyValue = ReasonResponse(reason))
 
     //Profile
     suspend fun getDisplayName(userId: String) : DisplayNameResponse =

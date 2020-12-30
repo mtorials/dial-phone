@@ -1,15 +1,17 @@
 package de.mtorials.dialphone.entities
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.MatrixID
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 class UserImpl(
-    @JsonProperty("avatar_url")
+    @SerialName("avatar_url")
     override val avatarURL: String?,
-    @JsonProperty("displayname")
+    @SerialName("displayname")
     override val displayName: String?,
-    @JsonProperty("user_id")
+    @SerialName("user_id")
     override val id: String,
     override val phone: DialPhone
 ) : User {

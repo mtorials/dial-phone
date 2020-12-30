@@ -1,47 +1,45 @@
 package de.mtorials.dialphone.responses
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import net.mt32.makocommons.mevents.MatrixEvent
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 class SyncResponse(
-    @JsonProperty("presence")
+    @SerialName("presence")
         val presenceEvents: SyncPresence,
-    @JsonProperty("rooms")
+    @SerialName("rooms")
         val roomSync: SyncRooms,
-    @JsonProperty("next_batch")
+    @SerialName("next_batch")
         val nextBatch: String
 ) {
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    
+    @Serializable
     class SyncRooms(
             val join: Map<String, RoomsRoom>,
             val invite: Map<String, RoomsInvite>
     ) {
-        @JsonIgnoreProperties(ignoreUnknown = true)
+        @Serializable
         class RoomsRoom(
                 val timeline: RoomTimeline
         ) {
-            @JsonIgnoreProperties(ignoreUnknown = true)
+            @Serializable
             class RoomTimeline(
                 val events: List<MatrixEvent>
             )
         }
-
-        @JsonIgnoreProperties(ignoreUnknown = true)
+        @Serializable
         class RoomsInvite(
-            @JsonProperty("invite_state")
+            @SerialName("invite_state")
             val inviteState: InviteState
         ) {
-            @JsonIgnoreProperties(ignoreUnknown = true)
+            @Serializable
             class InviteState(
                 val events: List<MatrixEvent>
             )
         }
     }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     class SyncPresence(
             val events: List<MatrixEvent>
     )
