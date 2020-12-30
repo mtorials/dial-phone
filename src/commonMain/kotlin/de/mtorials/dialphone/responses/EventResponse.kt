@@ -1,8 +1,10 @@
 package de.mtorials.dialphone.responses
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 class EventResponse (
-    @JsonProperty("event_id")
+    @SerialName("event_id")
     val id: String
 )

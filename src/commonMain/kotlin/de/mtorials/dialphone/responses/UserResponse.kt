@@ -1,12 +1,14 @@
 package de.mtorials.dialphone.responses
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 class UserResponse(
-    @JsonProperty("avatar_url")
+    @SerialName("avatar_url")
     val avatarURL: String?,
-    @JsonProperty("displayname")
+    @SerialName("displayname")
     val displayName: String?,
-    @JsonProperty("user_id")
+    @SerialName("user_id")
     val id: String
 )

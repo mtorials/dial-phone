@@ -1,8 +1,10 @@
 package de.mtorials.dialphone.responses
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 class RoomResponse (
-    @JsonProperty("room_id")
+    @SerialName("room_id")
     val id: String
 )

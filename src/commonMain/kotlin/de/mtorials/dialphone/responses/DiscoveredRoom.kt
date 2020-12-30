@@ -1,8 +1,6 @@
 package de.mtorials.dialphone.responses
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
-@JsonDeserialize(`as` = DiscordedRoomImpl::class)
 interface DiscoveredRoom {
     val id: String
     val name: String

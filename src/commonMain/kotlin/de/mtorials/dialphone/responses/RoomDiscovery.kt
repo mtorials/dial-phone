@@ -1,10 +1,12 @@
 package de.mtorials.dialphone.responses
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 class RoomDiscovery (
-    @JsonProperty("chunk")
+    @SerialName("chunk")
     val rooms: List<DiscoveredRoom>,
-    @JsonProperty("total_room_count_estimate")
+    @SerialName("total_room_count_estimate")
     val totalRoomCountEstimated: Int
 )
