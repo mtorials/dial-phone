@@ -39,33 +39,27 @@ class APIRequests(
         request(HttpMethod.Get, "directory/room/${encode(alias)}")
 
     // Events
-    @ExperimentalSerializationApi
-    @InternalSerializationApi
     suspend fun sendMessageEvent(
-        eventType: KClass<out MatrixEvent>,
+        eventType: String,
         content: EventContent,
         roomID: String
     ) : String {
-        val typename = eventType.serializer().descriptor.serialName
         return request<EventResponse>(
             httpMethod = HttpMethod.Put,
-            path = "rooms/${encode(roomID)}/send/${typename}/${random.nextInt()}",
+            path = "rooms/${encode(roomID)}/send/$eventType/${random.nextInt()}",
             bodyValue = content
         ).id
     }
 
-    @ExperimentalSerializationApi
-    @InternalSerializationApi
     suspend fun sendStateEvent(
-        eventType: KClass<out MatrixEvent>,
+        eventType: String,
         content: EventContent,
         roomID: String,
         stateKey: String
     ) : String {
-        val typename = eventType.serializer().descriptor.serialName
         return request<EventResponse>(
             httpMethod = HttpMethod.Put,
-            path = "rooms/${encode(roomID)}/state/${typename}/${stateKey}",
+            path = "rooms/${encode(roomID)}/state/${eventType}/${stateKey}",
             bodyValue = content
         ).id
     }

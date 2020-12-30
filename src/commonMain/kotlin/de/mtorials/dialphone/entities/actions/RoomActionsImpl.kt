@@ -2,6 +2,8 @@ package de.mtorials.dialphone.entities.actions
 
 import net.mt32.makocommons.mevents.ContentEventType
 import de.mtorials.dialphone.DialPhone
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
 import net.mt32.makocommons.mevents.MatrixEvent
 import net.mt32.makocommons.mevents.roommessage.MessageEventContent
 import net.mt32.makocommons.mevents.roomstate.StateEventContent
@@ -11,13 +13,12 @@ open class RoomActionsImpl(
     override val phone: DialPhone,
     override val id: String
 ) : RoomActions {
-    override suspend fun sendMessageEvent(content: MessageEventContent) : String {
-        val type : KClass<out MatrixEvent> = content::class.annotations.filterIsInstance<ContentEventType>()[0].type
-        return phone.requestObject.sendMessageEvent(type, content, id)
+
+    override suspend fun sendMessageEvent(content: MessageEventContent, typeName: String) : String {
+        return phone.requestObject.sendMessageEvent(typeName, content, id)
     }
 
-    override suspend fun sendStateEvent(content: StateEventContent, stateKey: String): String {
-        val type : KClass<out MatrixEvent> = content::class.annotations.filterIsInstance<ContentEventType>()[0].type
-        return phone.requestObject.sendStateEvent(type, content, id, stateKey)
+    override suspend fun sendStateEvent(content: StateEventContent, typeName: String, stateKey: String): String {
+        return phone.requestObject.sendStateEvent(typeName, content, id, stateKey)
     }
 }
