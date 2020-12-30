@@ -1,32 +1,33 @@
 package de.mtorials.dialphone
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import org.http4k.client.OkHttp
-import org.http4k.core.Method
+import io.ktor.client.request.*
+import io.ktor.http.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 object Registrar {
 
     private const val registrationEndpoint = "/_matrix/client/r0/register"
-    private val client = OkHttp()
+    private val client = HttpClient.client
 
     suspend fun registerGuest(homeserverUrl: String) : GuestResponse {
-        val request = org.http4k.core.Request(Method.POST, homeserverUrl + registrationEndpoint)
-            .query("kind", "guest")
-            .body("{}")
-        val responseString = client(request).bodyString()
-        return jacksonObjectMapper().readValue(responseString)
+        return client.request {
+            method = HttpMethod.Post
+            url(homeserverUrl + registrationEndpoint)
+            parameter("kind", "guest")
+            body = "{}"
+        }
     }
 
+    @Serializable
     data class GuestResponse(
-        @JsonProperty("device_id")
+        @SerialName("device_id")
         val deviceId: String,
-        @JsonProperty("user_id")
+        @SerialName("user_id")
         val userId: String,
-        @JsonProperty("access_token")
+        @SerialName("access_token")
         val token: String,
-        @JsonProperty("home_server")
+        @SerialName("home_server")
         val homeserverName: String
     )
 }
