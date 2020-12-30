@@ -1,13 +1,20 @@
 plugins {
     kotlin("multiplatform") version "1.4.21"
-    kotlin("plugin.serialization") version "1.4.10"
+    //kotlin("plugin.serialization") version "1.4.10"
+}
+
+group = "de.mtorials"
+version = "v0.1.1-alpha"
+
+
+repositories {
+    mavenCentral()
+    jcenter()
 }
 
 kotlin {
 
-    targets {
-        jvm()
-    }
+    jvm()
 
     sourceSets {
         val commonMain by getting {
@@ -26,13 +33,4 @@ kotlin {
         testCompileOnly("io.kotlintest:kotlintest-runner-junit5:3.0.2")
     }
 }
-
-group = "de.mtorials"
-version = "v0.1.1-alpha"
-
-repositories {
-    mavenCentral()
-    jcenter()
-}
-
 val artifactID = "dial-phone"
