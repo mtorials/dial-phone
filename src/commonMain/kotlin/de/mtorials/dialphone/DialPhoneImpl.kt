@@ -1,6 +1,5 @@
 package de.mtorials.dialphone
 
-
 import de.mtorials.dialphone.entities.User
 import de.mtorials.dialphone.entities.UserImpl
 import de.mtorials.dialphone.entities.actions.InvitedRoomActions

@@ -24,8 +24,8 @@ class DialPhoneBuilder(
         this.block()
     }
 
-    fun isGuest() {
-        val guest = runBlocking { Registrar.registerGuest(homeserverUrl ?: throwNoHomeserver()) }
+    suspend fun isGuest() {
+        val guest = Registrar.registerGuest(homeserverUrl ?: throwNoHomeserver())
         token = guest.token
         ownId = guest.userId
     }
@@ -74,7 +74,6 @@ class DialPhoneBuilder(
         if (homeserverUrl == null) throwNoHomeserver()
         return DialPhoneImpl(
             token = token,
-            userId = ownId,
             homeserverUrl = homeserverUrl!!,
             listeners = listenerList.list,
             customEventTypes = customEventList.list.toTypedArray(),
