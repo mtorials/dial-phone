@@ -20,6 +20,11 @@ interface DialPhone {
     val profile: Profile
 
     /**
+     * The users fully qualified matrix id
+     */
+    val ownID: String
+
+    /**
      * The url of the homeserver
      */
     val homeserverUrl: String
@@ -95,6 +100,6 @@ interface DialPhone {
         const val MATRIX_PATH = "/_matrix/client/r0/"
         const val TIMEOUT = "8000"
 
-        operator fun invoke(block: DialPhoneBuilder.() -> Unit) : DialPhone = DialPhoneBuilder(block).build()
+        suspend operator fun invoke(block: DialPhoneBuilder.() -> Unit) : DialPhone = DialPhoneBuilder(block).build()
     }
 }
