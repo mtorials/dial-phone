@@ -1,10 +1,30 @@
-import org.gradle.jvm.tasks.Jar
-
 plugins {
-    kotlin("jvm") version "1.4.20"
-    id("org.jetbrains.dokka") version "0.10.0"
-    maven
-    java
+    kotlin("multiplatform") version "1.4.21"
+    kotlin("plugin.serialization") version "1.4.10"
+}
+
+kotlin {
+
+    targets {
+        jvm()
+    }
+
+    sourceSets {
+        val commonMain by getting {
+
+        }
+    }
+
+    dependencies {
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.+")
+        implementation(group = "org.http4k", name = "http4k-core", version = "3.254.0")
+        implementation(group = "org.http4k", name = "http4k-client-okhttp", version = "3.254.0")
+
+        testCompileOnly("io.kotlintest:kotlintest-core:3.0.2")
+        testCompileOnly("io.kotlintest:kotlintest-assertions:3.0.2")
+        testCompileOnly("io.kotlintest:kotlintest-runner-junit5:3.0.2")
+    }
 }
 
 group = "de.mtorials"
@@ -16,41 +36,3 @@ repositories {
 }
 
 val artifactID = "dial-phone"
-
-dependencies {
-    implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.+")
-    implementation(group = "org.http4k", name = "http4k-core", version = "3.254.0")
-    implementation(group = "org.http4k", name = "http4k-client-okhttp", version = "3.254.0")
-
-    testCompileOnly("io.kotlintest:kotlintest-core:3.0.2")
-    testCompileOnly("io.kotlintest:kotlintest-assertions:3.0.2")
-    testCompileOnly("io.kotlintest:kotlintest-runner-junit5:3.0.2")
-
-}
-
-tasks.dokka {
-    outputFormat = "html"
-    outputDirectory = "$buildDir/javadoc"
-}
-
-val dokkaJar by tasks.creating(Jar::class) {
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-    description = "Documentation for DialPhone."
-    from(tasks.dokka)
-}
-
-val sourcesJar by tasks.creating(Jar::class) {
-    archiveClassifier.set("sources")
-    from(sourceSets.main.get().allSource)
-}
-
-artifacts {
-    archives(sourcesJar)
-    archives(dokkaJar)
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
