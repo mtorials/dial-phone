@@ -3,6 +3,9 @@ package de.mtorials.dialphone
 class Profile(
     private val phone: DialPhoneImpl
 ) {
+
+    private var ownId: String? = null
+
     suspend fun receiveDisplayName() : String? {
         return phone.requestObject.getMe().displayName
     }
@@ -12,6 +15,7 @@ class Profile(
     }
 
     suspend fun receiveID(): String {
-        return phone.requestObject.getMe().id
+        if (ownId == null) ownId = phone.requestObject.getMe().id
+        return ownId!!
     }
 }
