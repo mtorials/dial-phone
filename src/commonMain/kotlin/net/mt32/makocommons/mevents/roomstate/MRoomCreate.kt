@@ -1,23 +1,22 @@
 package net.mt32.makocommons.mevents.roomstate
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.SerialName
 import net.mt32.makocommons.mevents.ContentEventType
 
-@JsonTypeName("m.room.create")
+@SerialName("m.room.create")
 class MRoomCreate(
     override val sender: String,
-    @JsonProperty("event_id")
+    @SerialName("event_id")
     override val id: String?,
     override val content: Content,
-    @JsonProperty("state_key")
+    @SerialName("state_key")
     override val stateKey: String,
-    @JsonProperty("prev_content")
+    @SerialName("prev_content")
     override val prevContent: Content?
 ) : MatrixStateEvent {
     @ContentEventType(MRoomCreate::class)
     data class Content(
-        @JsonProperty("room_version")
+        @SerialName("room_version")
         val roomVersion: Int,
         val creator: String
     ) : StateEventContent

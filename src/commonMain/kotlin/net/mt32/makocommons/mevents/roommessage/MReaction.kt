@@ -1,8 +1,6 @@
 package net.mt32.makocommons.mevents.roommessage
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.SerialName
 import net.mt32.makocommons.mevents.ContentEventType
 import net.mt32.makocommons.enums.MessageType
 
@@ -10,17 +8,16 @@ import net.mt32.makocommons.enums.MessageType
  * Can not find documentation of this event in specification
  * Is used by the riot client for emotes
  */
-@JsonTypeName("m.reaction")
+@SerialName("m.reaction")
 class MReaction(
     override val sender: String,
-    @JsonProperty("event_id")
+    @SerialName("event_id")
     override val id: String,
     override val content: Content
 ) : MatrixMessageEvent {
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @ContentEventType(MReaction::class)
     data class Content(
-        @JsonProperty("msgtype")
+        @SerialName("msgtype")
         val msgType: MessageType = MessageType.TEXT,
         val body: String
     ) : MessageEventContent

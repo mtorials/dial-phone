@@ -1,12 +1,11 @@
 package net.mt32.makocommons.mevents.presence
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.SerialName
 import net.mt32.makocommons.mevents.ContentEventType
 import net.mt32.makocommons.mevents.EventContent
 import net.mt32.makocommons.mevents.MatrixEvent
 
-@JsonTypeName("m.presence")
+@SerialName("m.presence")
 class MPresence(
         override val sender: String,
         override val content: PresenceContent
@@ -14,9 +13,9 @@ class MPresence(
     @ContentEventType(MPresence::class)
     data class PresenceContent(
         val presence: String,
-        @JsonProperty("last_active_ago")
+        @SerialName("last_active_ago")
         val lastActiveAgo: Long,
-        @JsonProperty("currently_active")
+        @SerialName("currently_active")
         val currentlyActive: Boolean
     ) : EventContent
 }

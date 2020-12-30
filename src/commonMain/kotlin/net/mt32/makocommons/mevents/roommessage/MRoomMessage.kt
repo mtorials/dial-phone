@@ -1,44 +1,36 @@
 package net.mt32.makocommons.mevents.roommessage
 
-import com.fasterxml.jackson.annotation.*
+import kotlinx.serialization.SerialName
 import net.mt32.makocommons.mevents.ContentEventType
 
-@JsonTypeName("m.room.message")
+@SerialName("m.room.message")
 class MRoomMessage(
     override val sender: String,
-    @JsonProperty("event_id")
+    @SerialName("event_id")
     override val id: String,
     override val content: MRoomMessageContent
 ) : MatrixMessageEvent {
 
     @ContentEventType(MRoomMessage::class)
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "msgtype", defaultImpl = EmptyContent::class)
-    @JsonSubTypes(
-        JsonSubTypes.Type(value = TextContent::class),
-        JsonSubTypes.Type(value = ImageContent::class)
-    )
     interface MRoomMessageContent : MessageEventContent {
         val body: String
     }
 
     @ContentEventType(MRoomMessage::class)
-    @JsonTypeName("m.text")
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @SerialName("m.text")
     data class TextContent(
         override val body: String,
         val format: String? = null,
-        @JsonProperty("formatted_body")
+        @SerialName("formatted_body")
         val formattedBody: String? = null
     ) : MRoomMessageContent
 
     @ContentEventType(MRoomMessage::class)
-    @JsonTypeName("")
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @SerialName("")
     data class EmptyContent(override val body: String = "") : MRoomMessageContent
 
-    @JsonTypeName("m.image")
+    @SerialName("m.image")
     @ContentEventType(MRoomMessage::class)
-    @JsonIgnoreProperties(ignoreUnknown = true)
     data class ImageContent(
         override val body: String,
         val url: String?,
