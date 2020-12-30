@@ -4,7 +4,6 @@ import de.mtorials.dialphone.entities.User
 import de.mtorials.dialphone.entities.actions.InvitedRoomActions
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
 import de.mtorials.dialphone.listener.Listener
-import de.mtorials.dialphone.responses.DiscordedRoomImpl
 import de.mtorials.dialphone.responses.DiscoveredRoom
 import kotlinx.coroutines.Job
 
@@ -14,11 +13,6 @@ interface DialPhone {
      * The token for the matrix account
      */
     val token: String
-
-    /**
-     * The id of the account you logged in with
-     */
-    val ownId: String
 
     /**
      * Profile information
@@ -45,18 +39,18 @@ interface DialPhone {
      * Used to synchronize with the homeserver.
      * Call this method to receive events.
      * To use the returning job you need kotlinx.coroutines.
-     * @see syncBlocking for a blocking method
+     * @see sync for a blocking method
      * @return Returns an infinite lasting job
      */
-    fun sync() : Job
+    fun syncAndReturnJob() : Job
 
     /**
      * Used to synchronize with the homeserver.
      * Call this method to receive events.
      * This method is blocking.
-     * @see sync for a non blocking method
+     * @see syncAndReturnJob for a non blocking method
      */
-    fun syncBlocking()
+    suspend fun sync()
 
     /**
      * Register a listener

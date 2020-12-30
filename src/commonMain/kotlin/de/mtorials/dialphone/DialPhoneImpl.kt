@@ -7,7 +7,6 @@ import de.mtorials.dialphone.entities.actions.InvitedRoomActions
 import de.mtorials.dialphone.entities.actions.InvitedRoomActionsImpl
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
-import kotlinx.coroutines.runBlocking
 import de.mtorials.dialphone.listener.Listener
 import net.mt32.makocommons.mevents.MatrixEvent
 import de.mtorials.dialphone.responses.DiscoveredRoom
@@ -22,8 +21,7 @@ class DialPhoneImpl internal constructor(
     override val homeserverUrl: String,
     listeners: List<Listener>,
     override val commandPrefix: String,
-    customEventTypes: Array<KClass<out MatrixEvent>>,
-    userId: String? = null
+    customEventTypes: Array<KClass<out MatrixEvent>>
 ) : DialPhone {
 
     // cache
@@ -31,11 +29,7 @@ class DialPhoneImpl internal constructor(
 
     override val requestObject = APIRequests(this, customEventTypes)
 
-    override val ownId: String = userId ?: runBlocking {
-        requestObject.getMe().id
-    }
-
-    override val profile = Profile(this, ownId)
+    override val profile = Profile(this)
 
     private val syncObject = Synchronizer(listeners.toMutableList(), this, customEventTypes)
 
@@ -75,11 +69,11 @@ class DialPhoneImpl internal constructor(
         return requestObject.discoverRooms().rooms.map { Pair(InvitedRoomActionsImpl(this, it.id), it) }
     }
 
-    override fun sync(): Job = GlobalScope.launch {
+    override fun syncAndReturnJob(): Job = GlobalScope.launch {
         syncObject.sync()
     }
 
-    override fun syncBlocking() = runBlocking {
+    override suspend fun sync() {
         syncObject.sync()
     }
 }
