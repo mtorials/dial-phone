@@ -20,13 +20,14 @@ class DialPhoneImpl internal constructor(
     override val homeserverUrl: String,
     listeners: List<Listener>,
     override val commandPrefix: String,
-    customEventTypes: Array<KClass<out MatrixEvent>>
+    customEventTypes: Array<KClass<out MatrixEvent>>,
+    override val ownID: String
 ) : DialPhone {
 
     // cache
     val cache = PhoneCache()
 
-    override val requestObject = APIRequests(this, customEventTypes)
+    override val requestObject = APIRequests(homeserverUrl, token, customEventTypes)
 
     override val profile = Profile(this)
 

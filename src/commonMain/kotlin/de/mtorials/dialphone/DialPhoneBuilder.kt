@@ -69,14 +69,16 @@ class DialPhoneBuilder(
         throw RuntimeException("No homeserver specified. Please assign a value to homeserverUrl first.")
     }
 
-    fun build() : DialPhone {
+    suspend fun build() : DialPhone {
         if (homeserverUrl == null) throwNoHomeserver()
+        val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token).getMe().id
         return DialPhoneImpl(
             token = token,
             homeserverUrl = homeserverUrl!!,
             listeners = listenerList.list,
             customEventTypes = customEventList.list.toTypedArray(),
-            commandPrefix = commandPrefix ?: "!"
+            commandPrefix = commandPrefix ?: "!",
+            ownID = id
         )
     }
 }

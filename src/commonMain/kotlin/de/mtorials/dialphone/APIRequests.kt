@@ -14,8 +14,9 @@ import kotlin.random.Random
 import kotlin.reflect.KClass
 
 class APIRequests(
-    val phone: DialPhone,
-    subTypes: Array<KClass<out MatrixEvent>>
+    private val token: String,
+    private val homeserverUrl: String,
+    subTypes: Array<KClass<out MatrixEvent>> = arrayOf()
 ) {
 
     private val random = Random(getTimeMillis().toInt() * 2834)
@@ -84,11 +85,11 @@ class APIRequests(
         vararg parameters: Pair<String, String> = arrayOf(),
         bodyValue: Any? = null
     ) : T {
-        val newPath = phone.homeserverUrl + DialPhone.MATRIX_PATH + path
+        val newPath = homeserverUrl + DialPhone.MATRIX_PATH + path
         return client.request {
             url(newPath)
             method = httpMethod
-            header("Authorization", "Bearer ${phone.token}")
+            header("Authorization", "Bearer $token")
             header("Content-Type", "application/json")
             parameters.forEach { parameter(it.first, it.second) }
             if (bodyValue != null) body = bodyValue
