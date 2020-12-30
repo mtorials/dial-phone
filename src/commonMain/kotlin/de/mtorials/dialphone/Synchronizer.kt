@@ -1,9 +1,5 @@
 package de.mtorials.dialphone
 
-import com.fasterxml.jackson.databind.JsonMappingException
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import de.mtorials.dialphone.entities.actions.InvitedRoomActions
 import de.mtorials.dialphone.entities.actions.InvitedRoomActionsImpl
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
@@ -11,15 +7,11 @@ import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import de.mtorials.dialphone.exceptions.SyncException
 import de.mtorials.dialphone.listener.Listener
 import de.mtorials.dialphone.listener.UserCacheListener
-import net.mt32.makocommons.mevents.MatrixEvent
 import de.mtorials.dialphone.responses.SyncResponse
 import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.SerializationException
-import org.http4k.client.OkHttp
-import org.http4k.core.Method
-import org.http4k.core.Request
+import net.mt32.makocommons.mevents.MatrixEvent
 import kotlin.reflect.KClass
 
 class Synchronizer(
@@ -36,23 +28,6 @@ class Synchronizer(
         // Chache Listeners
         listeners.add(UserCacheListener(phone.cache))
         subTypes.forEach { TODO("Subtypes") }
-    }
-
-    suspend fun init() {
-        val res = getSyncResponse()
-        lastTimeBatch = res.nextBatch
-        res.roomSync.join.forEach { (roomID, roomEvents) ->
-            phone.cache.joinedRooms.add(RoomFutureImpl(roomID, phone))
-            roomEvents.timeline.events.forEach { event ->
-                listeners.forEach { it.onOldRoomEvent(event, roomID, phone) }
-            }
-        }
-        res.roomSync.invite.forEach { (roomID, roomEvents) ->
-            phone.cache.invitedRooms.add(InvitedRoomActionsImpl(phone, roomID))
-            roomEvents.inviteState.events.forEach { event ->
-                listeners.forEach { it.onOldRoomEvent(event, roomID, phone) }
-            }
-        }
     }
 
     fun addListener(listener: Listener) = listeners.add(listener)
