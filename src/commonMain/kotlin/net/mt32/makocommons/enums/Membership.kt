@@ -1,20 +1,22 @@
 package net.mt32.makocommons.enums
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 enum class Membership {
-    @JsonProperty("join")
+    @SerialName("join")
     JOIN,
-    @JsonProperty("leave")
+    @SerialName("leave")
     LEAVE,
-    @JsonProperty("invite")
+    @SerialName("invite")
     INVITE,
-    @JsonProperty("ban")
+    @SerialName("ban")
     BAN,
 
     /**
      * Reserved in specification (https://matrix.org/docs/spec/client_server/r0.6.1#m-room-member)
      */
-    @JsonProperty("knock")
+    @SerialName("knock")
     KNOCK
 }

@@ -78,7 +78,7 @@ class DialPhoneBuilder(
             listeners = listenerList.list,
             customEventTypes = customEventList.list.toTypedArray(),
             commandPrefix = commandPrefix ?: "!",
-            ownID = id
+            ownId = id
         )
     }
 }

@@ -21,7 +21,7 @@ class DialPhoneImpl internal constructor(
     listeners: List<Listener>,
     override val commandPrefix: String,
     customEventTypes: Array<KClass<out MatrixEvent>>,
-    override val ownID: String
+    override val ownId: String
 ) : DialPhone {
 
     // cache

@@ -1,22 +1,24 @@
 package net.mt32.makocommons.enums
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 enum class MessageType(name: String) {
-    @JsonProperty("m.text")
+    @SerialName("m.text")
     TEXT("m.text"),
-    @JsonProperty("m.emote")
+    @SerialName("m.emote")
     EMOTE("m.emote"),
-    @JsonProperty("m.notice")
+    @SerialName("m.notice")
     NOTICE("m.image"),
-    @JsonProperty("m.image")
+    @SerialName("m.image")
     IMAGE("a"),
-    @JsonProperty("m.file")
+    @SerialName("m.file")
     FILE("m.file"),
-    @JsonProperty("m.audio")
+    @SerialName("m.audio")
     AUDIO("m.audio"),
-    @JsonProperty("m.location")
+    @SerialName("m.location")
     LOCATION("m.location"),
-    @JsonProperty("m.video")
+    @SerialName("m.video")
     VIDEO("m.video"),
 }

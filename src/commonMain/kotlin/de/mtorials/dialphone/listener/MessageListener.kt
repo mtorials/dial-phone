@@ -10,7 +10,7 @@ class MessageListener(
     private val messagesByRoom: MutableMap<String, MutableList<Message>> = mutableMapOf()
 
     override suspend fun onRoomMessageReceive(event: MessageReceivedEvent) {
-        messagesByRoom.putIfAbsent(event.roomFuture.id, mutableListOf())
+        if (messagesByRoom[event.roomFuture.id] == null) messagesByRoom[event.roomFuture.id] = mutableListOf()
         messagesByRoom[event.roomFuture.id]?.add(event.message)
         onNewMessage(event)
     }
