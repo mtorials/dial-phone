@@ -1,7 +1,5 @@
 package de.mtorials.dialphone
 
-import com.fasterxml.jackson.annotation.JsonCreator
-
 class MatrixID(
         val homeServerName: String,
         val type: IDType,
@@ -26,8 +24,6 @@ class MatrixID(
     companion object {
         private const val SEPARATOR : String = ":"
 
-        @JvmStatic
-        @JsonCreator
         fun fromString(serialized: String) : MatrixID {
             val split = serialized.split(SEPARATOR)
             return MatrixID(
