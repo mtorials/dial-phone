@@ -1,14 +1,16 @@
 package net.mt32.makocommons.enums
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 enum class JoinRule {
-    @JsonProperty("public")
+    @SerialName("public")
     PUBLIC,
-    @JsonProperty("knock")
+    @SerialName("knock")
     KNOCK,
-    @JsonProperty("invite")
+    @SerialName("invite")
     INVITE,
-    @JsonProperty("private")
+    @SerialName("private")
     PRIVATE
 }

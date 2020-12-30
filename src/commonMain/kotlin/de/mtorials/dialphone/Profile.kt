@@ -9,6 +9,6 @@ class Profile(
     }
 
     suspend fun setDisplayName(displayName: String) {
-        phone.requestObject.setDisplayName(phone.ownID, displayName)
+        phone.requestObject.setDisplayName(phone.ownId, displayName)
     }
 }

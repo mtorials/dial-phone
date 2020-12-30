@@ -22,7 +22,7 @@ interface DialPhone {
     /**
      * The users fully qualified matrix id
      */
-    val ownID: String
+    val ownId: String
 
     /**
      * The url of the homeserver

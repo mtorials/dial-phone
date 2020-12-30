@@ -33,7 +33,7 @@ abstract class ListenerAdapter(
                 event = event
             )) }
             is MRoomMember -> when (event.content.membership) {
-                Membership.INVITE -> if (event.stateKey == phone.ownID) GlobalScope.launch {
+                Membership.INVITE -> if (event.stateKey == phone.ownId) GlobalScope.launch {
                     onRoomInvite(RoomInviteEvent(
                         roomId = roomId,
                         phone = phone,
