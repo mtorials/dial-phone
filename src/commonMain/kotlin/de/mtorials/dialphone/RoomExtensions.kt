@@ -16,24 +16,27 @@ suspend fun RoomActions.sendAndGet(message: String) =
 suspend fun RoomActions.sendTextMessage(content: String) : String = this.sendMessageEvent(
     content = MRoomMessage.TextContent(
         body = content
-    )
+    ),
+    eventType = "m.room.message"
 )
 
 suspend fun RoomActions.sendHtmlMessage(content: String, nonFormattedContent: String? = null) : String = this.sendMessageEvent(
     content = MRoomMessage.TextContent(
         body = nonFormattedContent ?: content,
         format = MRoomMessage.htmlFormat,
-        formattedBody = content
-    )
+        formattedBody = content,
+    ),
+    eventType = "m.room.message"
 )
 
 suspend fun RoomActions.sendImageWithUrl(url: String, title: String? = null) : String = this.sendMessageEvent(
     content = MRoomMessage.ImageContent(
         body = title ?: "image send with dial-phone",
         url = url
-    )
+    ),
+    eventType = "m.room.message"
 )
 
 fun RoomActions.setName(name: String) = GlobalScope.launch {
-    this@setName.sendStateEvent(MRoomName.Content(name = name))
+    this@setName.sendStateEvent(MRoomName.Content(name = name), "m.room.name")
 }
