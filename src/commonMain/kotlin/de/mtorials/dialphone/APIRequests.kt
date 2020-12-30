@@ -26,11 +26,7 @@ class APIRequests(
 
     private val random = Random(getTimeMillis().toInt() * 2834)
 
-    private val client = HttpClient {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(EventSerialization.matrixFormat)
-        }
-    }
+    private val client = HttpClient.client
 
     init { subTypes.forEach { TODO("Subtypes") } }
 

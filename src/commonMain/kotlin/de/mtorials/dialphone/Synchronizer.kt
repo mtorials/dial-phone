@@ -13,7 +13,10 @@ import de.mtorials.dialphone.listener.Listener
 import de.mtorials.dialphone.listener.UserCacheListener
 import net.mt32.makocommons.mevents.MatrixEvent
 import de.mtorials.dialphone.responses.SyncResponse
+import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.SerializationException
 import org.http4k.client.OkHttp
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -26,33 +29,28 @@ class Synchronizer(
     private val fullState: Boolean = false
 ) {
 
-    private val mapper = jacksonObjectMapper()
     private var lastTimeBatch: String? = null
-    private val client = OkHttp()
+    private val client = HttpClient.client
 
     init {
         // Chache Listeners
         listeners.add(UserCacheListener(phone.cache))
+        subTypes.forEach { TODO("Subtypes") }
+    }
 
-        subTypes.forEach { mapper.registerSubtypes(it.java) }
-        runBlocking {
-            try {
-                val res = getSyncResponse()
-                lastTimeBatch = res.nextBatch
-                res.roomSync.join.forEach { (roomID, roomEvents) ->
-                    phone.cache.joinedRooms.add(RoomFutureImpl(roomID, phone))
-                    roomEvents.timeline.events.forEach { event ->
-                        listeners.forEach { it.onOldRoomEvent(event, roomID, phone) }
-                    }
-                }
-                res.roomSync.invite.forEach { (roomID, roomEvents) ->
-                    phone.cache.invitedRooms.add(InvitedRoomActionsImpl(phone, roomID))
-                    roomEvents.inviteState.events.forEach { event ->
-                        listeners.forEach { it.onOldRoomEvent(event, roomID, phone) }
-                    }
-                }
-            } catch (e: UnrecognizedPropertyException) {
-                e.printStackTrace()
+    suspend fun init() {
+        val res = getSyncResponse()
+        lastTimeBatch = res.nextBatch
+        res.roomSync.join.forEach { (roomID, roomEvents) ->
+            phone.cache.joinedRooms.add(RoomFutureImpl(roomID, phone))
+            roomEvents.timeline.events.forEach { event ->
+                listeners.forEach { it.onOldRoomEvent(event, roomID, phone) }
+            }
+        }
+        res.roomSync.invite.forEach { (roomID, roomEvents) ->
+            phone.cache.invitedRooms.add(InvitedRoomActionsImpl(phone, roomID))
+            roomEvents.inviteState.events.forEach { event ->
+                listeners.forEach { it.onOldRoomEvent(event, roomID, phone) }
             }
         }
     }
@@ -82,8 +80,6 @@ class Synchronizer(
                 phone.cache.joinedRooms = joinedRooms
                 phone.cache.invitedRooms = invitedRooms
                 //println(lastTimeBatch)
-            } catch (e: UnrecognizedPropertyException) {
-                e.printStackTrace()
             } catch (e: RuntimeException) {
                 e.printStackTrace()
             }
@@ -93,16 +89,16 @@ class Synchronizer(
 
     private suspend fun getSyncResponse() : SyncResponse {
         try {
-            var request = Request(Method.GET, phone.homeserverUrl + DialPhone.MATRIX_PATH + "sync")
-                .query("timeout", DialPhone.TIMEOUT)
-                .query("full_state", fullState.toString())
-                .header("Authorization", "Bearer ${phone.token}")
-            if (lastTimeBatch != null) request = request.query("since", lastTimeBatch.toString())
-            val string = client(request).bodyString()
-            if (string.isEmpty()) throw RuntimeException("Response is empty.")
-            //println(string)
-            return mapper.readValue(string)
-        } catch (mappingException: JsonMappingException) {
+            return client.request {
+                url(phone.homeserverUrl + DialPhone.MATRIX_PATH + "sync")
+                method = HttpMethod.Get
+                header("Authorization", "Bearer ${phone.token}")
+                header("Content-Type", "application/json")
+                parameter("timeout", DialPhone.TIMEOUT)
+                parameter("full_state", fullState.toString())
+                if (lastTimeBatch != null) parameter("since", lastTimeBatch.toString())
+            }
+        } catch (mappingException: SerializationException) {
             throw SyncException(mappingException, "Deserialization Exception while Syncing")
         } catch (e: Exception) {
             throw SyncException(e, "Exception while syncing")
