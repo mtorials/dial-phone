@@ -1,11 +1,12 @@
 package net.mt32.makocommons.mevents
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import kotlinx.serialization.Serializable
 
+@Serializable
 class DefaultEvent(
     override val sender: String,
     override val content: DefaultContent
 ) : MatrixEvent {
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     class DefaultContent : EventContent
 }

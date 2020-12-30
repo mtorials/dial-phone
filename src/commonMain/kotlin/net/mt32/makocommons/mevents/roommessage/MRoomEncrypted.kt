@@ -1,27 +1,24 @@
 package net.mt32.makocommons.mevents.roommessage
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.SerialName
 import net.mt32.makocommons.mevents.ContentEventType
 
-@JsonTypeName("m.room.encrypted")
+@SerialName("m.room.encrypted")
 class MRoomEncrypted(
     override val sender: String,
-    @JsonProperty("event_id")
+    @SerialName("event_id")
     override val id: String,
     override val content: Content
 ) : MatrixMessageEvent {
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @ContentEventType(MRoomMessage::class)
     data class Content(
-        @JsonProperty("sender_key")
+        @SerialName("sender_key")
         val senderKey: String? = null,
-        @JsonProperty("ciphertext")
+        @SerialName("ciphertext")
         val cipherText: String,
-        @JsonProperty("session_id")
+        @SerialName("session_id")
         val sessionId: String,
-        @JsonProperty("device_id")
+        @SerialName("device_id")
         val deviceId: String,
         val algorithm: String
     ) : MessageEventContent
