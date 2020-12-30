@@ -3,7 +3,7 @@ package de.mtorials.dialphone.listener
 import de.mtorials.dialphone.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.entities.Message
 
-abstract class MessageListener(
+class MessageListener(
     val onNewMessage: (MessageReceivedEvent) -> Unit = {}
 ) : ListenerAdapter(receivePastEvents = true) {
 
