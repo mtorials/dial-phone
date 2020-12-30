@@ -3,6 +3,7 @@ package de.mtorials.dialphone.entities
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import net.mt32.makocommons.enums.JoinRule
 import net.mt32.makocommons.enums.Membership
+import net.mt32.makocommons.mevents.ContentEventType
 import net.mt32.makocommons.mevents.roommessage.MessageEventContent
 import net.mt32.makocommons.mevents.roomstate.*
 
@@ -33,9 +34,9 @@ class RoomImpl(
         }
     }
 
-    override suspend fun sendMessageEvent(content: MessageEventContent): String =
-        RoomFutureImpl(id, phone).sendMessageEvent(content)
+    override suspend fun sendMessageEvent(content: MessageEventContent, eventType: String): String =
+        RoomFutureImpl(id, phone).sendMessageEvent(content, eventType)
 
-    override suspend fun sendStateEvent(content: StateEventContent, stateKey: String): String =
-        RoomFutureImpl(id, phone).sendStateEvent(content, stateKey)
+    override suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: String): String =
+        RoomFutureImpl(id, phone).sendStateEvent(content, eventType, stateKey)
 }
