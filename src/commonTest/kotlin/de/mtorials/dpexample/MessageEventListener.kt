@@ -8,5 +8,4 @@ class MessageEventListener : MatrixEventAdapter<MatrixMessageEvent>(MatrixMessag
     override fun onMatrixEvent(event: MatrixMessageEvent, roomFuture: RoomFutureImpl) {
         println("Received message event ${event::class.simpleName}: ${event.content}")
     }
-
 }

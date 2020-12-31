@@ -1,7 +1,6 @@
 plugins {
     kotlin("multiplatform") version "1.4.21"
     kotlin("plugin.serialization") version "1.4.10"
-    //kotlin("plugin.coroutines") version "1.4.10"
 }
 
 group = "de.mtorials"
@@ -50,18 +49,17 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
 
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-
                 //Ktor
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-
             }
 
         }
         val commonTest by getting {
-
+            dependencies {
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+            }
         }
     }
 }
