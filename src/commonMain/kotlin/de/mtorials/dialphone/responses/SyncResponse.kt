@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.responses
 
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.mt32.makocommons.mevents.MatrixEvent
@@ -7,24 +8,25 @@ import net.mt32.makocommons.mevents.MatrixEvent
 @Serializable
 class SyncResponse(
     @SerialName("presence")
-        val presenceEvents: SyncPresence,
+    val presenceEvents: SyncPresence,
     @SerialName("rooms")
-        val roomSync: SyncRooms,
+    val roomSync: SyncRooms,
     @SerialName("next_batch")
-        val nextBatch: String
+    val nextBatch: String
 ) {
     
     @Serializable
     class SyncRooms(
-            val join: Map<String, RoomsRoom>,
-            val invite: Map<String, RoomsInvite>
+        val join: Map<String, RoomsRoom>,
+        val invite: Map<String, RoomsInvite>
     ) {
         @Serializable
         class RoomsRoom(
-                val timeline: RoomTimeline
+            val timeline: RoomTimeline
         ) {
             @Serializable
             class RoomTimeline(
+                @Polymorphic
                 val events: List<MatrixEvent>
             )
         }
@@ -35,12 +37,14 @@ class SyncResponse(
         ) {
             @Serializable
             class InviteState(
+                @Polymorphic
                 val events: List<MatrixEvent>
             )
         }
     }
     @Serializable
     class SyncPresence(
-            val events: List<MatrixEvent>
+        @Polymorphic
+        val events: List<MatrixEvent>
     )
 }

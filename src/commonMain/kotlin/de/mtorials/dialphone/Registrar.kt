@@ -1,14 +1,14 @@
 package de.mtorials.dialphone
 
+import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-object Registrar {
-
-    private const val registrationEndpoint = "/_matrix/client/r0/register"
-    private val client = HttpClient.client
+class Registrar(
+    private val client: HttpClient
+) {
 
     suspend fun registerGuest(homeserverUrl: String) : GuestResponse {
         return client.post {
@@ -29,4 +29,8 @@ object Registrar {
         @SerialName("home_server")
         val homeserverName: String
     )
+
+    companion object {
+        private const val registrationEndpoint = "/_matrix/client/r0/register"
+    }
 }
