@@ -1,5 +1,6 @@
 package de.mtorials.dialphone
 
+import de.mtorials.dialphone.entities.EntitySerialization
 import de.mtorials.dialphone.entities.User
 import de.mtorials.dialphone.entities.UserImpl
 import de.mtorials.dialphone.entities.actions.InvitedRoomActions
@@ -13,6 +14,20 @@ import de.mtorials.dialphone.responses.UserWithoutIDResponse
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.plus
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
+import kotlinx.serialization.serializer
+import net.mt32.makocommons.EventSerialization
+import net.mt32.makocommons.mevents.presence.MPresence
+import net.mt32.makocommons.mevents.roommessage.MReaction
+import net.mt32.makocommons.mevents.roommessage.MRoomEncrypted
+import net.mt32.makocommons.mevents.roommessage.MRoomMessage
+import net.mt32.makocommons.mevents.roommessage.MRoomRedaction
+import net.mt32.makocommons.mevents.roomstate.*
 import kotlin.reflect.KClass
 
 class DialPhoneImpl internal constructor(
@@ -26,6 +41,12 @@ class DialPhoneImpl internal constructor(
 
     // cache
     val cache = PhoneCache()
+
+    val format = Json {
+        ignoreUnknownKeys = true
+        classDiscriminator = "type"
+        serializersModule = EventSerialization.serializersModule + EntitySerialization.serializersModule
+    }
 
     override val requestObject = APIRequests(homeserverUrl, token, customEventTypes)
 

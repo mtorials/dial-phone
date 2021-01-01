@@ -11,8 +11,7 @@ object Registrar {
     private val client = HttpClient.client
 
     suspend fun registerGuest(homeserverUrl: String) : GuestResponse {
-        return client.request {
-            method = HttpMethod.Post
+        return client.post {
             url(homeserverUrl + registrationEndpoint)
             parameter("kind", "guest")
             body = "{}"
