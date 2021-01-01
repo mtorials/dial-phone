@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class UserWithoutIDResponse(
     @SerialName("avatar_url")
-    val avatarURL: String?,
+    val avatarURL: String? = null,
     @SerialName("displayname")
     val displayName: String?
 )

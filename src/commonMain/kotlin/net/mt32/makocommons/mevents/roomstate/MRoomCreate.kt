@@ -10,12 +10,12 @@ import net.mt32.makocommons.mevents.ContentEventType
 class MRoomCreate(
     override val sender: String,
     @SerialName("event_id")
-    override val id: String?,
+    override val id: String? = null,
     override val content: Content,
     @SerialName("state_key")
     override val stateKey: String,
     @SerialName("prev_content")
-    override val prevContent: Content?
+    override val prevContent: Content? = null
 ) : MatrixStateEvent {
     @ContentEventType(MRoomCreate::class)
     @Serializable

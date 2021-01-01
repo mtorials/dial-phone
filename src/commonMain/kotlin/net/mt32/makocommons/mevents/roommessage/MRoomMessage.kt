@@ -11,6 +11,7 @@ class MRoomMessage(
     override val sender: String,
     @SerialName("event_id")
     override val id: String,
+    @Polymorphic
     override val content: MRoomMessageContent
 ) : MatrixMessageEvent {
 
@@ -39,7 +40,7 @@ class MRoomMessage(
     @Serializable
     data class ImageContent(
         override val body: String,
-        val url: String?,
+        val url: String? = null,
         val file: String? = null
     ) : MRoomMessageContent
 

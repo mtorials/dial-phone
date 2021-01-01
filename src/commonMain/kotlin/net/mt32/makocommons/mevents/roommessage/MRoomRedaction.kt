@@ -18,6 +18,6 @@ class MRoomRedaction(
     @ContentEventType(MRoomRedaction::class)
     @Serializable
     data class Content(
-        val reason: String?
+        val reason: String? = null
     ) : MessageEventContent
 }
