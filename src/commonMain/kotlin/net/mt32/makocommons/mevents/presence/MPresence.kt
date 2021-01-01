@@ -1,6 +1,5 @@
 package net.mt32.makocommons.mevents.presence
 
-import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.mt32.makocommons.mevents.ContentEventType
@@ -11,7 +10,6 @@ import net.mt32.makocommons.mevents.MatrixEvent
 @Serializable
 class MPresence(
         override val sender: String,
-        @Polymorphic
         override val content: PresenceContent
 ) : MatrixEvent {
     @ContentEventType(MPresence::class)

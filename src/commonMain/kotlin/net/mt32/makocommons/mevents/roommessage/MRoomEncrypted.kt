@@ -11,7 +11,6 @@ class MRoomEncrypted(
     override val sender: String,
     @SerialName("event_id")
     override val id: String,
-    @Polymorphic
     override val content: Content
 ) : MatrixMessageEvent {
     @ContentEventType(MRoomMessage::class)

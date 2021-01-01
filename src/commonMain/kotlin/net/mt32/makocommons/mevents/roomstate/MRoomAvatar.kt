@@ -12,13 +12,11 @@ class MRoomAvatar(
     @SerialName("event_id")
     override val id: String?,
     @Serializable
-    @Polymorphic
     override val content: Content,
     @SerialName("state_key")
     override val stateKey: String,
     @SerialName("prev_content")
     @Serializable
-    @Polymorphic
     override val prevContent: Content?
 ) : MatrixStateEvent {
     @ContentEventType(MRoomAvatar::class)
