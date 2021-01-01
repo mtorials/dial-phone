@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("multiplatform") version "1.4.21"
     kotlin("plugin.serialization") version "1.4.10"
@@ -10,6 +12,7 @@ version = "v0.1.1-alpha"
 repositories {
     mavenCentral()
     jcenter()
+    maven("https://dl.bintray.com/kotlin/kotlin-eap")
 }
 
 val ktorVersion = "1.5.0"
@@ -28,7 +31,7 @@ kotlin {
         browser {
             testTask {
                 useKarma {
-                    useChromeHeadless()
+                    useChromium()
                     webpackConfig.cssSupport.enabled = true
                 }
             }
@@ -52,6 +55,10 @@ kotlin {
                 //Ktor
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+
+                // Tests
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
             }
 
         }
@@ -59,6 +66,18 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
+            }
+        }
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test-junit"))
+                implementation("org.apache.httpcomponents:httpasyncclient:4.1.4")
+            }
+        }
+        val jsTest by getting {
+            dependencies {
+                implementation(kotlin("test-js"))
+                implementation("io.ktor:ktor-client-js:$ktorVersion")
             }
         }
     }

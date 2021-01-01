@@ -16,6 +16,7 @@ class DialPhoneBuilder(
     private val listenerList = ListenerList()
     private val customEventList = CustomEventList()
     private var commandPrefix: String? = null
+    private var isGuestBool = false
 
     val client = this
 
@@ -23,10 +24,8 @@ class DialPhoneBuilder(
         this.block()
     }
 
-    suspend fun isGuest() {
-        val guest = Registrar.registerGuest(homeserverUrl ?: throwNoHomeserver())
-        token = guest.token
-        ownId = guest.userId
+    fun isGuest() {
+        isGuestBool = true
     }
 
     infix fun withToken(token: String) {
@@ -70,6 +69,11 @@ class DialPhoneBuilder(
     }
 
     suspend fun build() : DialPhone {
+        if (isGuestBool) {
+            val guest = Registrar.registerGuest(homeserverUrl ?: throwNoHomeserver())
+            token = guest.token
+            ownId = guest.userId
+        }
         if (homeserverUrl == null) throwNoHomeserver()
         val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token).getMe().id
         return DialPhoneImpl(
