@@ -11,30 +11,27 @@ import net.mt32.makocommons.mevents.roommessage.MRoomEncrypted
 import net.mt32.makocommons.mevents.roommessage.MRoomMessage
 import net.mt32.makocommons.mevents.roommessage.MRoomRedaction
 import net.mt32.makocommons.mevents.roomstate.*
+import kotlin.reflect.KClass
 
 object EventSerialization {
-    val matrixFormat = Json {
-        ignoreUnknownKeys = true
-        classDiscriminator = "type"
-        serializersModule = SerializersModule {
-            polymorphic(MatrixEvent::class) {
+    val serializersModule = SerializersModule {
+        polymorphic(MatrixEvent::class) {
 
-                // Presence
-                subclass(MPresence::class)
+            // Presence
+            subclass(MPresence::class)
 
-                // Message
-                subclass(MReaction::class)
-                subclass(MRoomEncrypted::class)
-                subclass(MRoomMessage::class)
-                subclass(MRoomRedaction::class)
+            // Message
+            subclass(MReaction::class)
+            subclass(MRoomEncrypted::class)
+            subclass(MRoomMessage::class)
+            subclass(MRoomRedaction::class)
 
-                // State
-                subclass(MRoomAvatar::class)
-                subclass(MRoomCreate::class)
-                subclass(MRoomJoinRules::class)
-                subclass(MRoomMember::class)
-                subclass(MRoomName::class)
-            }
+            // State
+            subclass(MRoomAvatar::class)
+            subclass(MRoomCreate::class)
+            subclass(MRoomJoinRules::class)
+            subclass(MRoomMember::class)
+            subclass(MRoomName::class)
         }
     }
 }

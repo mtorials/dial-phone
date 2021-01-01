@@ -71,7 +71,9 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
-                implementation("org.apache.httpcomponents:httpasyncclient:4.1.4")
+                //implementation("org.eclipse.jetty:jetty-client:11.0.0")
+                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+
             }
         }
         val jsTest by getting {
