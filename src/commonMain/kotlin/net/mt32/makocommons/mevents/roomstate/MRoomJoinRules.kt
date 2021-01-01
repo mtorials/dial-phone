@@ -12,12 +12,10 @@ class MRoomJoinRules(
     override val sender: String,
     @SerialName("event_id")
     override val id: String?,
-    @Polymorphic
     override val content: Content,
     @SerialName("state_key")
     override val stateKey: String,
     @SerialName("prev_content")
-    @Polymorphic
     override val prevContent: Content?
 ) : MatrixStateEvent {
     @Serializable

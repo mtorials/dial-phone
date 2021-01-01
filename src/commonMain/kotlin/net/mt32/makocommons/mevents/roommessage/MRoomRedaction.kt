@@ -11,7 +11,6 @@ class MRoomRedaction(
     override val sender: String,
     @SerialName("event_id")
     override val id: String,
-    @Polymorphic
     override val content: Content,
     @SerialName("redacts")
     val redactionEventId: String

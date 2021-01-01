@@ -4,6 +4,7 @@ import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.mt32.makocommons.mevents.MatrixEvent
+import net.mt32.makocommons.mevents.presence.MPresence
 
 @Serializable
 class SyncResponse(
@@ -26,7 +27,6 @@ class SyncResponse(
         ) {
             @Serializable
             class RoomTimeline(
-                @Polymorphic
                 val events: List<MatrixEvent>
             )
         }
@@ -37,14 +37,12 @@ class SyncResponse(
         ) {
             @Serializable
             class InviteState(
-                @Polymorphic
                 val events: List<MatrixEvent>
             )
         }
     }
     @Serializable
     class SyncPresence(
-        @Polymorphic
-        val events: List<MatrixEvent>
+        val events: List<MPresence>
     )
 }
