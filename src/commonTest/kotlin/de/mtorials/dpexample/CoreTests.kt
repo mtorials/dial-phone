@@ -1,16 +1,29 @@
 package de.mtorials.dpexample
 
 import de.mtorials.dialphone.DialPhone
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
+import de.mtorials.dialphone.sendTextMessage
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
 import kotlin.test.Test
 
-@Serializable
-data class Config(val homeserverUrl: String, val token: String)
-
 class CoreTests {
+
+    suspend fun getPhone() : DialPhone {
+        return DialPhone {
+            isGuest()
+            homeserverUrl = "https://matrix.mtorials.de"
+        }
+    }
+
     @Test
-    fun testCore() {
-        println("Test begins!")
+    fun test1() {
+        val job = GlobalScope.launch {
+            val phone = getPhone()
+            phone.sync()
+            phone.getRoomByAlias("#open:mtorials.de").join().sendTextMessage("hi!")
+            println("sent")
+        }
+        awaitAll()
     }
 }
