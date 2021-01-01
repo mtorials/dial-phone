@@ -1,6 +1,14 @@
 package de.mtorials.dialphone
 
+import de.mtorials.dialphone.entities.EntitySerialization
 import de.mtorials.dialphone.listener.Listener
+import io.ktor.client.*
+import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.plus
+import net.mt32.makocommons.EventSerialization
 import net.mt32.makocommons.mevents.MatrixEvent
 import kotlin.reflect.KClass
 
@@ -14,11 +22,9 @@ class DialPhoneBuilder(
     private var token: String = ""
     private var ownId: String? = null
     private val listenerList = ListenerList()
-    private val customEventList = CustomEventList()
+    private var customSerializer: SerializersModule = SerializersModule {  }
     private var commandPrefix: String? = null
     private var isGuestBool = false
-
-    val client = this
 
     init {
         this.block()
@@ -40,12 +46,8 @@ class DialPhoneBuilder(
        this.listenerList.addAll(listeners as Array<Listener>)
     }
 
-    infix fun addCustomEventTypes(block: CustomEventList.() -> CustomEventList) {
-        customEventList.block()
-    }
-
-    fun addCustomEventTypes(vararg types: KClass<out MatrixEvent>) {
-        customEventList.addAll(types as Array<KClass<out MatrixEvent>>)
+    fun addCustomSerializersModule(serializersModule: SerializersModule) {
+        this.customSerializer = serializersModule
     }
 
     infix fun hasCommandPrefix(commandPrefix: String) {
@@ -69,18 +71,29 @@ class DialPhoneBuilder(
     }
 
     suspend fun build() : DialPhone {
+        val format = Json {
+            ignoreUnknownKeys = true
+            classDiscriminator = "type"
+            serializersModule =
+                EventSerialization.serializersModule + EntitySerialization.serializersModule + customSerializer
+        }
+        val client = HttpClient {
+            install(JsonFeature) {
+                serializer = KotlinxSerializer(format)
+            }
+        }
         if (isGuestBool) {
-            val guest = Registrar.registerGuest(homeserverUrl ?: throwNoHomeserver())
+            val guest = Registrar(client).registerGuest(homeserverUrl ?: throwNoHomeserver())
             token = guest.token
             ownId = guest.userId
         }
         if (homeserverUrl == null) throwNoHomeserver()
-        val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token).getMe().id
+        val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token, client = client).getMe().id
         return DialPhoneImpl(
             token = token,
             homeserverUrl = homeserverUrl!!,
             listeners = listenerList.list,
-            customEventTypes = customEventList.list.toTypedArray(),
+            client = client,
             commandPrefix = commandPrefix ?: "!",
             ownId = id
         )

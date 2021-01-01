@@ -2,11 +2,13 @@ package de.mtorials.dialphone
 
 import net.mt32.makocommons.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.responses.*
+import io.ktor.client.HttpClient
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.date.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import net.mt32.makocommons.mevents.EventContent
 import net.mt32.makocommons.mevents.MatrixEvent
@@ -16,14 +18,10 @@ import kotlin.reflect.KClass
 class APIRequests(
     private val token: String,
     private val homeserverUrl: String,
-    subTypes: Array<KClass<out MatrixEvent>> = arrayOf()
+    private val client: HttpClient
 ) {
 
     private val random = Random(getTimeMillis().toInt() * 2834)
-
-    private val client = HttpClient.client
-
-    init { subTypes.forEach { TODO("Subtypes") } }
 
     suspend fun discoverRooms() : RoomDiscovery = request(HttpMethod.Get, "publicRooms")
     suspend fun getJoinedRooms() : JoinedRooms = request(HttpMethod.Get, "joined_rooms")

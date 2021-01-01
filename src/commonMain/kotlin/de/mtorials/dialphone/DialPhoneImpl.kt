@@ -11,6 +11,9 @@ import de.mtorials.dialphone.listener.Listener
 import net.mt32.makocommons.mevents.MatrixEvent
 import de.mtorials.dialphone.responses.DiscoveredRoom
 import de.mtorials.dialphone.responses.UserWithoutIDResponse
+import io.ktor.client.*
+import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -35,24 +38,18 @@ class DialPhoneImpl internal constructor(
     override val homeserverUrl: String,
     listeners: List<Listener>,
     override val commandPrefix: String,
-    customEventTypes: Array<KClass<out MatrixEvent>>,
-    override val ownId: String
+    override val ownId: String,
+    private val client: HttpClient
 ) : DialPhone {
 
     // cache
     val cache = PhoneCache()
 
-    val format = Json {
-        ignoreUnknownKeys = true
-        classDiscriminator = "type"
-        serializersModule = EventSerialization.serializersModule + EntitySerialization.serializersModule
-    }
-
-    override val requestObject = APIRequests(homeserverUrl, token, customEventTypes)
+    override val requestObject = APIRequests(homeserverUrl, token, client)
 
     override val profile = Profile(this)
 
-    private val syncObject = Synchronizer(listeners.toMutableList(), this, customEventTypes)
+    private val syncObject = Synchronizer(listeners.toMutableList(), this, client)
 
     override fun addListener(listener: Listener) {
         syncObject.addListener(listener)

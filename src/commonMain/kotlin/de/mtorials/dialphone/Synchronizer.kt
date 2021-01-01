@@ -8,6 +8,7 @@ import de.mtorials.dialphone.exceptions.SyncException
 import de.mtorials.dialphone.listener.Listener
 import de.mtorials.dialphone.listener.UserCacheListener
 import de.mtorials.dialphone.responses.SyncResponse
+import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.SerializationException
@@ -17,17 +18,15 @@ import kotlin.reflect.KClass
 class Synchronizer(
     private val listeners: MutableList<Listener>,
     private val phone: DialPhoneImpl,
-    subTypes: Array<KClass<out MatrixEvent>>,
+    private val client: HttpClient,
     private val fullState: Boolean = false
 ) {
 
     private var lastTimeBatch: String? = null
-    private val client = HttpClient.client
 
     init {
         // Chache Listeners
         listeners.add(UserCacheListener(phone.cache))
-        subTypes.forEach { TODO("Subtypes") }
     }
 
     fun addListener(listener: Listener) = listeners.add(listener)
