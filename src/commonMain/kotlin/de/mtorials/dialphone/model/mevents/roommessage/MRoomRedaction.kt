@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.model
+package de.mtorials.dialphone.model.mevents.roommessage
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -13,7 +13,6 @@ class MRoomRedaction(
     @SerialName("redacts")
     val redactionEventId: String
 ) : MatrixMessageEvent {
-    @ContentEventType(MRoomRedaction::class)
     @Serializable
     data class Content(
         val reason: String? = null

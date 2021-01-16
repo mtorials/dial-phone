@@ -1,5 +1,10 @@
-package de.mtorials.dialphone.model
+package de.mtorials.dialphone.model.mevents
 
+import de.mtorials.dialphone.model.mevents.roommessage.MRoomEncrypted
+import de.mtorials.dialphone.model.mevents.roommessage.MRoomMessage
+import de.mtorials.dialphone.model.mevents.roommessage.MRoomRedaction
+import de.mtorials.dialphone.model.mevents.presence.MPresence
+import de.mtorials.dialphone.model.mevents.roomstate.*
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass

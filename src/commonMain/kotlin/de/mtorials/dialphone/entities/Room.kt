@@ -1,7 +1,7 @@
 package de.mtorials.dialphone.entities
 
 import de.mtorials.dialphone.entities.actions.RoomActions
-import de.mtorials.dialphone.model.JoinRule
+import de.mtorials.dialphone.model.enums.JoinRule
 
 /**
  * A matrix room

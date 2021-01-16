@@ -1,4 +1,7 @@
-package de.mtorials.dialphone.model
+package de.mtorials.dialphone.model.mevents.roomstate
+
+import de.mtorials.dialphone.model.MatrixRoomEvent
+import de.mtorials.dialphone.model.mevents.EventContent
 
 interface MatrixStateEvent : MatrixRoomEvent {
     val stateKey: String

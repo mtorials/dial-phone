@@ -2,8 +2,8 @@ package de.mtorials.dialphone.responses
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import de.mtorials.dialphone.model.MatrixEvent
-import de.mtorials.dialphone.model.MPresence
+import de.mtorials.dialphone.model.mevents.MatrixEvent
+import de.mtorials.dialphone.model.mevents.presence.MPresence
 
 @Serializable
 class SyncResponse(

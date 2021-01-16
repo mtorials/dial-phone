@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.model
+package de.mtorials.dialphone.model.enums
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

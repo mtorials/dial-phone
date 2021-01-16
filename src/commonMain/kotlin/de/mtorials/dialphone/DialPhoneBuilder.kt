@@ -8,7 +8,7 @@ import io.ktor.client.features.json.serializer.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
-import de.mtorials.dialphone.model.EventSerialization
+import de.mtorials.dialphone.model.mevents.EventSerialization
 
 typealias ListenerList = DialPhoneBuilder.BuilderList<Listener>
 
