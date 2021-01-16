@@ -4,8 +4,9 @@ import de.mtorials.dialphone.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.entities.Message
 
 class MessageListener(
+    receiveOld: Boolean = true,
     val onNewMessage: (MessageReceivedEvent) -> Unit = {}
-) : ListenerAdapter(receivePastEvents = true) {
+) : ListenerAdapter(receivePastEvents = receiveOld) {
 
     private val messagesByRoom: MutableMap<String, MutableList<Message>> = mutableMapOf()
 

@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.model.mevents.roommessage
 
+import de.mtorials.dialphone.serializers.MessageEventContentSerializer
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -10,7 +11,7 @@ class MRoomMessage(
     override val sender: String,
     @SerialName("event_id")
     override val id: String,
-    @Polymorphic
+    @Serializable(with = MessageEventContentSerializer::class)
     override val content: MRoomMessageContent
 ) : MatrixMessageEvent {
 
