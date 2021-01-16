@@ -1,19 +1,14 @@
 package de.mtorials.dialphone
 
-import net.mt32.makocommons.mevents.roomstate.MatrixStateEvent
+import de.mtorials.dialphone.model.MatrixStateEvent
 import de.mtorials.dialphone.responses.*
 import io.ktor.client.HttpClient
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.date.*
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
-import net.mt32.makocommons.mevents.EventContent
-import net.mt32.makocommons.mevents.MatrixEvent
+import de.mtorials.dialphone.model.EventContent
+import de.mtorials.dialphone.model.MatrixEvent
 import kotlin.random.Random
-import kotlin.reflect.KClass
 
 class APIRequests(
     private val token: String,

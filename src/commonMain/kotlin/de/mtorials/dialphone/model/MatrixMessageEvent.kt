@@ -1,6 +1,4 @@
-package net.mt32.makocommons.mevents.roommessage
-
-import net.mt32.makocommons.mevents.MatrixRoomEvent
+package de.mtorials.dialphone.model
 
 /**
  * Represents a matrix event of type room message event

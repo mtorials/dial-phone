@@ -2,7 +2,7 @@ package de.mtorials.dialphone.responses
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.mt32.makocommons.mevents.MatrixEvent
+import de.mtorials.dialphone.model.MatrixEvent
 
 @Serializable
 class RoomStateResponse(

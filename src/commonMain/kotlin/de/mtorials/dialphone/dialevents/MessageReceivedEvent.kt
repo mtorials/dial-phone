@@ -5,7 +5,7 @@ import de.mtorials.dialphone.entities.Member
 import de.mtorials.dialphone.entities.MemberImpl
 import de.mtorials.dialphone.entities.Message
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
-import net.mt32.makocommons.mevents.roommessage.MRoomMessage
+import de.mtorials.dialphone.model.MRoomMessage
 
 class MessageReceivedEvent(
     val roomFuture: RoomFutureImpl,

@@ -1,7 +1,4 @@
-package net.mt32.makocommons.mevents.roomstate
-
-import net.mt32.makocommons.mevents.EventContent
-import net.mt32.makocommons.mevents.MatrixRoomEvent
+package de.mtorials.dialphone.model
 
 interface MatrixStateEvent : MatrixRoomEvent {
     val stateKey: String

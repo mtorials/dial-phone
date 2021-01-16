@@ -1,6 +1,4 @@
-package net.mt32.makocommons.mevents
-
-import net.mt32.makocommons.mevents.MatrixEvent
+package de.mtorials.dialphone.model
 
 /**
  * A matrix event that relates to a room

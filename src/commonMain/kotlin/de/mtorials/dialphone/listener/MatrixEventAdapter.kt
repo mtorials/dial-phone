@@ -2,7 +2,7 @@ package de.mtorials.dialphone.listener
 
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
-import net.mt32.makocommons.mevents.MatrixEvent
+import de.mtorials.dialphone.model.MatrixEvent
 import kotlin.reflect.KClass
 
 

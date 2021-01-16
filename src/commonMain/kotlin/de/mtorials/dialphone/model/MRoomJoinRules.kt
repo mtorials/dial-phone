@@ -1,13 +1,11 @@
-package net.mt32.makocommons.mevents.roomstate
+package de.mtorials.dialphone.model
 
-import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.mt32.makocommons.mevents.ContentEventType
 
-@SerialName("m.room.name")
+@SerialName("m.room.join_rules")
 @Serializable
-class MRoomName(
+class MRoomJoinRules(
     override val sender: String,
     @SerialName("event_id")
     override val id: String? = null,
@@ -18,8 +16,9 @@ class MRoomName(
     override val prevContent: Content? = null
 ) : MatrixStateEvent {
     @Serializable
-    @ContentEventType(MRoomName::class)
+    @ContentEventType(MRoomJoinRules::class)
     data class Content(
-        val name: String
+        @SerialName("join_rule")
+        val joinRule: JoinRule
     ) : StateEventContent
 }

@@ -8,11 +8,8 @@ import io.ktor.client.features.json.serializer.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
-import net.mt32.makocommons.EventSerialization
-import net.mt32.makocommons.mevents.MatrixEvent
-import kotlin.reflect.KClass
+import de.mtorials.dialphone.model.EventSerialization
 
-typealias CustomEventList = DialPhoneBuilder.BuilderList<KClass<out MatrixEvent>>
 typealias ListenerList = DialPhoneBuilder.BuilderList<Listener>
 
 class DialPhoneBuilder(
@@ -74,6 +71,7 @@ class DialPhoneBuilder(
         val format = Json {
             ignoreUnknownKeys = true
             classDiscriminator = "type"
+            encodeDefaults = true
             serializersModule =
                 EventSerialization.serializersModule + EntitySerialization.serializersModule + customSerializer
         }

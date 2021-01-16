@@ -1,7 +1,7 @@
 package de.mtorials.dialphone.listener
 
 import de.mtorials.dialphone.DialPhone
-import net.mt32.makocommons.mevents.MatrixEvent
+import de.mtorials.dialphone.model.MatrixEvent
 
 interface Listener {
     fun onNewRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone)

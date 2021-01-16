@@ -1,17 +1,8 @@
-package net.mt32.makocommons
+package de.mtorials.dialphone.model
 
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import net.mt32.makocommons.mevents.MatrixEvent
-import net.mt32.makocommons.mevents.presence.MPresence
-import net.mt32.makocommons.mevents.roommessage.MReaction
-import net.mt32.makocommons.mevents.roommessage.MRoomEncrypted
-import net.mt32.makocommons.mevents.roommessage.MRoomMessage
-import net.mt32.makocommons.mevents.roommessage.MRoomRedaction
-import net.mt32.makocommons.mevents.roomstate.*
-import kotlin.reflect.KClass
 
 object EventSerialization {
     val serializersModule = SerializersModule {
@@ -32,6 +23,13 @@ object EventSerialization {
             subclass(MRoomJoinRules::class)
             subclass(MRoomMember::class)
             subclass(MRoomName::class)
+        }
+
+        polymorphic(MRoomMessage.MRoomMessageContent::class) {
+
+            subclass(MRoomMessage.EmptyContent::class)
+            subclass(MRoomMessage.ImageContent::class)
+            subclass(MRoomMessage.TextContent::class)
         }
     }
 }

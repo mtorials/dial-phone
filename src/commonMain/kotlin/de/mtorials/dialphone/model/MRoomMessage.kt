@@ -1,9 +1,8 @@
-package net.mt32.makocommons.mevents.roommessage
+package de.mtorials.dialphone.model
 
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.mt32.makocommons.mevents.ContentEventType
 
 @SerialName("m.room.message")
 @Serializable
@@ -31,7 +30,6 @@ class MRoomMessage(
     ) : MRoomMessageContent
 
     @ContentEventType(MRoomMessage::class)
-    @SerialName("")
     @Serializable
     data class EmptyContent(override val body: String = "") : MRoomMessageContent
 
