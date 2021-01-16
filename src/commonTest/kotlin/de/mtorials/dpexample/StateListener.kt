@@ -2,7 +2,7 @@ package de.mtorials.dpexample
 
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import de.mtorials.dialphone.listener.MatrixEventAdapter
-import net.mt32.makocommons.mevents.roomstate.MatrixStateEvent
+import de.mtorials.dialphone.model.MatrixStateEvent
 
 class StateListener : MatrixEventAdapter<MatrixStateEvent>(MatrixStateEvent::class) {
     override fun onMatrixEvent(event: MatrixStateEvent, roomFuture: RoomFutureImpl) {

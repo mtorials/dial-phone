@@ -2,7 +2,7 @@ package de.mtorials.dialphone.entities.entityfutures
 
 import de.mtorials.dialphone.entities.Room
 import de.mtorials.dialphone.entities.actions.RoomActions
-import net.mt32.makocommons.mevents.roomstate.MatrixStateEvent
+import de.mtorials.dialphone.model.MatrixStateEvent
 
 /**
  * Represents a room entity without loaded properties

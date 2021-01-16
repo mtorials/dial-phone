@@ -1,10 +1,7 @@
-package net.mt32.makocommons.mevents.presence
+package de.mtorials.dialphone.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.mt32.makocommons.mevents.ContentEventType
-import net.mt32.makocommons.mevents.EventContent
-import net.mt32.makocommons.mevents.MatrixEvent
 
 @SerialName("m.presence")
 @Serializable

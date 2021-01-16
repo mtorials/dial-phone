@@ -1,4 +1,4 @@
-package net.mt32.makocommons.enums
+package de.mtorials.dialphone.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

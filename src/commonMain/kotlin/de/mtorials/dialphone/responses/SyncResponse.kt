@@ -1,10 +1,9 @@
 package de.mtorials.dialphone.responses
 
-import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.mt32.makocommons.mevents.MatrixEvent
-import net.mt32.makocommons.mevents.presence.MPresence
+import de.mtorials.dialphone.model.MatrixEvent
+import de.mtorials.dialphone.model.MPresence
 
 @Serializable
 class SyncResponse(

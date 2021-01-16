@@ -1,4 +1,4 @@
-package net.mt32.makocommons.mevents
+package de.mtorials.dialphone.model
 
 import kotlin.reflect.KClass
 

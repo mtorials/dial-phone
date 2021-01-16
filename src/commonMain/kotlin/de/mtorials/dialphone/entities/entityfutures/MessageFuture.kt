@@ -4,7 +4,7 @@ import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.MemberImpl
 import de.mtorials.dialphone.entities.Message
 import de.mtorials.dialphone.entities.actions.MessageActionsImpl
-import net.mt32.makocommons.mevents.roommessage.MRoomMessage
+import de.mtorials.dialphone.model.MRoomMessage
 
 class MessageFuture(
     id: String,

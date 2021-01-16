@@ -1,11 +1,10 @@
 package de.mtorials.dialphone.listener
 
-import de.mtorials.dialphone.CustomEventList
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.PhoneCache
 import de.mtorials.dialphone.entities.UserImpl
-import net.mt32.makocommons.mevents.MatrixEvent
-import net.mt32.makocommons.mevents.roomstate.MRoomMember
+import de.mtorials.dialphone.model.MatrixEvent
+import de.mtorials.dialphone.model.MRoomMember
 
 class UserCacheListener(private val cache: PhoneCache) : Listener {
     override fun onNewRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
