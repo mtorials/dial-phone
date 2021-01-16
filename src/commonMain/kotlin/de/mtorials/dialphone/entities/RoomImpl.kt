@@ -1,8 +1,10 @@
 package de.mtorials.dialphone.entities
 
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
-import de.mtorials.dialphone.model.*
-import de.mtorials.dialphone.model.Membership
+import de.mtorials.dialphone.model.enums.JoinRule
+import de.mtorials.dialphone.model.enums.Membership
+import de.mtorials.dialphone.model.mevents.roommessage.MessageEventContent
+import de.mtorials.dialphone.model.mevents.roomstate.*
 
 class RoomImpl(
     action: RoomFutureImpl,

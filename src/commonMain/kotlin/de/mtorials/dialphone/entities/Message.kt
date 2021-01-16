@@ -3,7 +3,7 @@ package de.mtorials.dialphone.entities
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.actions.MessageActionsImpl
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
-import de.mtorials.dialphone.model.MRoomMessage
+import de.mtorials.dialphone.model.mevents.roommessage.MRoomMessage
 import kotlin.reflect.KClass
 
 class Message(

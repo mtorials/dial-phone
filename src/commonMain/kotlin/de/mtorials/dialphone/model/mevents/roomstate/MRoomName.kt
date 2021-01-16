@@ -1,25 +1,22 @@
-package de.mtorials.dialphone.model
+package de.mtorials.dialphone.model.mevents.roomstate
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@SerialName("m.room.avatar")
+@SerialName("m.room.name")
 @Serializable
-class MRoomAvatar(
+class MRoomName(
     override val sender: String,
     @SerialName("event_id")
     override val id: String? = null,
-    @Serializable
     override val content: Content,
     @SerialName("state_key")
     override val stateKey: String,
     @SerialName("prev_content")
-    @Serializable
     override val prevContent: Content? = null
 ) : MatrixStateEvent {
-    @ContentEventType(MRoomAvatar::class)
     @Serializable
     data class Content(
-        val url: String
+        val name: String
     ) : StateEventContent
 }

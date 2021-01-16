@@ -1,13 +1,13 @@
 package de.mtorials.dialphone
 
-import de.mtorials.dialphone.model.MatrixStateEvent
+import de.mtorials.dialphone.model.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.responses.*
 import io.ktor.client.HttpClient
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.date.*
-import de.mtorials.dialphone.model.EventContent
-import de.mtorials.dialphone.model.MatrixEvent
+import de.mtorials.dialphone.model.mevents.EventContent
+import de.mtorials.dialphone.model.mevents.MatrixEvent
 import kotlin.random.Random
 
 class APIRequests(

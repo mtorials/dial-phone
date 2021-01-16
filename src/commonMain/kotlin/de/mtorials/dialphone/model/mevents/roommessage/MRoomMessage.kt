@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.model
+package de.mtorials.dialphone.model.mevents.roommessage
 
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
@@ -14,12 +14,10 @@ class MRoomMessage(
     override val content: MRoomMessageContent
 ) : MatrixMessageEvent {
 
-    @ContentEventType(MRoomMessage::class)
     interface MRoomMessageContent : MessageEventContent {
         val body: String
     }
 
-    @ContentEventType(MRoomMessage::class)
     @SerialName("m.text")
     @Serializable
     data class TextContent(
@@ -29,12 +27,10 @@ class MRoomMessage(
         val formattedBody: String? = null
     ) : MRoomMessageContent
 
-    @ContentEventType(MRoomMessage::class)
     @Serializable
     data class EmptyContent(override val body: String = "") : MRoomMessageContent
 
     @SerialName("m.image")
-    @ContentEventType(MRoomMessage::class)
     @Serializable
     data class ImageContent(
         override val body: String,

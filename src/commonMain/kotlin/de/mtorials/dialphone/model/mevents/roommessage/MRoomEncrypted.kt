@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.model
+package de.mtorials.dialphone.model.mevents.roommessage
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -11,7 +11,6 @@ class MRoomEncrypted(
     override val id: String,
     override val content: Content
 ) : MatrixMessageEvent {
-    @ContentEventType(MRoomMessage::class)
     @Serializable
     data class Content(
         @SerialName("sender_key")

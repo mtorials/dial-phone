@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.model
+package de.mtorials.dialphone.model.mevents
 
 import kotlinx.serialization.Serializable
 

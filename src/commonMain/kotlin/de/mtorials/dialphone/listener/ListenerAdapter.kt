@@ -3,10 +3,10 @@ package de.mtorials.dialphone.listener
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.dialevents.RoomInviteEvent
-import de.mtorials.dialphone.model.Membership
-import de.mtorials.dialphone.model.MatrixEvent
-import de.mtorials.dialphone.model.MRoomMessage
-import de.mtorials.dialphone.model.MRoomMember
+import de.mtorials.dialphone.model.enums.Membership
+import de.mtorials.dialphone.model.mevents.MatrixEvent
+import de.mtorials.dialphone.model.mevents.roommessage.MRoomMessage
+import de.mtorials.dialphone.model.mevents.roomstate.MRoomMember
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

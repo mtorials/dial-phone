@@ -1,11 +1,12 @@
-package de.mtorials.dialphone.model
+package de.mtorials.dialphone.model.mevents.roomstate
 
+import de.mtorials.dialphone.model.enums.JoinRule
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@SerialName("m.room.member")
+@SerialName("m.room.join_rules")
 @Serializable
-class MRoomMember(
+class MRoomJoinRules(
     override val sender: String,
     @SerialName("event_id")
     override val id: String? = null,
@@ -15,13 +16,9 @@ class MRoomMember(
     @SerialName("prev_content")
     override val prevContent: Content? = null
 ) : MatrixStateEvent {
-    @ContentEventType(MRoomMember::class)
     @Serializable
     data class Content(
-        val membership: Membership,
-        @SerialName("avatar_url")
-        val avatarURL: String? = null,
-        @SerialName("displayname")
-        val displayName: String?
+        @SerialName("join_rule")
+        val joinRule: JoinRule
     ) : StateEventContent
 }

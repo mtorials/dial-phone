@@ -4,7 +4,7 @@ import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.MemberImpl
 import de.mtorials.dialphone.entities.Message
 import de.mtorials.dialphone.entities.actions.MessageActionsImpl
-import de.mtorials.dialphone.model.MRoomMessage
+import de.mtorials.dialphone.model.mevents.roommessage.MRoomMessage
 
 class MessageFuture(
     id: String,

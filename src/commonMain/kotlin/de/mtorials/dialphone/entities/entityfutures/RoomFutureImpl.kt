@@ -4,7 +4,7 @@ import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.Room
 import de.mtorials.dialphone.entities.RoomImpl
 import de.mtorials.dialphone.entities.actions.RoomActionsImpl
-import de.mtorials.dialphone.model.MatrixStateEvent
+import de.mtorials.dialphone.model.mevents.roomstate.MatrixStateEvent
 
 class RoomFutureImpl(
     override val id: String,

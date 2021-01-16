@@ -1,5 +1,8 @@
-package de.mtorials.dialphone.model
+package de.mtorials.dialphone.model.mevents
 
+import de.mtorials.dialphone.model.mevents.roommessage.MatrixMessageEvent
+import de.mtorials.dialphone.model.mevents.roommessage.MessageEventContent
+import de.mtorials.dialphone.model.enums.MessageType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,7 +18,6 @@ class MReaction(
     override val id: String,
     override val content: Content
 ) : MatrixMessageEvent {
-    @ContentEventType(MReaction::class)
     @Serializable
     data class Content(
         @SerialName("msgtype")
