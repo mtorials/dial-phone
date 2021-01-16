@@ -11,6 +11,7 @@ import de.mtorials.dialphone.responses.SyncResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.http.cio.*
 import kotlinx.serialization.SerializationException
 
 class Synchronizer(
@@ -21,6 +22,7 @@ class Synchronizer(
 ) {
 
     private var lastTimeBatch: String? = null
+    private var initialSync: Boolean = true
 
     init {
         // Chache Listeners
@@ -34,21 +36,28 @@ class Synchronizer(
             val joinedRooms: MutableList<RoomFuture> = mutableListOf()
             val invitedRooms: MutableList<InvitedRoomActions> = mutableListOf()
             try {
-                //println("again!")
                 val res : SyncResponse = getSyncResponse()
                 lastTimeBatch = res.nextBatch
                 res.roomSync.join.forEach { (roomID, roomEvents) ->
                     joinedRooms.add(RoomFutureImpl(roomID, phone))
                     roomEvents.timeline.events.forEach { event ->
-                        listeners.forEach { it.onNewRoomEvent(event, roomID, phone) }
+                        listeners.forEach {
+                            if (initialSync) it.onOldRoomEvent(event, roomID, phone)
+                            else it.onNewRoomEvent(event, roomID, phone)
+                        }
                     }
                 }
                 res.roomSync.invite.forEach { (roomID, roomEvents) ->
                     invitedRooms.add(InvitedRoomActionsImpl(phone, roomID))
                     roomEvents.inviteState.events.forEach { event ->
-                        listeners.forEach { it.onNewRoomEvent(event, roomID, phone) }
+                        listeners.forEach {
+                            if (initialSync) it.onOldRoomEvent(event, roomID, phone)
+                            else it.onNewRoomEvent(event, roomID, phone)
+                        }
                     }
                 }
+                // Only first sync is inital
+                initialSync = false
                 phone.cache.joinedRooms = joinedRooms
                 phone.cache.invitedRooms = invitedRooms
                 //println(lastTimeBatch)

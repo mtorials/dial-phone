@@ -7,7 +7,7 @@ import de.mtorials.dialphone.model.mevents.roommessage.MatrixMessageEvent
 import de.mtorials.dialphone.model.mevents.roommessage.MessageEventContent
 import kotlinx.serialization.json.*
 
-class MessageEventContentSerializer() : JsonContentPolymorphicSerializer<MessageEventContent>(MessageEventContent::class) {
+class MessageEventContentSerializer() : JsonContentPolymorphicSerializer<MRoomMessage.MRoomMessageContent>(MRoomMessage.MRoomMessageContent::class) {
     override fun selectDeserializer(element: JsonElement) = when (element.jsonObject["msgtype"]?.jsonPrimitive?.content) {
         "m.text" -> MRoomMessage.TextContent.serializer()
         "m.image" -> MRoomMessage.ImageContent.serializer()
