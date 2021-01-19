@@ -24,6 +24,7 @@ class Synchronizer(
 
     private var lastTimeBatch: String? = null
     private var initialSync: Boolean = true
+    private var stopFlag: Boolean = false
 
     init {
         // Chache Listeners
@@ -31,6 +32,10 @@ class Synchronizer(
     }
 
     fun addListener(listener: Listener) = listeners.add(listener)
+
+    fun stop() {
+        this.stopFlag = true
+    }
 
     suspend fun sync() {
         while(true) {
@@ -65,8 +70,10 @@ class Synchronizer(
             } catch (e: RuntimeException) {
                 e.printStackTrace()
             }
-            // TODO REMOVE
-            // delay(10000)
+            if (stopFlag) {
+                stopFlag = false
+                break
+            }
         }
     }
 
