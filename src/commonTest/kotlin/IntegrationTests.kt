@@ -21,6 +21,7 @@ class IntegrationTests {
         phone.addListener(MessageListener(false) {
             println(it.message.body)
             assertEquals(testString, it.message.body)
+            it.message.redact("Test")
             phone.stop()
         })
         println("Sending msg")
