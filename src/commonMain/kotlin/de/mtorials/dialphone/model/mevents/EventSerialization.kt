@@ -5,13 +5,20 @@ import de.mtorials.dialphone.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.model.mevents.roommessage.MRoomRedaction
 import de.mtorials.dialphone.model.mevents.presence.MPresence
 import de.mtorials.dialphone.model.mevents.roomstate.*
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
+import kotlinx.serialization.serializer
 
 object EventSerialization {
+
     val serializersModule = SerializersModule {
         polymorphic(MatrixEvent::class) {
+
+            default {
+                DefaultEvent.serializer()
+            }
 
             // Presence
             subclass(MPresence::class)
