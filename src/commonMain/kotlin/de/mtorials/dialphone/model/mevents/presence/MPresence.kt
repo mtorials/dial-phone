@@ -17,6 +17,6 @@ class MPresence(
         @SerialName("last_active_ago")
         val lastActiveAgo: Long,
         @SerialName("currently_active")
-        val currentlyActive: Boolean
+        val currentlyActive: Boolean? = null
     ) : EventContent
 }

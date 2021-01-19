@@ -26,7 +26,11 @@ class DialPhoneImpl internal constructor(
     // cache
     val cache = PhoneCache()
 
-    override val requestObject = APIRequests(homeserverUrl, token, client)
+    override val requestObject = APIRequests(
+        homeserverUrl = homeserverUrl,
+        token = token,
+        client = client
+    )
 
     override val profile = Profile(this)
 
@@ -36,7 +40,7 @@ class DialPhoneImpl internal constructor(
         syncObject.addListener(listener)
     }
 
-    override suspend fun getJoinedRoomFutures(): List<RoomFuture> = cache.joinedRooms
+    override suspend fun getJoinedRoomFutures(): List<RoomFuture> = requestObject.getJoinedRooms().roomIds.map { RoomFutureImpl(it, this) }
     override suspend fun getInvitedRoomActions(): List<InvitedRoomActions> = cache.invitedRooms
 
     //override suspend fun getJoinedRoomFutures() : List<RoomFuture> =

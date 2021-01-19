@@ -11,7 +11,7 @@ class JvmTest {
     @Test
     fun test() {
         runBlocking {
-            CoreTests().basicTestWithToken(config)
+            IntegrationTests().basicTestWithToken(config)
         }
     }
 }

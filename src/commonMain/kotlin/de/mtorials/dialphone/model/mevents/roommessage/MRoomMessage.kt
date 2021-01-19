@@ -1,7 +1,6 @@
 package de.mtorials.dialphone.model.mevents.roommessage
 
-import de.mtorials.dialphone.serializers.MessageEventContentSerializer
-import kotlinx.serialization.Polymorphic
+import de.mtorials.dialphone.serialization.MessageEventContentSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,6 +15,7 @@ class MRoomMessage(
 ) : MatrixMessageEvent {
 
     interface MRoomMessageContent : MessageEventContent {
+        val msgType: String
         val body: String
     }
 
@@ -25,19 +25,25 @@ class MRoomMessage(
         override val body: String,
         val format: String? = null,
         @SerialName("formatted_body")
-        val formattedBody: String? = null
-    ) : MRoomMessageContent
+        val formattedBody: String? = null,
+    ) : MRoomMessageContent {
+        @SerialName("msgtype")
+        override val msgType: String = "m.text"
+    }
 
     @Serializable
-    data class EmptyContent(override val body: String = "") : MRoomMessageContent
+    data class EmptyContent(override val body: String = "", override val msgType: String = "") : MRoomMessageContent
 
     @SerialName("m.image")
     @Serializable
     data class ImageContent(
         override val body: String,
         val url: String? = null,
-        val file: String? = null
-    ) : MRoomMessageContent
+        val file: String? = null,
+    ) : MRoomMessageContent {
+        @SerialName("msgtype")
+        override val msgType: String = "m.image"
+    }
 
     companion object {
         const val htmlFormat = "org.matrix.custom.html"

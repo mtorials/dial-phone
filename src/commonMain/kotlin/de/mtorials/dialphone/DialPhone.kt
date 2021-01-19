@@ -39,7 +39,6 @@ interface DialPhone {
      */
     val requestObject: APIRequests
 
-
     /**
      * Used to synchronize with the homeserver.
      * Call this method to receive events.

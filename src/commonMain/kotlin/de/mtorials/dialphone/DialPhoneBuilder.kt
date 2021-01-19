@@ -9,7 +9,6 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
 import de.mtorials.dialphone.model.mevents.EventSerialization
-import de.mtorials.dialphone.serializers.MessageEventContentSerializer
 
 typealias ListenerList = DialPhoneBuilder.BuilderList<Listener>
 
