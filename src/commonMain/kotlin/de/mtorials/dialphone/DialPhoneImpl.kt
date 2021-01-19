@@ -79,4 +79,8 @@ class DialPhoneImpl internal constructor(
     override suspend fun sync() {
         syncObject.sync()
     }
+
+    override fun stop() {
+        syncObject.stop()
+    }
 }

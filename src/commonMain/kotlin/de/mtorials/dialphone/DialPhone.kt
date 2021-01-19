@@ -57,6 +57,11 @@ interface DialPhone {
     suspend fun sync()
 
     /**
+     * Stops syncing with the homeserver and ends the SyncJob returned syncAndReturnJob()
+     */
+    fun stop()
+
+    /**
      * Register a listener
      */
     fun addListener(listener: Listener)
