@@ -26,6 +26,11 @@ class IntegrationTests {
         })
         println("Sending msg")
         val room: RoomFuture = phone.getJoinedRoomFutureById("!YIqYutrrBUdGDombnI:mtorials.de") ?: error("Room not found")
+
+        // Test room info
+        assertEquals("[Demo] Manuell", room.receive().name)
+        assertEquals("@mtorials:mtorials.de", phone.getUserById("@mtorials:mtorials.de")?.id)
+
         room.sendTextMessage(testString)
         job.join()
     }
