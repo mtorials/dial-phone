@@ -22,6 +22,6 @@ class MRoomMember(
         @SerialName("avatar_url")
         val avatarURL: String? = null,
         @SerialName("displayname")
-        val displayName: String?
+        val displayName: String? = null
     ) : StateEventContent
 }
