@@ -10,9 +10,15 @@
 *work in progress*
 
 A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK for the JVM written in Kotlin.
-The library uses Jackson and Kotlin coroutines.
+The library uses kotlinx.serialization and kotlinx.coroutines.
+
+It is multi-platform compatible, but the only supported platform at the moment is the JVM.
 
 See my [dial-bot](https://github.com/mtorials/dialbot) repository for a reference bot implementation.
+(outdated currently)
+
+E2EE is currently not supported, but you should be able to use [pantalaimon](https://github.com/matrix-org/pantalaimon)
+to achieve it. This is however not tested. 
 
 ## Installation
 
@@ -41,16 +47,19 @@ Add the dependencies:
 
 #### Gradle
 
+
 Add to repositories:
 
-```groovy
-maven { url 'https://jitpack.io' }
+```kotlin
+// build.gradle.kts
+maven { url = "https://jitpack.io" }
 ```
 
 Add to dependencies:
 
-```groovy
-implementation 'de.mtorials:dial-phone:<SEE_RELEASES>'
+```kotlin
+// build.gradle.kts
+implementation(de.mtorials:dial-phone:<SEE_RELEASES>)
 ```
 
 ## Getting Started
@@ -78,10 +87,8 @@ val phone = DialPhone { // this: DialPhoneBuilder
 
 To receive events you have to start synchronizing.
 
-if you want to use the blocking sync method, use:
-
 ```kotlin
-phone.syncBlocking()
+phone.sync()
 ```
 
 If you want to use [koltinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
@@ -89,7 +96,7 @@ do not forget to wait for the returned job to join.
 Otherwise, your code will just stop executing at the end of your main function (you need to install kotlinx.coroutines).
 
 ```kotlin
-val syncJob = phone.sync()
+val syncJob = phone.syncAndReturnJob()
 // ...
 syncJob.join()
 ```
@@ -217,14 +224,14 @@ Use the `@ContentEventType` annotation to specify the according event type of th
 
 An example of a room message event that carries a positional data (x,y,z coordinates):
 ```kotlin
-@JsonTypeName("com.example.matrix.event.position")
+@Serializable
 class PositionEvent(
     override val sender: String,
     @JsonProperty("event_id")
     override val id: String,
     override val content: Content
 ) : MatrixMessageEvent {
-    @ContentEventType(PositionEvent::class)
+    @Serializable
     data class Content(
         val x: Int,
         val y: Int,
@@ -234,6 +241,9 @@ class PositionEvent(
 ```
 
 If you want to receive your custom events you have to register these when creating the `DailPhone` object.
+THis is done with a `SerializersModule`.
+
+*More information necessary, feel free to contact me...*
 
 ### Send Custom Events
 
@@ -242,7 +252,7 @@ See *Sending Events*.
 ### Receive Custom Events
 
 To receive custom events you have to implement the interface `Listener` directly:
-With the second constructor parameter you can control wether you want to receive past events also.
+With the second constructor parameter you can control if you want to receive past events too.
 
 ```kotlin
 class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class, true) {
@@ -267,5 +277,5 @@ Everyone is welcome to contribute. See the [CONTRIBUTING.md](https://github.com/
 - support for all Matrix events
 - DialPhone events for the most used native Matrix events
 - lazy loading
-- group management
+- group/community management
 
