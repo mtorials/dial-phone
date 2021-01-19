@@ -2,10 +2,12 @@ package de.mtorials.dialphone.listener
 
 import de.mtorials.dialphone.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.entities.Message
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MessageListener(
     receiveOld: Boolean = true,
-    val onNewMessage: (MessageReceivedEvent) -> Unit = {}
+    val onNewMessage: suspend (MessageReceivedEvent) -> Unit = {}
 ) : ListenerAdapter(receivePastEvents = receiveOld) {
 
     private val messagesByRoom: MutableMap<String, MutableList<Message>> = mutableMapOf()
@@ -13,7 +15,7 @@ class MessageListener(
     override suspend fun onRoomMessageReceive(event: MessageReceivedEvent) {
         if (messagesByRoom[event.roomFuture.id] == null) messagesByRoom[event.roomFuture.id] = mutableListOf()
         messagesByRoom[event.roomFuture.id]?.add(event.message)
-        onNewMessage(event)
+        GlobalScope.launch { onNewMessage(event) }
     }
 
     /**
