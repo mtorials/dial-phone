@@ -9,11 +9,11 @@ open class RoomActionsImpl(
     override val id: String
 ) : RoomActions {
 
-    override suspend fun sendMessageEvent(content: MessageEventContent, typeName: String) : String {
-        return phone.requestObject.sendMessageEvent(typeName, content, id)
+    override suspend fun sendMessageEvent(content: MessageEventContent, eventType: String) : String {
+        return phone.requestObject.sendMessageEvent(eventType, content, id)
     }
 
-    override suspend fun sendStateEvent(content: StateEventContent, typeName: String, stateKey: String): String {
-        return phone.requestObject.sendStateEvent(typeName, content, id, stateKey)
+    override suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: String): String {
+        return phone.requestObject.sendStateEvent(eventType, content, id, stateKey)
     }
 }

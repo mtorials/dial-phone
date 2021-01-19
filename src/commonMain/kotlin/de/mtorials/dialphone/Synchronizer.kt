@@ -12,6 +12,7 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.http.cio.*
+import kotlinx.coroutines.delay
 import kotlinx.serialization.SerializationException
 
 class Synchronizer(
@@ -64,7 +65,8 @@ class Synchronizer(
             } catch (e: RuntimeException) {
                 e.printStackTrace()
             }
-            //delay(10000)
+            // TODO REMOVE
+            // delay(10000)
         }
     }
 
@@ -78,6 +80,7 @@ class Synchronizer(
                 parameter("timeout", DialPhone.TIMEOUT)
                 parameter("full_state", fullState.toString())
                 if (lastTimeBatch != null) parameter("since", lastTimeBatch.toString())
+                //this.run { println(this.build().toString()) }
             }
         } catch (mappingException: SerializationException) {
             throw SyncException(mappingException, "Deserialization Exception while Syncing")
