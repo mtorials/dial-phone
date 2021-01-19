@@ -86,3 +86,7 @@ kotlin {
 }
 
 val artifactID = "dial-phone"
+
+artifacts {
+    archives(sourceSets)
+}
