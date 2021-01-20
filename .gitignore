@@ -3,6 +3,8 @@ username
 ghtoken
 bintraykey
 /config.json
+config.json
+config2.json
 /build
 /profile
 /data
