@@ -1,8 +1,8 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("multiplatform") version "1.4.21"
     kotlin("plugin.serialization") version "1.4.10"
+    `maven-publish`
+    id("org.jetbrains.dokka") version "0.10.0"
 }
 
 group = "de.mtorials"
@@ -61,4 +61,36 @@ kotlin {
     }
 }
 
-val artifactID = "dial-phone"
+val name = "dial-phone"
+
+tasks.dokka {
+    outputFormat = "html"
+    outputDirectory = "$buildDir/javadoc"
+}
+
+val dokkaJar by tasks.creating(Jar::class) {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    description = "Documentation for DialPhone."
+    from(tasks.dokka)
+}
+
+publishing {
+    repositories {
+        maven {
+            url = uri("https://git.mt32.net/api/v4/groups/mtorials/dial-phone/packages/maven")
+            name = "GitLab"
+            credentials {
+                name = "Job-Token"
+                username = "mtorials"
+                password = System.getenv("CI_JOB_TOKEN")
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "de.mtorials"
+            artifactId = name
+            version = "1.1"
+        }
+    }
+}

@@ -33,3 +33,7 @@ test:
     paths:
       - build
       - .gradle
+
+publish:
+  stage: publsish
+  script: gradle publish
