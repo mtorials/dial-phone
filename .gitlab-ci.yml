@@ -24,15 +24,15 @@ build:
       - build
       - .gradle
 
-test:
-  stage: test
-  script: gradle check
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
-    paths:
-      - build
-      - .gradle
+#test:
+#  stage: test
+#  script: gradle check
+#  cache:
+#    key: "$CI_COMMIT_REF_NAME"
+#    policy: pull
+#    paths:
+#      - build
+#     - .gradle
 
 publish:
   stage: deploy
