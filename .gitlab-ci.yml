@@ -35,5 +35,5 @@ test:
       - .gradle
 
 publish:
-  stage: publsish
+  stage: deploy
   script: gradle publish
