@@ -77,12 +77,14 @@ val dokkaJar by tasks.creating(Jar::class) {
 publishing {
     repositories {
         maven {
-            url = uri("https://git.mt32.net/api/v4/groups/mtorials/dial-phone/packages/maven")
+            url = uri("https://git.mt32.net/api/v4/projects/dial-phone/packages/maven")
             name = "GitLab"
-            credentials {
+            credentials(HttpHeaderCredentials::class) {
                 name = "Job-Token"
-                username = "mtorials"
-                password = System.getenv("CI_JOB_TOKEN")
+                value = System.getenv("CI_JOB_TOKEN")
+            }
+            authentication {
+                create<HttpHeaderAuthentication>("header")
             }
         }
     }
