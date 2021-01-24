@@ -74,6 +74,21 @@ val dokkaJar by tasks.creating(Jar::class) {
     from(tasks.dokka)
 }
 
+repositories {
+    maven {
+        url = uri("https://gitlab.example.com/api/v4/groups/mtorials/-/packages/maven")
+        name = "GitLab"
+        credentials(HttpHeaderCredentials::class) {
+            name = "Job-Token"
+            value = System.getenv("CI_JOB_TOKEN")
+        }
+        authentication {
+            create<HttpHeaderAuthentication>("header")
+        }
+    }
+}
+
+
 publishing {
     repositories {
         maven {
