@@ -37,3 +37,5 @@ build:
 publish:
   stage: deploy
   script: gradle publish
+  only:
+    - tags
