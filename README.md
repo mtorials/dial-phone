@@ -24,27 +24,6 @@ to achieve it. This is however not tested.
 
 The library is published with [JitPack]("https://jitpack.io/").
 
-#### Maven
-
-Add the repo:
-
-```xml
-<repository>
-    <id>jitpack.io</id>
-    <url>https://jitpack.io</url>
-</repository>
-```
-
-Add the dependencies:
-
-```xml
-<dependency>
-    <groupId>de.mtorials</groupId>
-    <artifactId>dial-phone</artifactId>
-    <version>SEE RELEASES</version>
-</dependency>
-```
-
 #### Gradle
 
 
@@ -60,6 +39,9 @@ Add to dependencies:
 ```kotlin
 // build.gradle.kts
 implementation(de.mtorials:dial-phone:<SEE_RELEASES>)
+// A ktor client of your chioce, here okhttp
+// please check for a newer version!
+implementation("io.ktor:ktor-client-okhttp:1.5.0")
 ```
 
 ## Getting Started
