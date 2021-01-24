@@ -8,9 +8,17 @@ class JvmTest {
 
     private val config: Config = Json { ignoreUnknownKeys = true }.decodeFromString(File("config.json").readText())
 
+    @Test
     fun basicTestWithTokenJVM() {
         runBlocking {
             IntegrationTests().basicTestWithToken(config)
+        }
+    }
+
+    @Test
+    fun bodTest() {
+        runBlocking {
+            IntegrationTests().botTest(config)
         }
     }
 }

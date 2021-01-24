@@ -1,6 +1,8 @@
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.dialevents.MessageReceivedEvent
+import de.mtorials.dialphone.dialevents.answer
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
+import de.mtorials.dialphone.listener.Command
 import de.mtorials.dialphone.listener.MessageListener
 import de.mtorials.dialphone.sendTextMessage
 import kotlinx.coroutines.cancelChildren
@@ -33,5 +35,22 @@ class IntegrationTests {
 
         room.sendTextMessage(testString)
         job.join()
+    }
+
+    suspend fun botTest(config: Config) {
+        val phone = DialPhone {
+            withToken(config.token)
+            homeserverUrl = config.homeserverUrl
+            bot {
+                commandPrefix = "&"
+                generateHelp()
+                commands(
+                    Command("ping") { params ->
+                        this answer params[0]
+                    }
+                )
+            }
+        }
+        phone.sync()
     }
 }

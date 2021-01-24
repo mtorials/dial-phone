@@ -29,10 +29,6 @@ interface DialPhone {
      */
     val homeserverUrl: String
 
-    /**
-     * The command prefix you specified optionally
-     */
-    val commandPrefix: String
 
     /**
      * The object the api uses to make low level requests

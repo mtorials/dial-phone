@@ -1,6 +1,9 @@
 package de.mtorials.dialphone
 
+import de.mtorials.dialphone.dialevents.answer
 import de.mtorials.dialphone.entities.EntitySerialization
+import de.mtorials.dialphone.listener.Command
+import de.mtorials.dialphone.listener.CommandListener
 import de.mtorials.dialphone.listener.Listener
 import io.ktor.client.*
 import io.ktor.client.features.json.*
@@ -20,8 +23,9 @@ class DialPhoneBuilder(
     private var ownId: String? = null
     private val listenerList = ListenerList()
     private var customSerializer: SerializersModule = SerializersModule {  }
-    private var commandPrefix: String? = null
     private var isGuestBool = false
+    private var commandListener: CommandListener? = null
+    private var bot: BotBuilder? = null
 
     init {
         this.block()
@@ -47,10 +51,6 @@ class DialPhoneBuilder(
         this.customSerializer = serializersModule
     }
 
-    infix fun hasCommandPrefix(commandPrefix: String) {
-        this.commandPrefix = commandPrefix
-    }
-
     class BuilderList<T> {
         val list: MutableList<T> = mutableListOf()
         fun add(el: T): BuilderList<T> {
@@ -65,6 +65,21 @@ class DialPhoneBuilder(
 
     private fun throwNoHomeserver() : Nothing {
         throw RuntimeException("No homeserver specified. Please assign a value to homeserverUrl first.")
+    }
+
+    fun bot(block: BotBuilder.() -> Unit) {
+        val botBuilder = BotBuilder()
+        botBuilder.block()
+        var fall: Command? = null
+        if (botBuilder.help) fall = Command("help", "Gives Help", "help <command>") {
+            this answer "Help:"
+            botBuilder.regCommands.forEach { command ->
+                this answer command.invoke + ": " + command.usage
+            }
+        }
+        if (fall != null) botBuilder.regCommands.add(fall)
+        this.commandListener = CommandListener(prefix = botBuilder.commandPrefix, commands = botBuilder.regCommands, fallbackCommand = fall)
+        this.bot = botBuilder
     }
 
     suspend fun build() : DialPhone {
@@ -87,13 +102,32 @@ class DialPhoneBuilder(
         }
         if (homeserverUrl == null) throwNoHomeserver()
         val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token, client = client).getMe().id
+        val listeners: MutableList<Listener> = listenerList.list
+        if (commandListener != null) listeners.add(commandListener!!)
         return DialPhoneImpl(
             token = token,
             homeserverUrl = homeserverUrl!!,
-            listeners = listenerList.list,
+            listeners = listeners,
             client = client,
-            commandPrefix = commandPrefix ?: "!",
             ownId = id
         )
+    }
+
+    class BotBuilder {
+
+        val bot = this
+
+        var commandPrefix: String = "!"
+        val regCommands: MutableList<Command> = mutableListOf()
+        var help: Boolean = false
+            private set
+
+        fun generateHelp() {
+            this.help = true
+        }
+
+        fun commands(vararg commands: Command) {
+            regCommands.addAll(commands)
+        }
     }
 }
