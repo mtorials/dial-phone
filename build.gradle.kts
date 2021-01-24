@@ -92,7 +92,7 @@ repositories {
 publishing {
     repositories {
         maven {
-            url = uri("https://git.mt32.net/api/v4/projects/dial-phone/packages/maven")
+            url = uri("https://git.mt32.net/api/v4/projects/59/packages/maven")
             name = "GitLab"
             credentials(HttpHeaderCredentials::class) {
                 name = "Job-Token"
