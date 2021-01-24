@@ -1,10 +1,10 @@
 /.idea
-/.gradle
 username
 ghtoken
 bintraykey
 /config.json
-/src/test
+config.json
+config2.json
 /build
 /profile
 /data

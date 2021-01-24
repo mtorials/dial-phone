@@ -1,34 +1,67 @@
-import org.gradle.jvm.tasks.Jar
-
 plugins {
-    kotlin("jvm") version "1.4.20"
+    kotlin("multiplatform") version "1.4.21"
+    kotlin("plugin.serialization") version "1.4.10"
+    `maven-publish`
     id("org.jetbrains.dokka") version "0.10.0"
-    maven
-    java
 }
 
 group = "de.mtorials"
-version = "v0.1.1-alpha"
+version = "v1.0.0-alpha"
+
 
 repositories {
     mavenCentral()
     jcenter()
+    maven("https://dl.bintray.com/kotlin/kotlin-eap")
 }
 
-val artifactID = "dial-phone"
+val ktorVersion = "1.5.0"
 
-dependencies {
-    implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.+")
-    implementation(group = "org.http4k", name = "http4k-core", version = "3.254.0")
-    implementation(group = "org.http4k", name = "http4k-client-okhttp", version = "3.254.0")
+kotlin {
 
-    testCompileOnly("io.kotlintest:kotlintest-core:3.0.2")
-    testCompileOnly("io.kotlintest:kotlintest-assertions:3.0.2")
-    testCompileOnly("io.kotlintest:kotlintest-runner-junit5:3.0.2")
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = "1.8"
+        }
+        testRuns["test"].executionTask.configure {
+            useJUnit()
+        }
+    }
 
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+
+                //Ktor
+                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+
+                // Tests
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+            }
+
+        }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+            }
+        }
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test-junit"))
+                //implementation("org.eclipse.jetty:jetty-client:11.0.0")
+                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+
+            }
+        }
+    }
 }
+
+val name = "dial-phone"
 
 tasks.dokka {
     outputFormat = "html"
@@ -41,16 +74,40 @@ val dokkaJar by tasks.creating(Jar::class) {
     from(tasks.dokka)
 }
 
-val sourcesJar by tasks.creating(Jar::class) {
-    archiveClassifier.set("sources")
-    from(sourceSets.main.get().allSource)
+repositories {
+    maven {
+        url = uri("https://gitlab.example.com/api/v4/groups/mtorials/-/packages/maven")
+        name = "GitLab"
+        credentials(HttpHeaderCredentials::class) {
+            name = "Job-Token"
+            value = System.getenv("CI_JOB_TOKEN")
+        }
+        authentication {
+            create<HttpHeaderAuthentication>("header")
+        }
+    }
 }
 
-artifacts {
-    archives(sourcesJar)
-    archives(dokkaJar)
-}
 
-tasks.test {
-    useJUnitPlatform()
+publishing {
+    repositories {
+        maven {
+            url = uri("https://git.mt32.net/api/v4/projects/59/packages/maven")
+            name = "GitLab"
+            credentials(HttpHeaderCredentials::class) {
+                name = "Job-Token"
+                value = System.getenv("CI_JOB_TOKEN")
+            }
+            authentication {
+                create<HttpHeaderAuthentication>("header")
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "de.mtorials"
+            artifactId = name
+            version = "1.1"
+        }
+    }
 }
