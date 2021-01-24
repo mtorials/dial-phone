@@ -22,23 +22,24 @@ to achieve it. This is however not tested.
 
 ## Installation
 
-The library is published with [JitPack]("https://jitpack.io/").
+The library is currently published via my gitlab instance.
 
 #### Gradle
 
+Releases are [here](https://git.mt32.net/mtorials/dial-phone/-/packages/).
 
 Add to repositories:
 
 ```kotlin
 // build.gradle.kts
-maven { url = "https://jitpack.io" }
+maven { url = uri("https://git.mt32.net/api/v4/projects/59/packages/maven") }
 ```
 
 Add to dependencies:
 
 ```kotlin
 // build.gradle.kts
-implementation(de.mtorials:dial-phone:<SEE_RELEASES>)
+implementation("de.mtorials:dial-phone-jvm:<SEE_RELEASES>")
 // A ktor client of your chioce, here okhttp
 // please check for a newer version!
 implementation("io.ktor:ktor-client-okhttp:1.5.0")
