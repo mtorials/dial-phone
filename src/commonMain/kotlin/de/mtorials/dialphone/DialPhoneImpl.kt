@@ -18,7 +18,7 @@ class DialPhoneImpl internal constructor(
     override val token: String,
     override val homeserverUrl: String,
     listeners: List<Listener>,
-    override val commandPrefix: String,
+    //override val commandPrefix: String,
     override val ownId: String,
     private val client: HttpClient
 ) : DialPhone {
