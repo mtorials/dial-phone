@@ -38,4 +38,8 @@ class RoomImpl(
 
     override suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: String): String =
         RoomFutureImpl(id, phone).sendStateEvent(content, eventType, stateKey)
+
+    override suspend fun leave() {
+        RoomFutureImpl(id, phone).leave()
+    }
 }
