@@ -15,18 +15,12 @@ abstract class Command(
             description: String? = null,
             usage: String? = null,
             executeBlock: suspend MessageReceivedEvent.(Array<String>)->Unit
-        ): DefaultCommand {
-            return DefaultCommand(invoke, description, executeBlock)
-        }
-    }
-
-    class DefaultCommand(
-        invoke: String,
-        description: String? = null,
-        val executeBlock: suspend (MessageReceivedEvent, Array<String>)->Unit
-    ) : Command(invoke, description) {
-        override suspend fun execute(event: MessageReceivedEvent, parameters: Array<String>) {
-            executeBlock(event, parameters)
+        ): Command {
+            return object : Command(invoke, description, usage) {
+                override suspend fun execute(event: MessageReceivedEvent, parameters: Array<String>) {
+                    executeBlock(event, parameters)
+                }
+            }
         }
     }
 }
