@@ -16,4 +16,8 @@ open class RoomActionsImpl(
     override suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: String): String {
         return phone.requestObject.sendStateEvent(eventType, content, id, stateKey)
     }
+
+    override suspend fun leave() {
+        phone.requestObject.leaveRoomWithId(id)
+    }
 }

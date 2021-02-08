@@ -29,6 +29,8 @@ class APIRequests(
         request(HttpMethod.Get, "rooms/${encode(roomId)}/event/${encode(id)}")
     suspend fun joinRoomWithId(id: String) : RoomResponse =
         request(HttpMethod.Post, "rooms/${encode(id)}/join")
+    suspend fun leaveRoomWithId(id: String) =
+        request<Any>(HttpMethod.Post, "rooms/${encode(id)}/leave")
     suspend fun getRoomIdForAlias(alias: String) : AliasExchangeResponse =
         request(HttpMethod.Get, "directory/room/${encode(alias)}")
 

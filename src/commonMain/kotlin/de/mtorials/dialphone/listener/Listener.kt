@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.listener
 
 import de.mtorials.dialphone.DialPhone
+import de.mtorials.dialphone.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.model.mevents.MatrixEvent
 
 interface Listener {

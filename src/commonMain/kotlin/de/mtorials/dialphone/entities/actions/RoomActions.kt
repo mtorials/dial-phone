@@ -27,4 +27,9 @@ interface RoomActions {
      * @return The event Id
      */
     suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: String = "") : String
+
+    /**
+     * Leave the room
+     */
+    suspend fun leave()
 }
