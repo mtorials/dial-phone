@@ -9,7 +9,7 @@ import de.mtorials.dialphone.model.mevents.roomstate.MatrixStateEvent
 class RoomFutureImpl(
     override val id: String,
     phone: DialPhone
-) : EntityFuture<Room>, RoomFuture, RoomActionsImpl(phone, id) {
+) : RoomFuture, RoomActionsImpl(phone, id) {
     override suspend fun receiveStateEvents(): Array<MatrixStateEvent>  = phone.requestObject.getRoomsState(id)
     override suspend fun receive() : Room = RoomImpl(this, receiveStateEvents())
 }
