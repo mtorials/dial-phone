@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.entities
 
+import de.mtorials.dialphone.entities.actions.RoomActions
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import de.mtorials.dialphone.model.enums.JoinRule
 import de.mtorials.dialphone.model.enums.Membership
@@ -9,7 +10,7 @@ import de.mtorials.dialphone.model.mevents.roomstate.*
 class RoomImpl(
     action: RoomFutureImpl,
     stateEvents: Array<MatrixStateEvent>
-) : Room {
+) : Room, RoomActions by action {
     override val phone = action.phone
 
     override var name: String = "init"
@@ -31,15 +32,5 @@ class RoomImpl(
                 ))
             }
         }
-    }
-
-    override suspend fun sendMessageEvent(content: MessageEventContent, eventType: String): String =
-        RoomFutureImpl(id, phone).sendMessageEvent(content, eventType)
-
-    override suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: String): String =
-        RoomFutureImpl(id, phone).sendStateEvent(content, eventType, stateKey)
-
-    override suspend fun leave() {
-        RoomFutureImpl(id, phone).leave()
     }
 }
