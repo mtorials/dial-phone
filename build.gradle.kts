@@ -1,12 +1,12 @@
 plugins {
-    kotlin("multiplatform") version "1.4.21"
-    kotlin("plugin.serialization") version "1.4.10"
+    kotlin("multiplatform") version "1.4.31"
+    kotlin("plugin.serialization") version "1.4.31"
     `maven-publish`
     id("org.jetbrains.dokka") version "0.10.0"
 }
 
 group = "de.mtorials"
-version = "v1.1.1-alpha"
+version = "v1.1.2-alpha"
 
 
 repositories {
@@ -26,6 +26,12 @@ kotlin {
         testRuns["test"].executionTask.configure {
             useJUnit()
         }
+    }
+
+    js {
+        binaries.executable()
+        browser()
+        nodejs()
     }
 
     sourceSets {
@@ -58,6 +64,11 @@ kotlin {
 
             }
         }
+        val jsTest by getting {
+            dependencies {
+                //implementation(kotlin("test-js"))
+            }
+        }
     }
 }
 
@@ -88,9 +99,9 @@ repositories {
     }
 }
 
-
 publishing {
     repositories {
+        mavenLocal()
         maven {
             url = uri("https://git.mt32.net/api/v4/projects/59/packages/maven")
             name = "GitLab"

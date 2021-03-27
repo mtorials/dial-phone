@@ -26,6 +26,7 @@ class DialPhoneBuilder(
     private var isGuestBool = false
     private var commandListener: CommandListener? = null
     private var bot: BotBuilder? = null
+    private var initCallback : suspend (DialPhone) -> Unit = {}
 
     init {
         this.block()
@@ -41,6 +42,10 @@ class DialPhoneBuilder(
 
     infix fun addListeners(block: ListenerList.() -> ListenerList) {
         listenerList.block()
+    }
+
+    fun afterInitialSync(callback: suspend (DialPhone) -> Unit) {
+        this.initCallback = callback
     }
 
     fun addListeners(vararg listeners: Listener) {
@@ -109,7 +114,8 @@ class DialPhoneBuilder(
             homeserverUrl = homeserverUrl!!,
             listeners = listeners,
             client = client,
-            ownId = id
+            ownId = id,
+            initCallback = this.initCallback
         )
     }
 
