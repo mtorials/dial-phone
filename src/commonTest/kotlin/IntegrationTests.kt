@@ -31,6 +31,10 @@ class IntegrationTests {
                     override suspend fun onRoomInvite(event: RoomInviteEvent) { event.invitedRoomActions.join() }
                 }
             )
+            afterInitialSync { phone ->
+                println("Inital sync!")
+                //phone.getJoinedRoomFutures().map { it.receive() }.forEach { phone.getJoinedRoomFutureById(roomId)?.sendTextMessage(it.name) }
+            }
         }
         println("created dialphone")
         val job = phone.syncAndReturnJob()
