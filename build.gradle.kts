@@ -28,9 +28,13 @@ kotlin {
         }
     }
 
-    js {
+    js(IR) {
         binaries.executable()
-        browser()
+        browser {
+            testTask {
+                useCommonJs()
+            }
+        }
         nodejs()
     }
 
@@ -66,7 +70,7 @@ kotlin {
         }
         val jsTest by getting {
             dependencies {
-                //implementation(kotlin("test-js"))
+                implementation(kotlin("test-js"))
             }
         }
     }
