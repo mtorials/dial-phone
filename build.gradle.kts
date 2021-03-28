@@ -31,9 +31,7 @@ kotlin {
     js(IR) {
         binaries.executable()
         browser {
-            testTask {
-                useCommonJs()
-            }
+            testTask()
         }
         nodejs()
     }
