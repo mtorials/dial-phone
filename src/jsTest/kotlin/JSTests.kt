@@ -5,6 +5,6 @@ import kotlinx.coroutines.launch
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class JSTests {
-
+fun main() {
+    println("Hey")
 }
