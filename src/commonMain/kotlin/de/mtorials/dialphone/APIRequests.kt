@@ -21,7 +21,7 @@ class APIRequests(
     suspend fun discoverRooms() : RoomDiscovery = request(HttpMethod.Get, "publicRooms")
     suspend fun getJoinedRooms() : JoinedRooms = request(HttpMethod.Get, "joined_rooms")
     suspend fun getMe() : UserResponse = request(HttpMethod.Get, "account/whoami")
-    suspend fun getRoomsState(id: String) : Array<MatrixStateEvent> =
+    suspend fun getRoomsState(id: String) : List<MatrixStateEvent> =
         request(HttpMethod.Get, "rooms/${id}/state")
     suspend fun getUserById(id: String) : UserWithoutIDResponse? = request(HttpMethod.Get, "profile/${id}")
     suspend fun getEventByIdAndRoomId(id: String, roomId: String) : MatrixEvent =

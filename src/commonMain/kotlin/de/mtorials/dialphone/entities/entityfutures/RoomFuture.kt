@@ -11,5 +11,5 @@ interface RoomFuture : EntityFuture<Room>, RoomActions {
     /**
      * @return all matrix state events corresponding to this room
      */
-    suspend fun receiveStateEvents() : Array<MatrixStateEvent>
+    suspend fun receiveStateEvents() : List<MatrixStateEvent>
 }
