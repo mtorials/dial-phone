@@ -9,7 +9,7 @@ import de.mtorials.dialphone.model.mevents.roomstate.*
 
 class RoomImpl(
     action: RoomFutureImpl,
-    stateEvents: Array<MatrixStateEvent>
+    stateEvents: List<MatrixStateEvent>
 ) : Room, RoomActions by action {
     override val phone = action.phone
 

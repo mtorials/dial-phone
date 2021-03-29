@@ -35,6 +35,18 @@ object EventSerialization {
             subclass(MRoomJoinRules::class)
             subclass(MRoomMember::class)
             subclass(MRoomName::class)
+
+        }
+
+        polymorphic(MatrixStateEvent::class) {
+            default {
+                DefaultStateEvent.serializer()
+            }
+            subclass(MRoomAvatar::class)
+            subclass(MRoomCreate::class)
+            subclass(MRoomJoinRules::class)
+            subclass(MRoomMember::class)
+            subclass(MRoomName::class)
         }
 
         polymorphic(MRoomMessage.MRoomMessageContent::class) {
