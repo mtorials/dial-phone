@@ -88,7 +88,7 @@ class DialPhoneBuilder(
     }
 
     suspend fun build() : DialPhone {
-        val format = Json {
+        val json = Json {
             ignoreUnknownKeys = true
             classDiscriminator = "type"
             encodeDefaults = true
@@ -97,7 +97,7 @@ class DialPhoneBuilder(
         }
         val client = HttpClient {
             install(JsonFeature) {
-                serializer = KotlinxSerializer(format)
+                serializer = KotlinxSerializer(json)
             }
         }
         if (isGuestBool) {
@@ -106,7 +106,7 @@ class DialPhoneBuilder(
             ownId = guest.userId
         }
         if (homeserverUrl == null) throwNoHomeserver()
-        val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token, client = client).getMe().id
+        val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token, client = client, json = json).getMe().id
         val listeners: MutableList<Listener> = listenerList.list
         if (commandListener != null) listeners.add(commandListener!!)
         return DialPhoneImpl(
@@ -115,7 +115,8 @@ class DialPhoneBuilder(
             listeners = listeners,
             client = client,
             ownId = id,
-            initCallback = this.initCallback
+            initCallback = this.initCallback,
+            json = json
         )
     }
 

@@ -34,6 +34,7 @@ class IntegrationTests {
             afterInitialSync { phone ->
                 println("Inital sync!")
                 //phone.getJoinedRoomFutures().map { it.receive() }.forEach { phone.getJoinedRoomFutureById(roomId)?.sendTextMessage(it.name) }
+                //phone.stop()
             }
         }
         println("created dialphone")

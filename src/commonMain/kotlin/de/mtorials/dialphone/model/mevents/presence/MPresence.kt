@@ -15,7 +15,7 @@ class MPresence(
     data class PresenceContent(
         val presence: String,
         @SerialName("last_active_ago")
-        val lastActiveAgo: Long,
+        val lastActiveAgo: Long? = null,
         @SerialName("currently_active")
         val currentlyActive: Boolean? = null
     ) : EventContent

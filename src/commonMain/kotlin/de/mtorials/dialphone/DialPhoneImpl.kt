@@ -13,6 +13,7 @@ import io.ktor.client.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 
 class DialPhoneImpl internal constructor(
     override val token: String,
@@ -22,6 +23,7 @@ class DialPhoneImpl internal constructor(
     override val ownId: String,
     private val client: HttpClient,
     initCallback: suspend (DialPhone) -> Unit,
+    json: Json,
 ) : DialPhone {
 
     // cache
@@ -30,7 +32,8 @@ class DialPhoneImpl internal constructor(
     override val requestObject = APIRequests(
         homeserverUrl = homeserverUrl,
         token = token,
-        client = client
+        client = client,
+        json = json
     )
 
     override val profile = Profile(this)
