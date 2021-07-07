@@ -5,6 +5,7 @@ import de.mtorials.dialphone.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.model.mevents.roommessage.MRoomRedaction
 import de.mtorials.dialphone.model.mevents.presence.MPresence
 import de.mtorials.dialphone.model.mevents.roomstate.*
+import de.mtorials.dialphone.model.mevents.space.MSpaceParent
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -35,6 +36,7 @@ object EventSerialization {
             subclass(MRoomJoinRules::class)
             subclass(MRoomMember::class)
             subclass(MRoomName::class)
+            subclass(MSpaceParent::class)
 
         }
 
@@ -47,6 +49,7 @@ object EventSerialization {
             subclass(MRoomJoinRules::class)
             subclass(MRoomMember::class)
             subclass(MRoomName::class)
+            subclass(MSpaceParent::class)
         }
 
         polymorphic(MRoomMessage.MRoomMessageContent::class) {

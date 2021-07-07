@@ -1,6 +1,6 @@
 plugins {
-    kotlin("multiplatform") version "1.4.31"
-    kotlin("plugin.serialization") version "1.4.31"
+    kotlin("multiplatform") version "1.5.20"
+    kotlin("plugin.serialization") version "1.5.20"
     `maven-publish`
     id("org.jetbrains.dokka") version "0.10.0"
 }
