@@ -52,10 +52,10 @@ To use the SDK first create the DialPhone object.
 Use can create a guest account or login with a access token you can receive for example from the element client.
 Login and registration with username and password will be availibe in the future.
 ```kotlin
-val phone = DialPhone { // this: DialPhoneBuilder
-    homeserverUrl = "<YOUR_HOMESERVER_URL>" // This is 
-    client withToken "<YOUR TOKEN>" // If you want to login with an access token
+val phone = DialPhone("<HOMESERVER_URL>") { // this: DialPhoneBuilder
+    client withToken "<YOUR_TOKEN>" // If you want to login with an access token
     isGuets() // If you want to create a guest account
+    isUser("myusername", "mypassword") // login with credentials
     client hasCommandPrefix "!" // If you want to use the command listener, default is "!"
     addListeners(
         ExampleListener(),
@@ -244,6 +244,14 @@ class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class, true) {
     }
 }
 ```
+
+# Integration Tests
+
+Integration tests are performed against synapse running in a container. The container is defined in 
+the `test-compose.yaml` file and all configuration for the synapse server is in the `synapse` directory. When performing
+integration tests with gradle a gradle plugin is used to create, start, stop and remove the container. The synapse
+database is not persistent.
+
 # Contact
 
 If you want to contact me join the [#dial-phone:mtorials.de](https://matrix.to/#/#dial-phone:mtorials.de) room.
