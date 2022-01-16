@@ -1,0 +1,143 @@
+# vim:ft=yaml
+
+## TLS ##
+
+
+
+# tls_certificate_path: "/data/example.org.tls.crt"
+# tls_private_key_path: "/data/example.org.tls.key"
+
+
+
+## Server ##
+
+server_name: "example.org"
+pid_file: /homeserver.pid
+web_client: False
+soft_file_limit: 0
+log_config: "/config/log.config"
+
+## Ports ##
+
+listeners:
+  
+  # Allow configuring in case we want to reverse proxy 8008
+  # using another process in the same container
+  - port: 8008
+    tls: false
+    bind_addresses: ['::']
+    type: http
+    x_forwarded: false
+
+    resources:
+      - names: [client]
+        compress: true
+      - names: [federation]
+        compress: false
+
+## Database ##
+
+
+database:
+  name: "sqlite3"
+  args:
+    database: "/tmp/homeserver.db"
+
+
+## Performance ##
+
+event_cache_size: "10K"
+
+## Ratelimiting ##
+
+rc_messages_per_second: 0
+rc_message_burst_count: 0
+federation_rc_window_size: 0
+federation_rc_sleep_limit: 0
+federation_rc_sleep_delay: 0
+federation_rc_reject_limit: 0
+federation_rc_concurrent: 0
+
+## Files ##
+
+media_store_path: "/tmp/data/media"
+max_upload_size: "50M"
+max_image_pixels: "32M"
+dynamic_thumbnails: False
+
+# List of thumbnail to precalculate when an image is uploaded.
+thumbnail_sizes:
+- width: 32
+  height: 32
+  method: crop
+- width: 96
+  height: 96
+  method: crop
+- width: 320
+  height: 240
+  method: scale
+- width: 640
+  height: 480
+  method: scale
+- width: 800
+  height: 600
+  method: scale
+
+url_preview_enabled: False
+max_spider_size: "10M"
+
+## Captcha ##
+
+
+recaptcha_public_key: "YOUR_PUBLIC_KEY"
+recaptcha_private_key: "YOUR_PRIVATE_KEY"
+enable_registration_captcha: False
+recaptcha_siteverify_api: "https://www.google.com/recaptcha/api/siteverify"
+
+
+## Turn ##
+
+
+turn_uris: []
+turn_shared_secret: "YOUR_SHARED_SECRET"
+turn_user_lifetime: "1h"
+turn_allow_guests: True
+
+
+## Registration ##
+
+enable_registration: True
+registration_shared_secret: "00cd527b8fea37dc6b6c04c06976c55e031e0c1eb5f9822a5e340f4a34bd992c"
+bcrypt_rounds: 12
+allow_guest_access: True
+enable_group_creation: True
+
+
+## Metrics ###
+
+
+enable_metrics: False
+report_stats: False
+
+
+## API Configuration ##
+
+
+
+macaroon_secret_key: "2c0bbec85c8c8f84ccce66d453f54632a7b4d782f0b4dd4b1251bcfb7cf0bc5c"
+expire_access_token: False
+
+## Signing Keys ##
+
+signing_key_path: "/config/example.org.signing.key"
+old_signing_keys: {}
+key_refresh_interval: "1d" # 1 Day.
+
+# The trusted servers to download signing keys from.
+trusted_key_servers:
+  - server_name: matrix.org
+    verify_keys:
+      "ed25519:auto": "Noi6WqcDj0QmPxCNQqgezwTlBKrfqehY1u2FyWP9uYw"
+
+password_config:
+   enabled: True
