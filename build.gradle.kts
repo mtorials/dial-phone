@@ -22,7 +22,8 @@ repositories {
     //maven("https://dl.bintray.com/kotlin/kotlin-eap")
 }
 
-val ktorVersion = "1.5.0"
+val ktorVersion = "1.6.2"
+val logbackVersion = "1.3.0-alpha12"
 
 kotlin {
 
@@ -44,6 +45,7 @@ kotlin {
                 //Ktor
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+                implementation("io.ktor:ktor-client-logging:$ktorVersion")
 
                 // Tests
                 implementation(kotlin("test-common"))
@@ -63,6 +65,10 @@ kotlin {
                 implementation(kotlin("test-junit"))
                 implementation("org.eclipse.jetty:jetty-client:11.0.0")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
+
+                implementation("ch.qos.logback:logback-core:$logbackVersion")
+                implementation("ch.qos.logback:logback-classic:$logbackVersion")
+
                 // testcontainers
 //                val junitJupiterVersion = "5.4.2"
 //                val testcontainerVersion = "1.16.2"

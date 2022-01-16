@@ -100,6 +100,9 @@ interface DialPhone {
         const val MATRIX_PATH = "/_matrix/client/r0/"
         const val TIMEOUT = "8000"
 
-        suspend operator fun invoke(block: DialPhoneBuilder.() -> Unit) : DialPhone = DialPhoneBuilder(block).build()
+        suspend operator fun invoke(homeserverUrl: String, block: DialPhoneBuilder.() -> Unit) : DialPhone = DialPhoneBuilder(
+            block,
+            homeserverUrl = homeserverUrl
+        ).build()
     }
 }

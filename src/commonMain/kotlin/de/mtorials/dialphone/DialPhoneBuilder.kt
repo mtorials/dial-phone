@@ -1,5 +1,7 @@
 package de.mtorials.dialphone
 
+import de.mtorials.dialphone.authentication.Login
+import de.mtorials.dialphone.authentication.Registrar
 import de.mtorials.dialphone.dialevents.answer
 import de.mtorials.dialphone.entities.EntitySerialization
 import de.mtorials.dialphone.listener.Command
@@ -12,16 +14,22 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
 import de.mtorials.dialphone.model.mevents.EventSerialization
+import io.ktor.client.features.*
+import io.ktor.client.features.logging.*
+import io.ktor.http.*
 
 typealias ListenerList = DialPhoneBuilder.BuilderList<Listener>
 
 class DialPhoneBuilder(
-    block: DialPhoneBuilder.() -> Unit
+    block: DialPhoneBuilder.() -> Unit,
+    var homeserverUrl: String,
 ) {
     // TODO make all lateinit
-    var homeserverUrl: String? = null
-    private var token: String = ""
+    private var token: String? = null
     private var ownId: String? = null
+    private var username: String? = null
+    private var password: String? = null
+    private var createUserIfNoRegistered: Boolean = false
     private val listenerList = ListenerList()
     private var customSerializer: SerializersModule = SerializersModule {  }
     private var isGuestBool = false
@@ -34,6 +42,12 @@ class DialPhoneBuilder(
 
     fun isGuest() {
         isGuestBool = true
+    }
+
+    fun asUser(username: String, password: String, createUserIfNoRegistered : Boolean = false) {
+        this.password = password
+        this.username = username
+        this.createUserIfNoRegistered = createUserIfNoRegistered
     }
 
     infix fun withToken(token: String) {
@@ -95,18 +109,40 @@ class DialPhoneBuilder(
             install(JsonFeature) {
                 serializer = KotlinxSerializer(format)
             }
+            install(Logging) {
+                logger = Logger.DEFAULT
+                level = LogLevel.ALL
+            }
         }
         if (isGuestBool) {
             val guest = Registrar(client).registerGuest(homeserverUrl ?: throwNoHomeserver())
             token = guest.token
             ownId = guest.userId
         }
+        if (token == null) {
+            if (username == null || password == null) error("choose login method in builder")
+            try {
+                val response = Login(homeserverUrl = homeserverUrl, httpClient = client).login(
+                    username = username!!,
+                    password = password!!
+                )
+                token = response.accessToken
+            } catch (e: ClientRequestException) {
+                if (e.response.status.value == 403) {
+                    if (createUserIfNoRegistered) {
+                        val reqRes = Registrar(client).registerUser(homeserverUrl, username!!, password!!)
+                        token = reqRes.accessToken
+                    } else error("User Does Not Exist!")
+                } else e.printStackTrace()
+            }
+
+        }
         if (homeserverUrl == null) throwNoHomeserver()
-        val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token, client = client).getMe().id
+        val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token!!, client = client).getMe().id
         val listeners: MutableList<Listener> = listenerList.list
         if (commandListener != null) listeners.add(commandListener!!)
         return DialPhoneImpl(
-            token = token,
+            token = token!!,
             homeserverUrl = homeserverUrl!!,
             listeners = listeners,
             client = client,
