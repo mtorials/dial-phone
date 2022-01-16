@@ -8,7 +8,7 @@ import de.mtorials.dialphone.listener.MessageListener
 import de.mtorials.dialphone.listener.listenFor
 import de.mtorials.dialphone.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.sendTextMessage
-import org.junit.jupiter.api.Assertions.assertEquals
+import kotlin.test.assertEquals
 
 class IntegrationTests {
 
@@ -32,7 +32,8 @@ class IntegrationTests {
         println("created dialphone")
         val job = phone.syncAndReturnJob()
         phone.addListener(MessageListener(false) {
-                println(it.message.body)
+
+            println(it.message.body)
                 assertEquals(testString, it.message.body)
                 it.message.redact("Test")
                 phone.stop()
