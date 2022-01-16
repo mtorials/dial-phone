@@ -1,4 +1,4 @@
-package de.mtorials.dpexample
+package dpexample
 
 import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 import de.mtorials.dialphone.listener.MatrixEventAdapter
