@@ -1,6 +1,7 @@
 plugins {
-    kotlin("multiplatform") version "1.4.21"
-    kotlin("plugin.serialization") version "1.4.10"
+    val kotlinVersion = "1.6.10"
+    kotlin("multiplatform") version kotlinVersion
+    kotlin("plugin.serialization") version kotlinVersion
     `maven-publish`
     id("org.jetbrains.dokka") version "0.10.0"
 }
@@ -12,7 +13,7 @@ version = "v1.1.1-alpha"
 repositories {
     mavenCentral()
     jcenter()
-    maven("https://dl.bintray.com/kotlin/kotlin-eap")
+    //maven("https://dl.bintray.com/kotlin/kotlin-eap")
 }
 
 val ktorVersion = "1.5.0"
@@ -51,13 +52,38 @@ kotlin {
             }
         }
         val jvmTest by getting {
+
             dependencies {
-                implementation(kotlin("test-junit"))
+                //implementation(kotlin("test-junit"))
                 //implementation("org.eclipse.jetty:jetty-client:11.0.0")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
-
+                // testcontainers
+                val junitJupiterVersion = "5.4.2"
+                implementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
+                implementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
+                implementation("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
+                implementation("org.testcontainers:testcontainers:1.16.2")
+                implementation("org.testcontainers:junit-jupiter:1.16.2")
             }
         }
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        events = mutableSetOf(org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED, org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED)
+        showStandardStreams = true
+//        afterSuite { desc, result ->
+//            if (!desc.parent) {
+//                println "\nTest result: ${result.resultType}"
+//                println "Test summary: ${result.testCount} tests, " +
+//                "${result.successfulTestCount} succeeded, " +
+//                        "${result.failedTestCount} failed, " +
+//                        "${result.skippedTestCount} skipped"
+//            }
+//        }
     }
 }
 

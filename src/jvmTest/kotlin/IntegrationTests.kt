@@ -1,5 +1,4 @@
 import de.mtorials.dialphone.DialPhone
-import de.mtorials.dialphone.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.dialevents.RoomInviteEvent
 import de.mtorials.dialphone.dialevents.answer
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
@@ -7,11 +6,9 @@ import de.mtorials.dialphone.listener.Command
 import de.mtorials.dialphone.listener.ListenerAdapter
 import de.mtorials.dialphone.listener.MessageListener
 import de.mtorials.dialphone.listener.listenFor
-import de.mtorials.dialphone.model.mevents.MatrixEvent
 import de.mtorials.dialphone.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.sendTextMessage
-import kotlinx.coroutines.cancelChildren
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 
 class IntegrationTests {
 
