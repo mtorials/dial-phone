@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  homeserver:
+    image: matrixdotorg/synapse:latest
+    environment:
+      - SYNAPSE_SERVER_NAME=example.org
+      - SYNAPSE_REPORT_STATS=no
+      - SYNAPSE_HTTP_PORT=8008
+      - SYNAPSE_CONFIG_DIR=/config
+    ports:
+      - 8008:8008
+    volumes:
+      - ./synapse:/config

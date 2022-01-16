@@ -18,6 +18,7 @@ typealias ListenerList = DialPhoneBuilder.BuilderList<Listener>
 class DialPhoneBuilder(
     block: DialPhoneBuilder.() -> Unit
 ) {
+    // TODO make all lateinit
     var homeserverUrl: String? = null
     private var token: String = ""
     private var ownId: String? = null

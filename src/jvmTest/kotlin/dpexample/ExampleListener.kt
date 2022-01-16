@@ -1,4 +1,4 @@
-package de.mtorials.dpexample
+package dpexample
 
 import de.mtorials.dialphone.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.dialevents.RoomInviteEvent
