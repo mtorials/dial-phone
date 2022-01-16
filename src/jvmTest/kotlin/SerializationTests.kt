@@ -4,8 +4,8 @@ import de.mtorials.dialphone.model.mevents.roommessage.MRoomMessage
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.plus
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class SerializationTests {
 
