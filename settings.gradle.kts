@@ -7,5 +7,9 @@ pluginManagement {
 }
 rootProject.name = "dial-phone"
 
-include("dial-phone-core", "dial-phone-test")
+include(
+    "dial-phone-core",
+    "dial-phone-entities",
+    "dial-phone-test"
+)
 
