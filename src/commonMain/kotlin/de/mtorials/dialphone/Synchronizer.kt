@@ -12,14 +12,17 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.http.cio.*
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
 
 class Synchronizer(
     private val listeners: MutableList<Listener>,
     private val phone: DialPhoneImpl,
     private val client: HttpClient,
-    private val fullState: Boolean = false
+    private val fullState: Boolean = false,
+    private val initCallback: suspend (DialPhone) -> Unit,
 ) {
 
     private var lastTimeBatch: String? = null
@@ -62,10 +65,11 @@ class Synchronizer(
                         }
                     }
                 }
-                // Only first sync is inital
-                initialSync = false
+                // Only first sync is initial
                 phone.cache.joinedRooms = joinedRooms
                 phone.cache.invitedRooms = invitedRooms
+                if (initialSync) GlobalScope.launch { initCallback(phone) }
+                initialSync = false
                 //println(lastTimeBatch)
             } catch (e: RuntimeException) {
                 e.printStackTrace()
