@@ -1,6 +1,6 @@
-package de.mtorials.dialphone.core.entities.actions
+package de.mtorials.dialphone.entities.actions
 
-import de.mtorials.dialphone.core.DialPhone
+import de.mtorials.dialphone.entities.DialPhone
 
 interface MessageActions {
 

@@ -1,12 +1,13 @@
-package de.mtorials.dialphone.core.entities.entityfutures
+package de.mtorials.dialphone.entities.entityfutures
 
 import de.mtorials.dialphone.core.model.mevents.roomstate.MatrixStateEvent
+import de.mtorials.dialphone.entities.entities.Room
+import de.mtorials.dialphone.entities.actions.RoomActions
 
 /**
  * Represents a room entity without loaded properties
  */
-interface RoomFuture : de.mtorials.dialphone.core.entities.entityfutures.EntityFuture<de.mtorials.dialphone.core.entities.Room>,
-    de.mtorials.dialphone.core.entities.actions.RoomActions {
+interface RoomFuture : EntityFuture<Room>, RoomActions {
     /**
      * @return all matrix state events corresponding to this room
      */

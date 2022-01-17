@@ -1,8 +1,9 @@
 package de.mtorials.dialphone.core.listener
 
-import de.mtorials.dialphone.core.DialPhone
+import de.mtorials.dialphone.core.DialPhoneCore
 import de.mtorials.dialphone.core.model.mevents.MatrixEvent
 import kotlin.reflect.KClass
+
 
 /**
  *
@@ -17,13 +18,13 @@ abstract class MatrixEventAdapter<T : MatrixEvent>(
     private val receivePastEvent: Boolean = false
 ) : Listener {
     @Suppress
-    override fun onNewRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+    override fun onNewRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneCore) {
         if (type.isInstance(event)) onMatrixEvent(event as T,
             de.mtorials.dialphone.core.entities.entityfutures.RoomFutureImpl(roomId, phone)
         )
     }
     @Suppress
-    override fun onOldRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+    override fun onOldRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneCore) {
         if (!receivePastEvent) return
         if (type.isInstance(event)) onMatrixEvent(event as T,
             de.mtorials.dialphone.core.entities.entityfutures.RoomFutureImpl(roomId, phone)

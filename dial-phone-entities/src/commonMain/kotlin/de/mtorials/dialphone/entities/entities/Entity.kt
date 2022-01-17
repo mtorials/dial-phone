@@ -1,6 +1,6 @@
-package de.mtorials.dialphone.core.entities
+package de.mtorials.dialphone.entities.entities
 
-import de.mtorials.dialphone.core.DialPhone
+import de.mtorials.dialphone.entities.DialPhone
 
 /**
  * Represents an entity of the DialPhone SDK
