@@ -8,9 +8,14 @@ kotlin {
             kotlinOptions.jvmTarget = "1.8"
         }
     }
+    val logbackVersion = "1.3.0-alpha12"
+    val ktorVersion: String by rootProject.extra
     sourceSets {
         val jvmTest by getting {
             dependencies {
+                // WMODULES
+                implementation(project(":dial-phone-core"))
+
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
                 implementation(kotlin("test-junit"))
