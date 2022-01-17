@@ -13,10 +13,10 @@ import kotlinx.serialization.SerializationException
 
 class Synchronizer(
     private val listeners: MutableList<Listener>,
-    private val phone: DialPhoneImpl,
+    private val phone: DialPhoneCoreImpl,
     private val client: HttpClient,
     private val fullState: Boolean = false,
-    private val initCallback: suspend (DialPhone) -> Unit,
+    private val initCallback: suspend (DialPhoneCore) -> Unit,
 ) {
 
     private var lastTimeBatch: String? = null
@@ -78,11 +78,11 @@ class Synchronizer(
     private suspend fun getSyncResponse() : SyncResponse {
         try {
             return client.request {
-                url(phone.homeserverUrl + DialPhone.MATRIX_PATH + "sync")
+                url(phone.homeserverUrl + DialPhoneCore.MATRIX_PATH + "sync")
                 method = HttpMethod.Get
                 header("Authorization", "Bearer ${phone.token}")
                 header("Content-Type", "application/json")
-                parameter("timeout", DialPhone.TIMEOUT)
+                parameter("timeout", DialPhoneCore.TIMEOUT)
                 parameter("full_state", fullState.toString())
                 if (lastTimeBatch != null) parameter("since", lastTimeBatch.toString())
                 //this.run { println(this.build().toString()) }

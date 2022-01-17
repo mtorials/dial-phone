@@ -1,6 +1,6 @@
 package de.mtorials.dialphone.core.dialevents
 
-import de.mtorials.dialphone.core.DialPhone
+import de.mtorials.dialphone.core.DialPhoneCore
 import de.mtorials.dialphone.core.model.mevents.roommessage.MRoomMessage
 
 class MessageReceivedEvent(
@@ -8,9 +8,9 @@ class MessageReceivedEvent(
     val sender: de.mtorials.dialphone.core.entities.Member,
     val message: de.mtorials.dialphone.core.entities.Message,
     override val id: String,
-    override val phone: DialPhone
+    override val phone: DialPhoneCore
 ) : DialEvent(phone, id) {
-    constructor(roomID: String, event: MRoomMessage, phone: DialPhone) : this(
+    constructor(roomID: String, event: MRoomMessage, phone: DialPhoneCore) : this(
         de.mtorials.dialphone.core.entities.entityfutures.RoomFutureImpl(roomID, phone),
         de.mtorials.dialphone.core.entities.MemberImpl(
             id = event.sender,

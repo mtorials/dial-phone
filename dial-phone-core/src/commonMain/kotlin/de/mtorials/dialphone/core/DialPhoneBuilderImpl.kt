@@ -76,13 +76,14 @@ open class DialPhoneBuilderImpl(
         this.bot = botBuilder
     }
 
-    suspend fun build() : DialPhone {
+    suspend fun build() : DialPhoneCore {
         val format = Json {
             ignoreUnknownKeys = true
             classDiscriminator = "type"
             encodeDefaults = true
             serializersModule =
-                EventSerialization.serializersModule + de.mtorials.dialphone.core.entities.EntitySerialization.serializersModule + customSerializer
+                // TODO check if I broke smth
+                EventSerialization.serializersModule + customSerializer
         }
         val client = HttpClient {
             install(JsonFeature) {
@@ -130,7 +131,7 @@ open class DialPhoneBuilderImpl(
         }
         val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token!!, client = client).getMe().id
         if (commandListener != null) listenerList.add(commandListener!!)
-        return DialPhoneImpl(
+        return DialPhoneCoreImpl(
             token = token!!,
             homeserverUrl = homeserverUrl!!,
             listeners = listenerList,

@@ -1,13 +1,13 @@
-package de.mtorials.dialphone.core.entities.actions
+package de.mtorials.dialphone.entities.actions
 
-import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.model.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.core.model.mevents.roomstate.StateEventContent
+import de.mtorials.dialphone.entities.DialPhone
 
 open class RoomActionsImpl(
     override val phone: DialPhone,
     override val id: String
-) : de.mtorials.dialphone.core.entities.actions.RoomActions {
+) : RoomActions {
 
     override suspend fun sendMessageEvent(content: MessageEventContent, eventType: String) : String {
         return phone.requestObject.sendMessageEvent(eventType, content, id)

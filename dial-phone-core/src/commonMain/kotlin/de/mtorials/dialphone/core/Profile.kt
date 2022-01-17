@@ -1,7 +1,7 @@
 package de.mtorials.dialphone.core
 
 class Profile(
-    private val phone: DialPhoneImpl
+    private val phone: DialPhoneCoreImpl
 ) {
 
     suspend fun receiveDisplayName() : String? {

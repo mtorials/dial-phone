@@ -1,7 +1,7 @@
-package de.mtorials.dialphone.core.entities
+package de.mtorials.dialphone.entities.entities
 
-import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.MatrixID
+import de.mtorials.dialphone.entities.DialPhone
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -14,6 +14,6 @@ class UserImpl(
     @SerialName("user_id")
     override val id: String,
     override val phone: DialPhone
-) : de.mtorials.dialphone.core.entities.User {
+) : User {
     override val name: String? = MatrixID.fromString(id).value
 }

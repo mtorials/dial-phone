@@ -1,9 +1,9 @@
-package de.mtorials.dialphone.core.entities
+package de.mtorials.dialphone.entities.entities
 
 /**
  * A matrix user
  */
-interface User : de.mtorials.dialphone.core.entities.Entity {
+interface User : Entity {
     /**
      * The username visible in the id
      */

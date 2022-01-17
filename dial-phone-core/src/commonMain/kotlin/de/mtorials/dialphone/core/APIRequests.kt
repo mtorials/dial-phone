@@ -79,7 +79,7 @@ class APIRequests(
         vararg parameters: Pair<String, String> = arrayOf(),
         bodyValue: Any? = null
     ) : T {
-        val newPath = homeserverUrl + DialPhone.MATRIX_PATH + path
+        val newPath = homeserverUrl + DialPhoneCore.MATRIX_PATH + path
         return client.request {
             url(newPath)
             method = httpMethod

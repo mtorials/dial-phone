@@ -1,17 +1,19 @@
-package de.mtorials.dialphone.core.entities
+package de.mtorials.dialphone.entities.entities
 
 import de.mtorials.dialphone.core.model.enums.JoinRule
 import de.mtorials.dialphone.core.model.enums.Membership
 import de.mtorials.dialphone.core.model.mevents.roomstate.*
+import de.mtorials.dialphone.entities.actions.RoomActions
+import de.mtorials.dialphone.entities.entityfutures.RoomFutureImpl
 
 class RoomImpl(
-    action: de.mtorials.dialphone.core.entities.entityfutures.RoomFutureImpl,
+    action: RoomFutureImpl,
     stateEvents: List<MatrixStateEvent>
-) : de.mtorials.dialphone.core.entities.Room, de.mtorials.dialphone.core.entities.actions.RoomActions by action {
+) : Room, RoomActions by action {
     override val phone = action.phone
 
     override var name: String = "init"
-    override val members: MutableList<de.mtorials.dialphone.core.entities.Member> = mutableListOf()
+    override val members: MutableList<Member> = mutableListOf()
     override val id: String = action.id
     override var avatarUrl: String? = null
     override var joinRule : JoinRule = JoinRule.INVITE
@@ -23,7 +25,7 @@ class RoomImpl(
                 is MRoomJoinRules -> joinRule = event.content.joinRule
                 is MRoomAvatar -> avatarUrl = event.content.url
                 is MRoomMember -> if (event.content.membership == Membership.JOIN) members.add(
-                    de.mtorials.dialphone.core.entities.MemberImpl(
+                    MemberImpl(
                         id = event.stateKey,
                         phone = phone,
                         roomId = this.id

@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.core.entities.entityfutures
+package de.mtorials.dialphone.entities.entityfutures
 
 /**
  * Represents an entity without properties

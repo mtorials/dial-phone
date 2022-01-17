@@ -1,6 +1,6 @@
 package de.mtorials.dialphone.core.listener
 
-import de.mtorials.dialphone.core.DialPhone
+import de.mtorials.dialphone.core.DialPhoneCore
 import de.mtorials.dialphone.core.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.core.dialevents.RoomInviteEvent
 import de.mtorials.dialphone.core.model.enums.Membership
@@ -17,15 +17,15 @@ abstract class ListenerAdapter(
     open suspend fun onRoomInvite(event: RoomInviteEvent) = Unit
     //open suspend fun onPresenceChange(event: PresenceChangeEvent) = Unit
 
-    override fun onNewRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+    override fun onNewRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneCore) {
         onEvent(event, roomId, phone)
     }
 
-    override fun onOldRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+    override fun onOldRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneCore) {
         if (receivePastEvents) onEvent(event, roomId, phone)
     }
 
-    private fun onEvent(event: MatrixEvent, roomId: String, phone: DialPhone) {
+    private fun onEvent(event: MatrixEvent, roomId: String, phone: DialPhoneCore) {
         when(event) {
             is MRoomMessage -> GlobalScope.launch { onRoomMessageReceive(
                 MessageReceivedEvent(
