@@ -1,9 +1,9 @@
-//import com.bmuschko.gradle.docker.tasks.container.*
 import java.time.*
-//import de.gesellix.gradle.docker.tasks.*
+
 
 plugins {
     val kotlinVersion = "1.6.10"
+
     kotlin("multiplatform") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
     `maven-publish`
@@ -25,62 +25,11 @@ repositories {
 val ktorVersion = "1.6.2"
 val logbackVersion = "1.3.0-alpha12"
 
-kotlin {
+subprojects {
 
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "1.8"
-        }
-        testRuns["test"].executionTask.configure {
-            useJUnit()
-        }
-    }
-
-    sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
-
-                //Ktor
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-                implementation("io.ktor:ktor-client-logging:$ktorVersion")
-
-                // Tests
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
-
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
-        }
-        val jvmTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-                //implementation("org.eclipse.jetty:jetty-client:11.0.0")
-                implementation("io.ktor:ktor-client-cio:$ktorVersion")
-
-                implementation("ch.qos.logback:logback-core:$logbackVersion")
-                implementation("ch.qos.logback:logback-classic:$logbackVersion")
-
-                // testcontainers
-//                val junitJupiterVersion = "5.4.2"
-//                val testcontainerVersion = "1.16.2"
-//                implementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
-//                implementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
-//                implementation("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
-//                implementation("org.testcontainers:postgresql:$testcontainerVersion")
-//                implementation("org.testcontainers:testcontainers:$testcontainerVersion")
-//                implementation("org.testcontainers:junit-jupiter:$testcontainerVersion")
-            }
-        }
-    }
 }
+
+
 
 val name = "dial-phone"
 
@@ -152,7 +101,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "de.mtorials"
-            artifactId = name
+            artifactId = project.name
             version = "1.1"
         }
     }
