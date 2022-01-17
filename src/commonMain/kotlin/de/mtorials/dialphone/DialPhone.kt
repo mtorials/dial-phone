@@ -48,7 +48,7 @@ interface DialPhone {
      * Used to synchronize with the homeserver.
      * Call this method to receive events.
      * This method is blocking.
-     * @see syncAndReturnJob for a non blocking method
+     * @see syncAndReturnJob for a non-blocking method
      */
     suspend fun sync()
 
@@ -91,8 +91,8 @@ interface DialPhone {
     suspend fun getJoinedRoomFutureById(id: String) : RoomFuture?
 
     /**
-     * @return Returns the a list of Pairs containing first the room action which can be used to join the room.
-     * @return As second it returns the actual information.
+     * @return Returns a list of Pairs containing first the room action which can be used to join the room.
+     * @return Returns the actual information as seconds
      */
     suspend fun discoverRooms() : List<Pair<InvitedRoomActions, DiscoveredRoom>>
 
@@ -100,7 +100,7 @@ interface DialPhone {
         const val MATRIX_PATH = "/_matrix/client/r0/"
         const val TIMEOUT = "8000"
 
-        suspend operator fun invoke(homeserverUrl: String, block: DialPhoneBuilder.() -> Unit) : DialPhone = DialPhoneBuilder(
+        suspend operator fun invoke(homeserverUrl: String, block: DialPhoneBuilder.() -> Unit) : DialPhone = DialPhoneBuilderImpl(
             block,
             homeserverUrl = homeserverUrl
         ).build()
