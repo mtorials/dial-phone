@@ -6,3 +6,6 @@ pluginManagement {
     }
 }
 rootProject.name = "dial-phone"
+
+include("dial-phone-core")
+
