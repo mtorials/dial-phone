@@ -22,12 +22,12 @@ class JvmTest {
     fun `register and login as user`() {
         runBlocking {
             DialPhone(HOMESERVER_URL) {
-                asUser(TEST_USER, TEST_PWD, true)
+                isUser(TEST_USER, TEST_PWD, true)
             }
             // TODO remove rate limit in synapse
             delay(1000)
             dialPhone = DialPhone(HOMESERVER_URL) {
-                asUser(TEST_USER, TEST_PWD)
+                isUser(TEST_USER, TEST_PWD)
             }
         }
     }
