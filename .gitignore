@@ -10,3 +10,5 @@ config2.json
 /data
 /settings
 .gradle
+*/.gradle
+*/build
