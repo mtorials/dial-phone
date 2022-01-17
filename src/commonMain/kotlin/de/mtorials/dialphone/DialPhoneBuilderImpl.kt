@@ -17,7 +17,10 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
 
-class DialPhoneBuilderImpl internal constructor(
+/**
+ * Internal class that is open for other modules to build upon
+ */
+open class DialPhoneBuilderImpl(
     block: DialPhoneBuilder.() -> Unit,
     var homeserverUrl: String,
 ) : DialPhoneBuilder {
