@@ -1,11 +1,8 @@
-import java.time.*
-
-
 plugins {
-    val kotlinVersion = "1.6.10"
+    val kotlinVersion = "1.6.0"
 
-    kotlin("multiplatform") version kotlinVersion
-    kotlin("plugin.serialization") version kotlinVersion
+    kotlin("multiplatform") version kotlinVersion apply false
+    kotlin("plugin.serialization") version kotlinVersion apply false
     `maven-publish`
     id("org.jetbrains.dokka") version "0.10.0"
     //id("de.gesellix.docker") version "2021-12-18T23-58-00"
@@ -15,21 +12,33 @@ plugins {
 group = "de.mtorials"
 version = "v1.1.1-alpha"
 
-
-repositories {
-    mavenCentral()
-    jcenter()
-    //maven("https://dl.bintray.com/kotlin/kotlin-eap")
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url = uri("https://gitlab.example.com/api/v4/groups/mtorials/-/packages/maven")
+            name = "GitLab"
+            credentials(HttpHeaderCredentials::class) {
+                name = "Job-Token"
+                value = System.getenv("CI_JOB_TOKEN")
+            }
+            authentication {
+                create<HttpHeaderAuthentication>("header")
+            }
+        }
+    }
 }
-
-val ktorVersion = "1.6.2"
-val logbackVersion = "1.3.0-alpha12"
 
 subprojects {
 
 }
 
-
+extra.apply {
+    set("ktorVersion", "1.6.2")
+    set("kotlinxCoroutinesVersion", "1.4.2")
+    set("kotlinxSerializationVersion", "1.0.1")
+}
 
 val name = "dial-phone"
 
@@ -66,20 +75,6 @@ tasks.withType<Test> {
 //        events = mutableSetOf(org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED, org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED)
 //        showStandardStreams = true
 //    }
-}
-
-repositories {
-    maven {
-        url = uri("https://gitlab.example.com/api/v4/groups/mtorials/-/packages/maven")
-        name = "GitLab"
-        credentials(HttpHeaderCredentials::class) {
-            name = "Job-Token"
-            value = System.getenv("CI_JOB_TOKEN")
-        }
-        authentication {
-            create<HttpHeaderAuthentication>("header")
-        }
-    }
 }
 
 
