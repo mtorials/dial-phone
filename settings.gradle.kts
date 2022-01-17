@@ -2,7 +2,7 @@ pluginManagement {
     repositories {
         //maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
         mavenCentral()
-        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url = uri("https://plugins.gradle.org/m2/") }
     }
 }
-rootProject.name = 'dial-phone'
+rootProject.name = "dial-phone"
