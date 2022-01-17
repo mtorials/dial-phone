@@ -133,7 +133,8 @@ class DialPhoneBuilderImpl internal constructor(
             homeserverUrl = homeserverUrl!!,
             listeners = listenerList,
             client = client,
-            ownId = id
+            ownId = id,
+            initCallback = {}
         )
     }
 
