@@ -60,10 +60,9 @@ kotlin {
             }
         }
         val jvmTest by getting {
-
             dependencies {
                 implementation(kotlin("test-junit"))
-                implementation("org.eclipse.jetty:jetty-client:11.0.0")
+                //implementation("org.eclipse.jetty:jetty-client:11.0.0")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
 
                 implementation("ch.qos.logback:logback-core:$logbackVersion")
@@ -137,6 +136,7 @@ repositories {
 
 publishing {
     repositories {
+        mavenLocal()
         maven {
             url = uri("https://git.mt32.net/api/v4/projects/59/packages/maven")
             name = "GitLab"

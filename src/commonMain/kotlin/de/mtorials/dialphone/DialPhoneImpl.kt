@@ -20,7 +20,8 @@ class DialPhoneImpl internal constructor(
     listeners: List<Listener>,
     //override val commandPrefix: String,
     override val ownId: String,
-    private val client: HttpClient
+    private val client: HttpClient,
+    initCallback: suspend (DialPhone) -> Unit,
 ) : DialPhone {
 
     // cache
@@ -34,7 +35,7 @@ class DialPhoneImpl internal constructor(
 
     override val profile = Profile(this)
 
-    private val syncObject = Synchronizer(listeners.toMutableList(), this, client)
+    private val syncObject = Synchronizer(listeners.toMutableList(), this, client, initCallback = initCallback)
 
     override fun addListener(listener: Listener) {
         syncObject.addListener(listener)
