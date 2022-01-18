@@ -1,7 +1,9 @@
 package de.mtorials.dialphone.core
 
 import de.mtorials.dialphone.api.DialPhoneApi
+import de.mtorials.dialphone.api.DialPhoneApiImpl
 import de.mtorials.dialphone.api.Synchronizer
+import de.mtorials.dialphone.api.listeners.Listener
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
 import de.mtorials.dialphone.api.responses.UserWithoutIDResponse
 import de.mtorials.dialphone.core.actions.InvitedRoomActions
@@ -11,10 +13,26 @@ import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entities.UserImpl
 import de.mtorials.dialphone.core.entityfutures.RoomFuture
 import de.mtorials.dialphone.core.entityfutures.RoomFutureImpl
+import io.ktor.client.*
 
-class DialPhoneImpl internal constructor(dialPhoneApi: DialPhoneApi) : DialPhone, DialPhoneApi by dialPhoneApi {
+class DialPhoneImpl internal constructor(
+    token: String,
+    homeserverUrl: String,
+    listeners: List<Listener>,
+    //override val commandPrefix: String,
+    ownId: String,
+    client: HttpClient,
+    initCallback: suspend (DialPhoneApi) -> Unit,
+) : DialPhone, DialPhoneApiImpl(
+    token = token,
+    homeserverUrl = homeserverUrl,
+    listeners = listeners,
+    ownId = ownId,
+    client = client,
+    initCallback = initCallback
+) {
 
-    override val synchronizer = Synchronizer(listeners.toMutableList(), this as DialPhone, client, initCallback = initCallback)
+    override val synchronizer = Synchronizer(listeners.toMutableList(), this, client, initCallback = initCallback)
 
     // TODO fix impl and interface
     override val cache = object : PhoneCache {
@@ -23,7 +41,7 @@ class DialPhoneImpl internal constructor(dialPhoneApi: DialPhoneApi) : DialPhone
         override val users: MutableMap<String, User> = mutableMapOf()
     }
 
-    override suspend fun getJoinedRoomFutures(): List<RoomFuture> = requestObject.getJoinedRooms().roomIds.map {
+    override suspend fun getJoinedRoomFutures(): List<RoomFuture> = apiRequests.getJoinedRooms().roomIds.map {
         RoomFutureImpl(
             it,
             this
@@ -38,7 +56,7 @@ class DialPhoneImpl internal constructor(dialPhoneApi: DialPhoneApi) : DialPhone
         // Check cache
         if (cache.users.containsKey(id)) return cache.users[id]
 
-        val u : UserWithoutIDResponse = requestObject.getUserById(id) ?: return null
+        val u : UserWithoutIDResponse = apiRequests.getUserById(id) ?: return null
         return UserImpl(
             id = id,
             displayName = u.displayName,
@@ -50,7 +68,7 @@ class DialPhoneImpl internal constructor(dialPhoneApi: DialPhoneApi) : DialPhone
     override suspend fun getRoomByAlias(alias: String): InvitedRoomActions =
         InvitedRoomActionsImpl(
             this,
-            requestObject.getRoomIdForAlias(alias).roomId
+            apiRequests.getRoomIdForAlias(alias).roomId
         )
 
     override suspend fun getJoinedRoomFutureById(id: String) : RoomFuture? =
@@ -60,7 +78,7 @@ class DialPhoneImpl internal constructor(dialPhoneApi: DialPhoneApi) : DialPhone
         }
 
     override suspend fun discoverRooms(): List<Pair<InvitedRoomActions, DiscoveredRoom>> {
-        return requestObject.discoverRooms().rooms.map { Pair(
+        return apiRequests.discoverRooms().rooms.map { Pair(
             InvitedRoomActionsImpl(
                 this,
                 it.id

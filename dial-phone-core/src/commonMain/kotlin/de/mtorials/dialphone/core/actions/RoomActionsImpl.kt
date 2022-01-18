@@ -10,14 +10,14 @@ open class RoomActionsImpl(
 ) : RoomActions {
 
     override suspend fun sendMessageEvent(content: MessageEventContent, eventType: String) : String {
-        return phone.requestObject.sendMessageEvent(eventType, content, id)
+        return phone.apiRequests.sendMessageEvent(eventType, content, id)
     }
 
     override suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: String): String {
-        return phone.requestObject.sendStateEvent(eventType, content, id, stateKey)
+        return phone.apiRequests.sendStateEvent(eventType, content, id, stateKey)
     }
 
     override suspend fun leave() {
-        phone.requestObject.leaveRoomWithId(id)
+        phone.apiRequests.leaveRoomWithId(id)
     }
 }

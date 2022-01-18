@@ -9,22 +9,32 @@ import io.ktor.http.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
+import java.util.stream.Collectors.toList
 
-class Synchronizer<T : DialPhoneApi>(
+class Synchronizer(
     private val listeners: MutableList<Listener>,
-    private val phone: T,
+    private val phone: DialPhoneApi,
     private val client: HttpClient,
     private val fullState: Boolean = false,
     private val initCallback: suspend (DialPhoneApi) -> Unit,
 ) {
+
+
+    val joinedRoomIds: List<String>
+        get() = joined.toList()
+    val invitedRoomIds: List<String>
+        get() = invited.toList()
+
+    private val joined: MutableList<String> = mutableListOf()
+    private val invited: MutableList<String> = mutableListOf()
 
     private var lastTimeBatch: String? = null
     private var initialSync: Boolean = true
     private var stopFlag: Boolean = false
 
     init {
-        // Chache Listeners
-        listeners.add(UserCacheListener(phone.cache))
+        // Cache Listeners
+        // listeners.add(UserCacheListener(phone.cache))
     }
 
     fun addListener(listener: Listener) = listeners.add(listener)
@@ -33,35 +43,29 @@ class Synchronizer<T : DialPhoneApi>(
         this.stopFlag = true
     }
 
+    // TODO remove global scope
+    // TODO check if room duplicates are added
     suspend fun sync() {
         while(true) {
-            val joinedRooms: MutableList<de.mtorials.dialphone.api.entities.entityfutures.RoomFuture> = mutableListOf()
-            val invitedRooms: MutableList<de.mtorials.dialphone.api.entities.actions.InvitedRoomActions> = mutableListOf()
             try {
                 val res : SyncResponse = getSyncResponse()
                 lastTimeBatch = res.nextBatch
                 res.roomSync.join.forEach { (roomID, roomEvents) ->
-                    joinedRooms.add(de.mtorials.dialphone.api.entities.entityfutures.RoomFutureImpl(roomID, phone))
+                    joined.add(roomID)
                     roomEvents.timeline.events.forEach { event ->
                         listeners.forEach {
-                            if (initialSync) it.onOldRoomEvent(event, roomID, phone)
-                            else it.onNewRoomEvent(event, roomID, phone)
+                            it.onRoomEvent(event, roomID, phone, initialSync)
                         }
                     }
                 }
                 res.roomSync.invite.forEach { (roomID, roomEvents) ->
-                    invitedRooms.add(de.mtorials.dialphone.api.entities.actions.InvitedRoomActionsImpl(phone, roomID))
+                    invited.add(roomID)
                     roomEvents.inviteState.events.forEach { event ->
                         listeners.forEach {
-                            if (initialSync) it.onOldRoomEvent(event, roomID, phone)
-                            else it.onNewRoomEvent(event, roomID, phone)
+                            it.onRoomEvent(event, roomID, phone, initialSync)
                         }
                     }
                 }
-                // Only first sync is initial
-                if ()
-                phone.cache.joinedRooms = joinedRooms
-                phone.cache.invitedRooms = invitedRooms
                 if (initialSync) GlobalScope.launch { initCallback(phone) }
                 initialSync = false
                 //println(lastTimeBatch)

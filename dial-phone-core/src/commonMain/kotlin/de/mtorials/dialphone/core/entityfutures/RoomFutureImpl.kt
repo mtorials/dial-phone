@@ -10,7 +10,7 @@ class RoomFutureImpl(
     override val id: String,
     phone: DialPhone
 ) : RoomFuture, RoomActionsImpl(phone, id) {
-    override suspend fun receiveStateEvents(): List<MatrixStateEvent>  = phone.requestObject.getRoomsState(id)
+    override suspend fun receiveStateEvents(): List<MatrixStateEvent>  = phone.apiRequests.getRoomsState(id)
     override suspend fun receive() : Room =
         RoomImpl(this, receiveStateEvents())
 }

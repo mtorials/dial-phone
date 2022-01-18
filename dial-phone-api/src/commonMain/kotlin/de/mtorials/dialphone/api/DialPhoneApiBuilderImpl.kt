@@ -2,7 +2,6 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.authentication.Login
 import de.mtorials.dialphone.api.authentication.Registrar
-import de.mtorials.dialphone.api.dialevents.answer
 import de.mtorials.dialphone.api.listeners.Command
 import de.mtorials.dialphone.api.listeners.CommandListener
 import de.mtorials.dialphone.api.listeners.Listener
@@ -19,10 +18,10 @@ import kotlinx.serialization.modules.plus
 /**
  * Internal class that is open for other modules to build upon
  */
-open class DialPhoneBuilderImpl(
-    block: DialPhoneBuilder.() -> Unit,
+open class DialPhoneApiBuilderImpl<R: DialPhoneApi>(
+    block: DialPhoneApiBuilder<R>.() -> Unit,
     var homeserverUrl: String,
-) : DialPhoneBuilder {
+) : DialPhoneApiBuilder<R> {
     // TODO make all lateinit
     private var token: String? = null
     private var ownId: String? = null
@@ -33,7 +32,10 @@ open class DialPhoneBuilderImpl(
     private var customSerializer: SerializersModule = SerializersModule {  }
     private var isGuestBool = false
     private var commandListener: CommandListener? = null
-    private var bot: DialPhoneBuilder.BotBuilder? = null
+    private var bot: DialPhoneApiBuilder.BotBuilder? = null
+
+    lateinit var format: Json
+    lateinit var client: HttpClient
 
     init {
         this.block()
@@ -61,7 +63,7 @@ open class DialPhoneBuilderImpl(
         this.customSerializer = serializersModule
     }
 
-    override fun bot(block: DialPhoneBuilder.BotBuilder.() -> Unit) {
+    override fun bot(block: DialPhoneApiBuilder.BotBuilder.() -> Unit) {
         val botBuilder = BotBuilderImpl()
         botBuilder.block()
         var fall: Command? = null
@@ -76,16 +78,16 @@ open class DialPhoneBuilderImpl(
         this.bot = botBuilder
     }
 
-    suspend fun build() : DialPhoneApi {
-        val format = Json {
+    protected suspend fun configure() {
+        format = Json {
             ignoreUnknownKeys = true
             classDiscriminator = "type"
             encodeDefaults = true
             serializersModule =
-                // TODO check if I broke smth
+                    // TODO check if I broke smth
                 EventSerialization.serializersModule + customSerializer
         }
-        val client = HttpClient {
+        client = HttpClient {
             install(JsonFeature) {
                 serializer = KotlinxSerializer(format)
             }
@@ -129,8 +131,13 @@ open class DialPhoneBuilderImpl(
             }
 
         }
-        val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token!!, client = client).getMe().id
         if (commandListener != null) listenerList.add(commandListener!!)
+    }
+
+    // TODO why do i have to cast?
+    suspend fun build() : R {
+        configure()
+        val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token!!, client = client).getMe().id
         return DialPhoneApiImpl(
             token = token!!,
             homeserverUrl = homeserverUrl!!,
@@ -138,10 +145,10 @@ open class DialPhoneBuilderImpl(
             client = client,
             ownId = id,
             initCallback = {}
-        )
+        ) as R
     }
 
-    class BotBuilderImpl : DialPhoneBuilder.BotBuilder {
+    class BotBuilderImpl : DialPhoneApiBuilder.BotBuilder {
 
         override val bot = this
 

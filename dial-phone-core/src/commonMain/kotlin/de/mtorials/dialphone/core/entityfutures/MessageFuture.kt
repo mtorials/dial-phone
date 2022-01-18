@@ -12,7 +12,7 @@ class MessageFuture(
     phone: DialPhone
 ) : EntityFuture<Message>, MessageActionsImpl(id, phone, roomId) {
     override suspend fun receive(): Message {
-        val event = phone.requestObject.getEventByIdAndRoomId(id, roomId)
+        val event = phone.apiRequests.getEventByIdAndRoomId(id, roomId)
         if (event !is MRoomMessage) throw Error("Expected other event type!")
         return Message(
             body = event.content.body,

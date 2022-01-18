@@ -1,7 +1,7 @@
 package de.mtorials.dialphone.core
 
-import de.mtorials.dialphone.api.DialPhoneBuilder
-import de.mtorials.dialphone.api.DialPhoneBuilderImpl
+import de.mtorials.dialphone.api.DialPhoneApiBuilder
+import de.mtorials.dialphone.api.DialPhoneApiBuilderImpl
 import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
 import de.mtorials.dialphone.core.actions.InvitedRoomActions
@@ -52,12 +52,11 @@ interface DialPhone : DialPhoneApi {
     suspend fun discoverRooms() : List<Pair<InvitedRoomActions, DiscoveredRoom>>
 
     companion object {
-        suspend operator fun invoke(homeserverUrl: String, block: DialPhoneBuilder.() -> Unit) : DialPhone {
-            val dialPhoneCore = DialPhoneBuilderImpl(
+        suspend operator fun invoke(homeserverUrl: String, block: DialPhoneApiBuilder.() -> Unit) : DialPhone {
+            return val dialPhoneCore = DialPhoneApiBuilderImpl<DialPhone>(
                 block,
                 homeserverUrl = homeserverUrl
             ).build()
-            return DialPhoneImpl(dialPhoneCore)
         }
     }
 }
