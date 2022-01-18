@@ -39,11 +39,11 @@ open class DialPhoneBuilderImpl(
         this.block()
     }
 
-    override fun isGuest() {
+    override fun asGuest() {
         isGuestBool = true
     }
 
-    override fun isUser(username: String, password: String, createUserIfNotRegistered : Boolean) {
+    override fun asUser(username: String, password: String, createUserIfNotRegistered : Boolean) {
         this.password = password
         this.username = username
         this.createUserIfNoRegistered = createUserIfNoRegistered

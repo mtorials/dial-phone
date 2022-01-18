@@ -6,7 +6,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class DialPhoneApiImpl internal constructor(
+open class DialPhoneApiImpl internal constructor(
     override val token: String,
     override val homeserverUrl: String,
     listeners: List<Listener>,
