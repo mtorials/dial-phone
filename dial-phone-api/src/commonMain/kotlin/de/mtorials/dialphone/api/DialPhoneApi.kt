@@ -25,11 +25,15 @@ interface DialPhoneApi {
      */
     val homeserverUrl: String
 
-
     /**
      * The object the api uses to make low level requests
      */
-    val requestObject: APIRequests
+    val apiRequests: APIRequests
+
+//    /**
+//     * The object to handle the matrix sync api
+//     */
+//    val synchronizer: Synchronizer
 
     /**
      * Used to synchronize with the homeserver.
@@ -63,7 +67,7 @@ interface DialPhoneApi {
         const val MATRIX_PATH = "/_matrix/client/r0/"
         const val TIMEOUT = "8000"
 
-        suspend operator fun invoke(homeserverUrl: String, block: DialPhoneBuilder.() -> Unit) : DialPhoneApi = DialPhoneBuilderImpl(
+        suspend operator fun invoke(homeserverUrl: String, block: DialPhoneApiBuilder.() -> Unit) : DialPhoneApi = DialPhoneApiBuilderImpl(
             block,
             homeserverUrl = homeserverUrl
         ).build()

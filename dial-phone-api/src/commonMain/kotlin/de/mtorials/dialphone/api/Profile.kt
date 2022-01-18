@@ -5,10 +5,10 @@ class Profile(
 ) {
 
     suspend fun receiveDisplayName() : String? {
-        return phone.requestObject.getMe().displayName
+        return phone.apiRequests.getMe().displayName
     }
 
     suspend fun setDisplayName(displayName: String) {
-        phone.requestObject.setDisplayName(phone.ownId, displayName)
+        phone.apiRequests.setDisplayName(phone.ownId, displayName)
     }
 }

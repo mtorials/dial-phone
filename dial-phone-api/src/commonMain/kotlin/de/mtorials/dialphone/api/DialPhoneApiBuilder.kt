@@ -4,7 +4,7 @@ import de.mtorials.dialphone.api.listeners.Command
 import de.mtorials.dialphone.api.listeners.Listener
 import kotlinx.serialization.modules.SerializersModule
 
-interface DialPhoneBuilder {
+interface DialPhoneApiBuilder<R: DialPhoneApi> {
     /**
      * Authenticate as guest user
      * Can be used as an alternative to

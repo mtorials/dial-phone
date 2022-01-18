@@ -6,17 +6,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-open class DialPhoneApiImpl internal constructor(
-    override val token: String,
-    override val homeserverUrl: String,
+open class DialPhoneApiImpl constructor(
+    final override val token: String,
+    final override val homeserverUrl: String,
     listeners: List<Listener>,
     //override val commandPrefix: String,
     override val ownId: String,
-    private val client: HttpClient,
+    protected val client: HttpClient,
     protected val initCallback: suspend (DialPhoneApi) -> Unit,
 ) : DialPhoneApi {
 
-    override val requestObject = APIRequests(
+    override val apiRequests = APIRequests(
         homeserverUrl = homeserverUrl,
         token = token,
         client = client
@@ -24,21 +24,21 @@ open class DialPhoneApiImpl internal constructor(
 
     override val profile = Profile(this)
 
-    private val syncObject = Synchronizer(listeners.toMutableList(), this, client, initCallback = initCallback)
+    protected open val synchronizer = Synchronizer(listeners.toMutableList(), this, client, initCallback = initCallback)
 
     override fun addListener(listener: Listener) {
-        syncObject.addListener(listener)
+        synchronizer.addListener(listener)
     }
 
     override fun syncAndReturnJob(): Job = GlobalScope.launch {
-        syncObject.sync()
+        synchronizer.sync()
     }
 
     override suspend fun sync() {
-        syncObject.sync()
+        synchronizer.sync()
     }
 
     override fun stop() {
-        syncObject.stop()
+        synchronizer.stop()
     }
 }

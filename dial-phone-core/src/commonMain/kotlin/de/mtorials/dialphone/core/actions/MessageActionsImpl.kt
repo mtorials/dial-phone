@@ -8,6 +8,6 @@ open class MessageActionsImpl(
     override val roomId: String
 ) : MessageActions {
     override suspend fun redact(reason: String?) {
-        phone.requestObject.redactEventWithIdInRoom(roomId = roomId, id = id)
+        phone.apiRequests.redactEventWithIdInRoom(roomId = roomId, id = id)
     }
 }

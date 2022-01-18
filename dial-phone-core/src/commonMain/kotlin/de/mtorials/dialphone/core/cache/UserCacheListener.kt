@@ -11,14 +11,9 @@ class UserCacheListener(
     private val cache: PhoneCache,
     private val phone: DialPhone,
 ) : Listener {
-    override fun onNewRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneApi) {
+    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneApi, isOld: Boolean) {
         cache(event, roomId)
     }
-
-    override fun onOldRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneApi) {
-        cache(event, roomId)
-    }
-
     private fun cache(event: MatrixEvent, roomId: String) {
         if (event !is MRoomMember) return
         cache.users[event.stateKey] = UserImpl(

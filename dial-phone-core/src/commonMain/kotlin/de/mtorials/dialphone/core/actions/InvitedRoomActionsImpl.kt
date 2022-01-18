@@ -9,7 +9,7 @@ open class InvitedRoomActionsImpl(
     override val id: String
 ) : InvitedRoomActions {
     override suspend fun join() : RoomFuture {
-        phone.requestObject.joinRoomWithId(id)
+        phone.apiRequests.joinRoomWithId(id)
         return RoomFutureImpl(id, phone)
     }
 }
