@@ -1,29 +1,34 @@
 package de.mtorials.dialphone.core.dialevents
 
-import de.mtorials.dialphone.core.DialPhoneCore
-import de.mtorials.dialphone.core.model.mevents.roommessage.MRoomMessage
+import de.mtorials.dialphone.api.DialPhoneApi
+import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
+import de.mtorials.dialphone.core.DialPhone
+import de.mtorials.dialphone.core.entities.Member
+import de.mtorials.dialphone.core.entities.MemberImpl
+import de.mtorials.dialphone.core.entities.Message
+import de.mtorials.dialphone.core.entityfutures.RoomFutureImpl
 
 class MessageReceivedEvent(
-    val roomFuture: de.mtorials.dialphone.core.entities.entityfutures.RoomFutureImpl,
-    val sender: de.mtorials.dialphone.core.entities.Member,
-    val message: de.mtorials.dialphone.core.entities.Message,
+    val roomFuture: RoomFutureImpl,
+    val sender: Member,
+    val message: Message,
     override val id: String,
-    override val phone: DialPhoneCore
+    override val phone: DialPhoneApi
 ) : DialEvent(phone, id) {
-    constructor(roomID: String, event: MRoomMessage, phone: DialPhoneCore) : this(
-        de.mtorials.dialphone.core.entities.entityfutures.RoomFutureImpl(roomID, phone),
-        de.mtorials.dialphone.core.entities.MemberImpl(
+    constructor(roomID: String, event: MRoomMessage, phone: DialPhone) : this(
+        RoomFutureImpl(roomID, phone),
+        MemberImpl(
             id = event.sender,
             roomId = roomID,
             phone = phone
         ),
-        de.mtorials.dialphone.core.entities.Message(
+        Message(
             body = event.content.body,
             messageType = event.content::class,
             phone = phone,
-            roomFuture = de.mtorials.dialphone.core.entities.entityfutures.RoomFutureImpl(roomID, phone),
+            roomFuture = RoomFutureImpl(roomID, phone),
             id = event.id,
-            author = de.mtorials.dialphone.core.entities.MemberImpl(
+            author = MemberImpl(
                 id = event.sender,
                 roomId = roomID,
                 phone = phone

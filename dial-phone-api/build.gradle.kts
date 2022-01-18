@@ -14,10 +14,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-
-                // MODULES
-                implementation(project(":dial-phone-api"))
-
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
                 //Ktor
