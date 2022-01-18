@@ -1,8 +1,8 @@
 package de.mtorials.dialphone.core.dialevents
 
-import de.mtorials.dialphone.core.DialPhoneCore
+import de.mtorials.dialphone.api.DialPhoneApi
 
 abstract class DialEvent (
-    open val phone: DialPhoneCore,
+    open val phone: DialPhoneApi,
     open val id: String? = null
 )

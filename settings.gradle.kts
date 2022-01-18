@@ -8,8 +8,8 @@ pluginManagement {
 rootProject.name = "dial-phone"
 
 include(
+    "dial-phone-api",
     "dial-phone-core",
-    "dial-phone-entities",
     "dial-phone-test"
 )
 
