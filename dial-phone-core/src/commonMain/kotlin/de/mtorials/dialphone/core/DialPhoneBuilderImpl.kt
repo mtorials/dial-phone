@@ -1,0 +1,41 @@
+package de.mtorials.dialphone.core
+
+import de.mtorials.dialphone.api.APIRequests
+import de.mtorials.dialphone.api.DialPhoneApiBuilderImpl
+import de.mtorials.dialphone.core.cache.InMemoryCache
+import de.mtorials.dialphone.core.cache.PhoneCache
+import de.mtorials.dialphone.core.cache.UserCacheListener
+
+class DialPhoneBuilderImpl(
+    homeserverUrl: String,
+) : DialPhoneBuilder, DialPhoneApiBuilderImpl(
+    homeserverUrl = homeserverUrl
+) {
+    override var cache: PhoneCache? = null
+
+    override fun cacheInMemory() {
+        cache = InMemoryCache()
+    }
+
+    suspend fun buildDialPhone(block: DialPhoneBuilder.() -> Unit) : DialPhoneImpl {
+        block()
+        this.configure()
+        // TODO necessary here?
+        val id = APIRequests(homeserverUrl = homeserverUrl, token = token!!, client = client).getMe().id
+        return DialPhoneImpl(
+            token = this.token!!,
+            homeserverUrl = homeserverUrl,
+            listeners = listenerList,
+            client = client,
+            ownId = id,
+            initCallback = {},
+            // TODO impl phone cache
+            cache = cache
+        ).also {
+            if (cache != null) this.addListeners(UserCacheListener(
+                cache!!,
+                it,
+            ))
+        }
+    }
+}

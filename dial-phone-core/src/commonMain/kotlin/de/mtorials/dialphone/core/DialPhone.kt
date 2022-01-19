@@ -12,10 +12,10 @@ import de.mtorials.dialphone.core.entityfutures.RoomFuture
 
 interface DialPhone : DialPhoneApi {
 
-    /**
-     * The cache
-     */
-    val cache: PhoneCache
+//    /**
+//     * The cache
+//     */
+//    val cache: PhoneCache
 
     /**
      * @return Returns the entity futures of all rooms the user has joined
@@ -53,10 +53,9 @@ interface DialPhone : DialPhoneApi {
 
     companion object {
         suspend operator fun invoke(homeserverUrl: String, block: DialPhoneApiBuilder.() -> Unit) : DialPhone {
-            return val dialPhoneCore = DialPhoneApiBuilderImpl<DialPhone>(
-                block,
+            return DialPhoneBuilderImpl(
                 homeserverUrl = homeserverUrl
-            ).build()
+            ).buildDialPhone(block)
         }
     }
 }

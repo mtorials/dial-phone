@@ -19,10 +19,10 @@ class DialPhoneImpl internal constructor(
     token: String,
     homeserverUrl: String,
     listeners: List<Listener>,
-    //override val commandPrefix: String,
     ownId: String,
     client: HttpClient,
     initCallback: suspend (DialPhoneApi) -> Unit,
+    val cache: PhoneCache?,
 ) : DialPhone, DialPhoneApiImpl(
     token = token,
     homeserverUrl = homeserverUrl,
@@ -32,29 +32,21 @@ class DialPhoneImpl internal constructor(
     initCallback = initCallback
 ) {
 
-    override val synchronizer = Synchronizer(listeners.toMutableList(), this, client, initCallback = initCallback)
+    // override val synchronizer = Synchronizer(listeners.toMutableList(), this, client, initCallback = initCallback)
 
-    // TODO fix impl and interface
-    override val cache = object : PhoneCache {
-        override var joinedRooms: MutableList<RoomFuture> = mutableListOf()
-        override var invitedRooms: MutableList<InvitedRoomActions> = mutableListOf()
-        override val users: MutableMap<String, User> = mutableMapOf()
+    override suspend fun getJoinedRoomFutures(): List<RoomFuture> = synchronizer.joinedRoomIds.map {
+        RoomFutureImpl(it,this)
     }
-
-    override suspend fun getJoinedRoomFutures(): List<RoomFuture> = apiRequests.getJoinedRooms().roomIds.map {
-        RoomFutureImpl(
-            it,
-            this
-        )
+    override suspend fun getInvitedRoomActions(): List<InvitedRoomActions> = synchronizer.invitedRoomIds.map {
+        InvitedRoomActionsImpl(this, it)
     }
-    override suspend fun getInvitedRoomActions(): List<InvitedRoomActions> = cache.invitedRooms
 
     //override suspend fun getJoinedRoomFutures() : List<RoomFuture> =
     //    requestObject.getJoinedRooms().roomIds.map { id -> RoomFutureImpl(id, this@DialPhoneImpl) }
 
     override suspend fun getUserById(id: String) : User? {
         // Check cache
-        if (cache.users.containsKey(id)) return cache.users[id]
+        if (cache?.users?.containsKey(id) == true) return cache.users[id]
 
         val u : UserWithoutIDResponse = apiRequests.getUserById(id) ?: return null
         return UserImpl(

@@ -67,9 +67,11 @@ interface DialPhoneApi {
         const val MATRIX_PATH = "/_matrix/client/r0/"
         const val TIMEOUT = "8000"
 
-        suspend operator fun invoke(homeserverUrl: String, block: DialPhoneApiBuilder.() -> Unit) : DialPhoneApi = DialPhoneApiBuilderImpl(
-            block,
+        suspend operator fun invoke(
+            homeserverUrl: String,
+            block: DialPhoneApiBuilder.() -> Unit
+        ) : DialPhoneApi = DialPhoneApiBuilderImpl(
             homeserverUrl = homeserverUrl
-        ).build()
+        ).buildDialPhoneApi(block)
     }
 }
