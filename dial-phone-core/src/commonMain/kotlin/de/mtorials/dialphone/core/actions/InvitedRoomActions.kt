@@ -1,11 +1,12 @@
 package de.mtorials.dialphone.core.actions
 
+import de.mtorials.dialphone.core.ids.RoomId
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.entityfutures.RoomFuture
 
 interface InvitedRoomActions {
     val phone: DialPhone
-    val id: String
+    val id: RoomId
 
     /**
      * Join the room you are invited in

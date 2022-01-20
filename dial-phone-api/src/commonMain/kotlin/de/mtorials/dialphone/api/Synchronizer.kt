@@ -9,7 +9,6 @@ import io.ktor.http.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
-import java.util.stream.Collectors.toList
 
 class Synchronizer(
     private val listeners: MutableList<Listener>,

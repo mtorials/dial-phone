@@ -1,4 +1,5 @@
-package de.mtorials.dialphone.api.model.ids
+package de.mtorials.dialphone.core.ids
+
 
 class EventId(
     override val value: String,

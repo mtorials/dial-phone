@@ -2,17 +2,20 @@ package de.mtorials.dialphone.core.entityfutures
 
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.core.DialPhone
+import de.mtorials.dialphone.core.actions.MessageActionsImpl
 import de.mtorials.dialphone.core.entities.MemberImpl
 import de.mtorials.dialphone.core.entities.Message
-import de.mtorials.dialphone.core.actions.MessageActionsImpl
+import de.mtorials.dialphone.core.ids.EventId
+import de.mtorials.dialphone.core.ids.RoomId
+import de.mtorials.dialphone.core.ids.userId
 
 class MessageFuture(
-    id: String,
-    roomId: String,
+    id: EventId,
+    roomId: RoomId,
     phone: DialPhone
 ) : EntityFuture<Message>, MessageActionsImpl(id, phone, roomId) {
     override suspend fun receive(): Message {
-        val event = phone.apiRequests.getEventByIdAndRoomId(id, roomId)
+        val event = phone.apiRequests.getEventByIdAndRoomId(id.toString(), roomId.toString())
         if (event !is MRoomMessage) throw Error("Expected other event type!")
         return Message(
             body = event.content.body,
@@ -21,7 +24,7 @@ class MessageFuture(
             roomFuture = RoomFutureImpl(roomId, phone),
             id = id,
             author = MemberImpl(
-                id = event.sender,
+                userId = event.sender.userId(),
                 roomId = roomId,
                 phone = phone
             )

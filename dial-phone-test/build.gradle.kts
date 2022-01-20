@@ -14,7 +14,7 @@ kotlin {
     sourceSets {
         val jvmTest by getting {
             dependencies {
-                // WMODULES
+                // MODULES
                 implementation(project(":dial-phone-core"))
 
                 implementation(kotlin("test-common"))

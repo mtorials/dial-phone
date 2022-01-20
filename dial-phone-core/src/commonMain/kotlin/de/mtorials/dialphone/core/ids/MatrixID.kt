@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.api.model.ids
+package de.mtorials.dialphone.core.ids
 
 abstract class MatrixID {
 
