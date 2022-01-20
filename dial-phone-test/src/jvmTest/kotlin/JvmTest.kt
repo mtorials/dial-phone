@@ -46,6 +46,7 @@ class JvmTest {
     @Test
     fun `create room`() {
         runBlocking {
+            dialPhone.sync()
             delay(1000)
             val name = Helper.getRandomName(10)
             val room = dialPhone.createRoom(name) {

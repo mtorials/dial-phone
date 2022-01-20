@@ -20,7 +20,7 @@ import kotlinx.serialization.modules.plus
 open class DialPhoneApiBuilderImpl(
     val homeserverUrl: String,
 ) : DialPhoneApiBuilder {
-    // TODO make all lateinit
+
     protected var token: String? = null
     private var ownId: String? = null
     private var username: String? = null

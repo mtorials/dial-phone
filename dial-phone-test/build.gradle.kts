@@ -32,7 +32,6 @@ kotlin {
     }
 }
 
-
 // DOCKER
 
 val synapseImageId = "matrixdotorg/synapse:latest"

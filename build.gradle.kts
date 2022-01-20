@@ -1,3 +1,5 @@
+import org.jetbrains.dokka.ReflectDsl.get
+
 plugins {
     val kotlinVersion = "1.6.0"
 
@@ -10,7 +12,7 @@ plugins {
 }
 
 group = "de.mtorials"
-version = "v1.1.1-alpha"
+version = "0.2.1"
 
 allprojects {
     repositories {
@@ -31,7 +33,33 @@ allprojects {
 }
 
 subprojects {
-
+    apply(plugin = "maven-publish")
+    this.group = rootProject.group.toString() + ".dial-phone"
+    this.version = rootProject.version
+    // Exclude all projects with tests from publishing
+    if (this.tasks.filterIsInstance<Task>().isNotEmpty()) {
+        publishing {
+            repositories {
+                mavenLocal()
+                maven {
+                    url = uri("https://git.mt32.net/api/v4/projects/59/packages/maven")
+                    name = "GitLab"
+                    credentials(HttpHeaderCredentials::class) {
+                        name = "Job-Token"
+                        value = System.getenv("CI_JOB_TOKEN")
+                    }
+                    authentication {
+                        create<HttpHeaderAuthentication>("header")
+                    }
+                }
+            }
+            publications {
+                create<MavenPublication>("maven") {
+                    artifactId = this.name
+                }
+            }
+        }
+    }
 }
 
 extra.apply {
@@ -51,28 +79,4 @@ val dokkaJar by tasks.creating(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Documentation for DialPhone."
     from(tasks.dokka)
-}
-
-publishing {
-    repositories {
-        mavenLocal()
-        maven {
-            url = uri("https://git.mt32.net/api/v4/projects/59/packages/maven")
-            name = "GitLab"
-            credentials(HttpHeaderCredentials::class) {
-                name = "Job-Token"
-                value = System.getenv("CI_JOB_TOKEN")
-            }
-            authentication {
-                create<HttpHeaderAuthentication>("header")
-            }
-        }
-    }
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = "de.mtorials"
-            artifactId = project.name
-            version = "1.1"
-        }
-    }
 }
