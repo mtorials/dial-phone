@@ -24,11 +24,11 @@ open class ListenerAdapterImpl(
     protected open var callbackOnMessageReceived : EventCallback<MessageReceivedEvent> = {}
     protected open var callbackOnRoomInvited : EventCallback<RoomInviteEvent> = {}
 
-    override suspend fun onRoomMessageReceived(block: suspend (MessageReceivedEvent) -> Unit) {
+    override fun onRoomMessageReceived(block: suspend (MessageReceivedEvent) -> Unit) {
         callbackOnMessageReceived = block
     }
 
-    override suspend fun onRoomInvited(block: suspend (RoomInviteEvent) -> Unit) {
+    override fun onRoomInvited(block: suspend (RoomInviteEvent) -> Unit) {
         callbackOnRoomInvited = block
     }
 
