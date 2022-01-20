@@ -6,7 +6,7 @@ plugins {
     `maven-publish`
     id("org.jetbrains.dokka") version "0.10.0"
     //id("de.gesellix.docker") version "2021-12-18T23-58-00"
-    id("com.avast.gradle.docker-compose") version "0.14.13"
+    id("com.avast.gradle.docker-compose") version "0.14.13" apply false
 }
 
 group = "de.mtorials"
@@ -52,31 +52,6 @@ val dokkaJar by tasks.creating(Jar::class) {
     description = "Documentation for DialPhone."
     from(tasks.dokka)
 }
-
-// DOCKER
-
-val synapseImageId = "matrixdotorg/synapse:latest"
-
-dockerCompose {
-    useComposeFiles.add("test-compose.yaml")
-    waitForTcpPorts.set(true)
-    checkContainersRunning.set(true)
-    removeContainers.set(true)
-}
-
-// TESTING
-
-
-tasks.withType<Test> {
-    useJUnit()
-    dockerCompose.isRequiredBy(this)
-//    testLogging {
-//        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-//        events = mutableSetOf(org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED, org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED)
-//        showStandardStreams = true
-//    }
-}
-
 
 publishing {
     repositories {
