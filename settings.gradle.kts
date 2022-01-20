@@ -10,6 +10,7 @@ rootProject.name = "dial-phone"
 include(
     "dial-phone-api",
     "dial-phone-core",
+    "dial-phone-bot",
     "dial-phone-test"
 )
 

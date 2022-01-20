@@ -1,6 +1,6 @@
-package de.mtorials.dialphone.api.listeners
+package de.mtorials.dialhone.bot
 
-import de.mtorials.dialphone.api.dialevents.MessageReceivedEvent
+import de.mtorials.dialphone.core.dialevents.MessageReceivedEvent
 
 abstract class Command(
     val invoke: String,
