@@ -1,16 +1,8 @@
-import de.mtorials.dialphone.DialPhone
-import de.mtorials.dialphone.DialPhoneBuilder
-import de.mtorials.dialphone.authentication.Login
-import io.ktor.util.date.*
-import kotlinx.coroutines.GlobalScope
+import de.mtorials.dialphone.core.DialPhone
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
-import java.nio.file.attribute.UserPrincipalNotFoundException
-import kotlin.random.Random
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 
 class JvmTest {
@@ -22,12 +14,12 @@ class JvmTest {
     fun `register and login as user`() {
         runBlocking {
             DialPhone(HOMESERVER_URL) {
-                isUser(TEST_USER, TEST_PWD, true)
+                asUser(TEST_USER, TEST_PWD, true)
             }
             // TODO remove rate limit in synapse
             delay(1000)
             dialPhone = DialPhone(HOMESERVER_URL) {
-                isUser(TEST_USER, TEST_PWD)
+                asUser(TEST_USER, TEST_PWD)
             }
         }
     }
@@ -36,7 +28,7 @@ class JvmTest {
     fun `check guest access`() {
         runBlocking {
             DialPhone(HOMESERVER_URL) {
-                isGuest()
+                asGuest()
             }
         }
     }

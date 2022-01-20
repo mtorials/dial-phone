@@ -42,7 +42,7 @@ open class DialPhoneApiBuilderImpl(
     override fun asUser(username: String, password: String, createUserIfNotRegistered : Boolean) {
         this.password = password
         this.username = username
-        this.createUserIfNoRegistered = createUserIfNoRegistered
+        this.createUserIfNoRegistered = createUserIfNotRegistered
     }
 
     override infix fun withToken(token: String) {
