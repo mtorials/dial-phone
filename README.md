@@ -9,7 +9,7 @@
 
 *work in progress*
 
-A simple to use [Matrix](https://matrix.org/) client-server API (CS-API) SDK for the JVM written in Kotlin.
+A simple-to-use [Matrix](https://matrix.org/) client-server API (CS-API) SDK for the JVM written in Kotlin.
 The library uses kotlinx.serialization and kotlinx.coroutines.
 
 It is multi-platform compatible, but the only supported platform at the moment is the JVM.
@@ -53,9 +53,9 @@ Use can create a guest account or login with a access token you can receive for 
 Login and registration with username and password will be availibe in the future.
 ```kotlin
 val phone = DialPhone("<HOMESERVER_URL>") { // this: DialPhoneBuilder
-    client withToken "<YOUR_TOKEN>" // If you want to login with an access token
-    isGuets() // If you want to create a guest account
-    isUser("myusername", "mypassword") // login with credentials
+    withToken("<YOUR_TOKEN>") // If you want to login with an access token
+    asGuets() // If you want to create a guest account
+    asUser("myusername", "mypassword") // login with credentials
     client hasCommandPrefix "!" // If you want to use the command listener, default is "!"
     addListeners(
         ExampleListener(),
@@ -200,7 +200,7 @@ class InviteListener : ListenerAdapter() {
 ## Custom Events
 
 This library has the ability to send custom events. To do so, you have to first create a class inheriting from
-the `MatrixEvent` interface or sub classes depending on what type of event you want to create.
+the `MatrixEvent` interface or subclasses depending on what type of event you want to create.
 The content field has to be an extra class marked with the according `EventContent` interface.
 To specify the name of the event use the `@JsonTypeName` annotation of the Jackson library.
 Use the `@ContentEventType` annotation to specify the according event type of the `EventContent` type.
