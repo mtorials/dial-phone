@@ -62,9 +62,9 @@ interface DialPhoneApi {
      */
     fun addListener(listener: Listener)
 
-
     companion object {
         const val MATRIX_PATH = "/_matrix/client/r0/"
+        const val MATRIX_PATH_V3 = "/_matrix/client/v3/"
         const val TIMEOUT = "8000"
 
         suspend operator fun invoke(
