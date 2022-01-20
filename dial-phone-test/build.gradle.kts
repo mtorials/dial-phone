@@ -34,8 +34,6 @@ kotlin {
 
 // DOCKER
 
-val synapseImageId = "matrixdotorg/synapse:latest"
-
 dockerCompose {
     dockerComposeWorkingDirectory.set(rootDir)
     useComposeFiles.add("test-compose.yaml")
