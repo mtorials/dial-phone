@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
     id("com.avast.gradle.docker-compose")
 }
 
@@ -16,6 +17,7 @@ kotlin {
             dependencies {
                 // MODULES
                 implementation(project(":dial-phone-core"))
+                implementation(project(":dial-phone-api"))
 
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))

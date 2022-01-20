@@ -20,7 +20,6 @@ class DialPhoneBuilderImpl(
 
     suspend fun buildDialPhone(block: DialPhoneBuilder.() -> Unit) : DialPhoneImpl {
         block()
-        this.customSerializer = this.customSerializer + EntitySerialization.serializersModule
         this.configure()
         // TODO necessary here?
         val id = APIRequests(homeserverUrl = homeserverUrl, token = token!!, client = client).getMe().id
