@@ -9,6 +9,7 @@ import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
@@ -72,11 +73,13 @@ open class DialPhoneApiBuilderImpl(
 //        this.bot = botBuilder
 //    }
 
+    @OptIn(ExperimentalSerializationApi::class)
     protected suspend fun configure() {
         format = Json {
             ignoreUnknownKeys = true
             classDiscriminator = "type"
             encodeDefaults = true
+            explicitNulls = false
             serializersModule =
                     // TODO check if I broke smth
                 EventSerialization.serializersModule + customSerializer
