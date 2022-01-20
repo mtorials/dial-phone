@@ -1,15 +1,17 @@
-package de.mtorials.dialphone.api.listeners
+package de.mtorials.dialhone.bot
 
-import de.mtorials.dialphone.api.dialevents.MessageReceivedEvent
+import de.mtorials.dialphone.core.EventCallback
+import de.mtorials.dialphone.core.dialevents.MessageReceivedEvent
+import de.mtorials.dialphone.core.listeners.ListenerAdapterImpl
 
-class CommandListener internal constructor(
+class CommandListener constructor(
     private val prefix: String,
     private val commands: List<Command>,
     private val fallbackCommand: Command?
-): ListenerAdapter() {
-    override suspend fun onRoomMessageReceive(event: MessageReceivedEvent) {
+) : ListenerAdapterImpl(false){
+    override var callbackOnMessageReceived: EventCallback<MessageReceivedEvent> = call@{ event ->
         println(fallbackCommand)
-        if (!event.message.body.startsWith(prefix)) return
+        if (!event.message.body.startsWith(prefix)) return@call
         var found = false
         val parameters = event.message.body.split(" ").toMutableList()
         commands.forEach loop@{ command ->

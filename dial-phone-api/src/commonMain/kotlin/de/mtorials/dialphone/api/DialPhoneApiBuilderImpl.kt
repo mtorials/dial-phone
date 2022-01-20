@@ -2,8 +2,6 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.authentication.Login
 import de.mtorials.dialphone.api.authentication.Registrar
-import de.mtorials.dialphone.api.listeners.Command
-import de.mtorials.dialphone.api.listeners.CommandListener
 import de.mtorials.dialphone.api.listeners.Listener
 import de.mtorials.dialphone.api.model.mevents.EventSerialization
 import io.ktor.client.*

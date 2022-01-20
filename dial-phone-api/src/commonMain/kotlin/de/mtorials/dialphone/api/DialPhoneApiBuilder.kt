@@ -1,6 +1,5 @@
 package de.mtorials.dialphone.api
 
-import de.mtorials.dialphone.api.listeners.Command
 import de.mtorials.dialphone.api.listeners.Listener
 import kotlinx.serialization.modules.SerializersModule
 
@@ -41,36 +40,4 @@ interface DialPhoneApiBuilder {
      * Refer to te README for more detailed information on how to use custom events
      */
     fun addCustomSerializersModule(serializersModule: SerializersModule)
-
-//    /**
-//     * Builder specific to bots
-//     */
-//    fun bot(block: BotBuilder.() -> Unit)
-//
-//    /**
-//     * Builder class for bots
-//     */
-//    interface BotBuilder {
-//
-//        /**
-//         * Reference to this for convenience
-//         */
-//        val bot: BotBuilder
-//
-//        /**
-//         * The prefix used to recognize commands
-//         * The default is "!"
-//         */
-//        var commandPrefix: String
-//
-//        /**
-//         * When called, will generate a help command that lists all commands
-//         */
-//        fun generateHelp()
-//
-//        /**
-//         * Used to add commands
-//         */
-//        fun commands(vararg commands: Command)
-//    }
 }
