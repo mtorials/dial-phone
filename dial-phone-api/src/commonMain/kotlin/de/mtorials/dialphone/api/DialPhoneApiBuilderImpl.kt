@@ -134,10 +134,10 @@ open class DialPhoneApiBuilderImpl(
         block()
         configure()
         // TODO necessary here?
-        val id = APIRequests(homeserverUrl = homeserverUrl!!, token = token!!, client = client).getMe().id
+        val id = APIRequests(homeserverUrl = homeserverUrl, token = token!!, client = client).getMe().id
         return DialPhoneApiImpl(
             token = token!!,
-            homeserverUrl = homeserverUrl!!,
+            homeserverUrl = homeserverUrl,
             listeners = listenerList,
             client = client,
             ownId = id,

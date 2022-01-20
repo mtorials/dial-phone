@@ -5,6 +5,7 @@ import de.mtorials.dialphone.api.DialPhoneApiBuilderImpl
 import de.mtorials.dialphone.core.cache.InMemoryCache
 import de.mtorials.dialphone.core.cache.PhoneCache
 import de.mtorials.dialphone.core.cache.UserCacheListener
+import kotlinx.serialization.modules.plus
 
 class DialPhoneBuilderImpl(
     homeserverUrl: String,
@@ -19,6 +20,7 @@ class DialPhoneBuilderImpl(
 
     suspend fun buildDialPhone(block: DialPhoneBuilder.() -> Unit) : DialPhoneImpl {
         block()
+        this.customSerializer = this.customSerializer + EntitySerialization.serializersModule
         this.configure()
         // TODO necessary here?
         val id = APIRequests(homeserverUrl = homeserverUrl, token = token!!, client = client).getMe().id
