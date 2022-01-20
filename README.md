@@ -9,16 +9,15 @@
 
 *work in progress*
 
-A simple-to-use [Matrix](https://matrix.org/) client-server API (CS-API) SDK for the JVM written in Kotlin.
+A simple-to-use [Matrix](https://matrix.org/) client-server sdk for kotlin multiplatform in alpha.
 The library uses kotlinx.serialization and kotlinx.coroutines.
 
-It is multi-platform compatible, but the only supported platform at the moment is the JVM.
+Supported platforms are jvm and js, but testing is mostly done on the jvm.
 
 See my [dial-bot](https://github.com/mtorials/dialbot) repository for a reference bot implementation.
 (outdated currently)
 
-E2EE is currently not supported, but you should be able to use [pantalaimon](https://github.com/matrix-org/pantalaimon)
-to achieve it. This is however not tested. 
+E2EE is currently not supported.
 
 ## Installation
 
@@ -187,7 +186,18 @@ phone.requestObject.redactEventWithIdInRoom(roomId = roomId, id = eventId)
 
 ## Rooms
 
-Room menagement is not fully implemented yet.
+### Create a room 
+
+To create a room use the room builder:
+
+```kotlin
+val room = dialPhone.createRoom(name) {
+    topic = "This is a room topic"
+    alias = "alias"
+    makePublic()
+    invite(someUser)
+}
+```
 
 ### Invite Listener and Join
 
