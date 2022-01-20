@@ -1,4 +1,5 @@
 plugins {
+    kotlin("plugin.serialization")
     kotlin("multiplatform")
 }
 
