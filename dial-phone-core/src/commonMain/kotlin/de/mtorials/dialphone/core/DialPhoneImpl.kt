@@ -4,6 +4,7 @@ import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.DialPhoneApiImpl
 import de.mtorials.dialphone.api.Synchronizer
 import de.mtorials.dialphone.api.listeners.Listener
+import de.mtorials.dialphone.api.model.enums.RoomVisibility
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
 import de.mtorials.dialphone.api.responses.UserWithoutIDResponse
 import de.mtorials.dialphone.core.actions.InvitedRoomActions
@@ -72,6 +73,11 @@ class DialPhoneImpl internal constructor(
             true -> RoomFutureImpl(id, this)
             false -> null
         }
+
+    override suspend fun createRoom(name: String, block: RoomBuilder.() -> Unit): RoomFuture =
+        apiRequests.createRoom(RoomBuilderImpl(name).apply(block).build())
+            .run { RoomFutureImpl(this.id.roomId(), this@DialPhoneImpl) }
+
 
     override suspend fun discoverRooms(): List<Pair<InvitedRoomActions, DiscoveredRoom>> {
         return apiRequests.discoverRooms().rooms.map { Pair(

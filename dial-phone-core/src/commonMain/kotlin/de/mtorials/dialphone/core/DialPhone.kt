@@ -2,8 +2,10 @@ package de.mtorials.dialphone.core
 
 import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.DialPhoneApiBuilder
+import de.mtorials.dialphone.api.model.enums.RoomVisibility
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
 import de.mtorials.dialphone.core.actions.InvitedRoomActions
+import de.mtorials.dialphone.core.entities.Room
 import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entityfutures.RoomFuture
 import de.mtorials.dialphone.core.ids.RoomAlias
@@ -45,6 +47,11 @@ interface DialPhone : DialPhoneApi {
      * @return Returns the room future. If not found: null
      */
     suspend fun getJoinedRoomFutureById(id: RoomId) : RoomFuture?
+
+    /**
+     * Create a room
+     */
+    suspend fun createRoom(name: String, block: RoomBuilder.() -> Unit) : RoomFuture
 
     /**
      * @return Returns a list of Pairs containing first the room action which can be used to join the room.
