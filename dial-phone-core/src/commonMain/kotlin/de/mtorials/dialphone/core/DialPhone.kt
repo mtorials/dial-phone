@@ -1,13 +1,14 @@
 package de.mtorials.dialphone.core
 
-import de.mtorials.dialphone.api.DialPhoneApiBuilder
-import de.mtorials.dialphone.api.DialPhoneApiBuilderImpl
 import de.mtorials.dialphone.api.DialPhoneApi
+import de.mtorials.dialphone.api.DialPhoneApiBuilder
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
 import de.mtorials.dialphone.core.actions.InvitedRoomActions
-import de.mtorials.dialphone.core.cache.PhoneCache
 import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entityfutures.RoomFuture
+import de.mtorials.dialphone.core.ids.RoomAlias
+import de.mtorials.dialphone.core.ids.RoomId
+import de.mtorials.dialphone.core.ids.UserId
 
 
 interface DialPhone : DialPhoneApi {
@@ -31,19 +32,19 @@ interface DialPhone : DialPhoneApi {
      * @param id The id of the user you want to get
      * @return Return null if not found, otherwise the user object
      */
-    suspend fun getUserById(id: String) : User?
+    suspend fun getUserById(id: UserId) : User?
 
     /**
      * @param alias The room alias
      * @return Returns the object to join the room
      */
-    suspend fun getRoomByAlias(alias: String) : InvitedRoomActions
+    suspend fun getRoomByAlias(alias: RoomAlias) : InvitedRoomActions
 
     /**
      * @param id The id of the room you want to get
      * @return Returns the room future. If not found: null
      */
-    suspend fun getJoinedRoomFutureById(id: String) : RoomFuture?
+    suspend fun getJoinedRoomFutureById(id: RoomId) : RoomFuture?
 
     /**
      * @return Returns a list of Pairs containing first the room action which can be used to join the room.

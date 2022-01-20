@@ -4,6 +4,7 @@ import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomName
 import de.mtorials.dialphone.core.actions.RoomActions
 import de.mtorials.dialphone.core.entityfutures.MessageFuture
+import de.mtorials.dialphone.core.ids.eventId
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -22,7 +23,7 @@ infix fun RoomActions.rename(name: String) = setName(name)
  */
 suspend fun RoomActions.sendAndGet(message: String) =
     MessageFuture(
-        this@sendAndGet.sendTextMessage(message),
+        this@sendAndGet.sendTextMessage(message).eventId(),
         this@sendAndGet.id,
         this@sendAndGet.phone
     )

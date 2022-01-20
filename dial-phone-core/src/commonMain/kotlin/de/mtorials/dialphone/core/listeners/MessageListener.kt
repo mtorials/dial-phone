@@ -15,8 +15,8 @@ class MessageListener(
     private val messagesByRoom: MutableMap<String, MutableList<Message>> = mutableMapOf()
 
     override var callbackOnMessageReceived: EventCallback<MessageReceivedEvent> = { event ->
-        if (messagesByRoom[event.roomFuture.id] == null) messagesByRoom[event.roomFuture.id] = mutableListOf()
-        messagesByRoom[event.roomFuture.id]?.add(event.message)
+        if (messagesByRoom[event.roomFuture.id.toString()] == null) messagesByRoom[event.roomFuture.id.toString()] = mutableListOf()
+        messagesByRoom[event.roomFuture.id.toString()]?.add(event.message)
         onNewMessage(event)
     }
 

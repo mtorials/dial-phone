@@ -13,6 +13,10 @@ import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entities.UserImpl
 import de.mtorials.dialphone.core.entityfutures.RoomFuture
 import de.mtorials.dialphone.core.entityfutures.RoomFutureImpl
+import de.mtorials.dialphone.core.ids.RoomAlias
+import de.mtorials.dialphone.core.ids.RoomId
+import de.mtorials.dialphone.core.ids.UserId
+import de.mtorials.dialphone.core.ids.roomId
 import io.ktor.client.*
 
 class DialPhoneImpl internal constructor(
@@ -35,20 +39,20 @@ class DialPhoneImpl internal constructor(
     // override val synchronizer = Synchronizer(listeners.toMutableList(), this, client, initCallback = initCallback)
 
     override suspend fun getJoinedRoomFutures(): List<RoomFuture> = synchronizer.joinedRoomIds.map {
-        RoomFutureImpl(it,this)
+        RoomFutureImpl(it.roomId(),this)
     }
     override suspend fun getInvitedRoomActions(): List<InvitedRoomActions> = synchronizer.invitedRoomIds.map {
-        InvitedRoomActionsImpl(this, it)
+        InvitedRoomActionsImpl(this, it.roomId())
     }
 
     //override suspend fun getJoinedRoomFutures() : List<RoomFuture> =
     //    requestObject.getJoinedRooms().roomIds.map { id -> RoomFutureImpl(id, this@DialPhoneImpl) }
 
-    override suspend fun getUserById(id: String) : User? {
+    override suspend fun getUserById(id: UserId) : User? {
         // Check cache
-        if (cache?.users?.containsKey(id) == true) return cache.users[id]
+        if (cache?.users?.containsKey(id.toString()) == true) return cache.users[id.toString()]
 
-        val u : UserWithoutIDResponse = apiRequests.getUserById(id) ?: return null
+        val u : UserWithoutIDResponse = apiRequests.getUserById(id.toString()) ?: return null
         return UserImpl(
             id = id,
             displayName = u.displayName,
@@ -57,13 +61,13 @@ class DialPhoneImpl internal constructor(
         )
     }
 
-    override suspend fun getRoomByAlias(alias: String): InvitedRoomActions =
+    override suspend fun getRoomByAlias(alias: RoomAlias): InvitedRoomActions =
         InvitedRoomActionsImpl(
             this,
-            apiRequests.getRoomIdForAlias(alias).roomId
+            apiRequests.getRoomIdForAlias(alias.toString()).roomId.roomId()
         )
 
-    override suspend fun getJoinedRoomFutureById(id: String) : RoomFuture? =
+    override suspend fun getJoinedRoomFutureById(id: RoomId) : RoomFuture? =
         when (getJoinedRoomFutures().map { it.id }.contains(id)) {
             true -> RoomFutureImpl(id, this)
             false -> null
@@ -73,7 +77,7 @@ class DialPhoneImpl internal constructor(
         return apiRequests.discoverRooms().rooms.map { Pair(
             InvitedRoomActionsImpl(
                 this,
-                it.id
+                it.id.roomId()
             ), it) }
     }
 }

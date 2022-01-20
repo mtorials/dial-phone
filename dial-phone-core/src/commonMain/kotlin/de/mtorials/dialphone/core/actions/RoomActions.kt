@@ -3,13 +3,14 @@ package de.mtorials.dialphone.core.actions
 import de.mtorials.dialphone.api.model.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.api.model.mevents.roomstate.StateEventContent
 import de.mtorials.dialphone.core.DialPhone
+import de.mtorials.dialphone.core.ids.RoomId
 
 /**
  * All actions you can perform on a room
  */
 interface RoomActions {
     val phone: DialPhone
-    val id: String
+    val id: RoomId
 
     /**
      * Sends an MatrixMessageEvent and returns the id

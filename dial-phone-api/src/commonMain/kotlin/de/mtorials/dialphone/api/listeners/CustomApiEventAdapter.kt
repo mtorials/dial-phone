@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
  * @param type The class of the event type you want to listen for
  *
  */
-abstract class CustomEventAdapter<T : MatrixEvent>(
+abstract class CustomApiEventAdapter<T : MatrixEvent>(
     private val type : KClass<T>,
     private val receivePastEvent: Boolean = false
 ) : Listener {
