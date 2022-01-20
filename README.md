@@ -39,8 +39,12 @@ Add to dependencies:
 
 ```kotlin
 // build.gradle.kts
-implementation("de.mtorials:dial-phone-jvm:<SEE_RELEASES>")
-// A ktor client of your chioce, here okhttp
+// If you use the library for js, replace jvm with js
+implementation("de.mtorials.dail-phone:dial-phone-api-jvm:<SEE_RELEASES>")
+implementation("de.mtorials.dail-phone:dial-phone-core-jvm:<SEE_RELEASES>")
+// If you want to use bot features
+implementation("de.mtorials.dail-phone:dial-phone-bot-jvm:<SEE_RELEASES>")
+// A ktor client of your choice, here okhttp
 // please check for a newer version!
 implementation("io.ktor:ktor-client-okhttp:1.5.0")
 ```
