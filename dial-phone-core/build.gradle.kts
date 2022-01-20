@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    id("com.avast.gradle.docker-compose")
 }
 
 kotlin {
@@ -27,4 +28,28 @@ kotlin {
             }
         }
     }
+}
+
+// DOCKER
+
+val synapseImageId = "matrixdotorg/synapse:latest"
+
+dockerCompose {
+    useComposeFiles.add("test-compose.yaml")
+    waitForTcpPorts.set(true)
+    checkContainersRunning.set(true)
+    removeContainers.set(true)
+}
+
+// TESTING
+
+
+tasks.withType<Test> {
+    useJUnit()
+    dockerCompose.isRequiredBy(this)
+//    testLogging {
+//        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+//        events = mutableSetOf(org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED, org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED)
+//        showStandardStreams = true
+//    }
 }
