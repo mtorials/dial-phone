@@ -29,7 +29,7 @@ class DialPhoneImpl internal constructor(
     listeners = listeners,
     ownId = ownId,
     client = client,
-    initCallback = initCallback
+    initCallback = initCallback,
 ) {
 
     // override val synchronizer = Synchronizer(listeners.toMutableList(), this, client, initCallback = initCallback)
