@@ -7,7 +7,7 @@ interface User : Entity {
     /**
      * The username visible in the id
      */
-    val name: String?
+    // val name: String?
     val avatarURL: String?
     val displayName: String?
 }
