@@ -40,6 +40,7 @@ val synapseImageId = "matrixdotorg/synapse:latest"
 dockerCompose {
     dockerComposeWorkingDirectory.set(rootDir)
     useComposeFiles.add("test-compose.yaml")
+    captureContainersOutput.set(true)
     waitForTcpPorts.set(true)
     checkContainersRunning.set(true)
     removeContainers.set(true)

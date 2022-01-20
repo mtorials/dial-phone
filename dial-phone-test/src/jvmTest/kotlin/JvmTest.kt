@@ -3,12 +3,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 
 class JvmTest {
 
     lateinit var dialPhone: DialPhone
-    private val roomName: String = "this is a room name"
 
     @Before
     fun `register and login as user`() {
@@ -36,7 +36,12 @@ class JvmTest {
     @Test
     fun `create room`() {
         runBlocking {
-            // TODO
+            delay(5000)
+            val name = "test"
+            val room = dialPhone.createRoom(name) {
+                topic = "This is a room topic"
+            }
+            assertEquals(room.receive().name, name)
         }
     }
 
