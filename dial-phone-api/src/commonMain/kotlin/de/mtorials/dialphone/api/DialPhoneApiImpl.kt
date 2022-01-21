@@ -2,9 +2,7 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.listeners.Listener
 import io.ktor.client.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 open class DialPhoneApiImpl constructor(
     final override val token: String,
@@ -14,6 +12,7 @@ open class DialPhoneApiImpl constructor(
     override val ownId: String,
     protected val client: HttpClient,
     protected val initCallback: suspend (DialPhoneApi) -> Unit,
+    protected val coroutineDispatcher: CoroutineDispatcher,
 ) : DialPhoneApi {
 
     override val apiRequests = APIRequests(
@@ -30,15 +29,6 @@ open class DialPhoneApiImpl constructor(
         synchronizer.addListener(listener)
     }
 
-    override fun syncAndReturnJob(): Job = GlobalScope.launch {
-        synchronizer.sync()
-    }
+    override fun sync(): Job = synchronizer.sync(GlobalScope, coroutineDispatcher)
 
-    override suspend fun sync() {
-        synchronizer.sync()
-    }
-
-    override fun stop() {
-        synchronizer.stop()
-    }
 }

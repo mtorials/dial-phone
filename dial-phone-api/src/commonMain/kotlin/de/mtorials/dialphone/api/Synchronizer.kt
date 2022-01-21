@@ -6,8 +6,7 @@ import de.mtorials.dialphone.api.responses.sync.SyncResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.serialization.SerializationException
 
 class Synchronizer(
@@ -17,7 +16,6 @@ class Synchronizer(
     private val fullState: Boolean = false,
     private val initCallback: suspend (DialPhoneApi) -> Unit,
 ) {
-
 
     val joinedRoomIds: List<String>
         get() = joined.toList()
@@ -29,7 +27,6 @@ class Synchronizer(
 
     private var lastTimeBatch: String? = null
     private var initialSync: Boolean = true
-    private var stopFlag: Boolean = false
 
     init {
         // Cache Listeners
@@ -38,42 +35,37 @@ class Synchronizer(
 
     fun addListener(listener: Listener) = listeners.add(listener)
 
-    fun stop() {
-        this.stopFlag = true
-    }
-
-    // TODO remove global scope
     // TODO check if room duplicates are added
-    suspend fun sync() {
-        while(true) {
+    // TODO add knocked and left
+    fun sync(
+        coroutineScope: CoroutineScope,
+        coroutineDispatcher: CoroutineDispatcher
+    ) = coroutineScope.launch(coroutineDispatcher) {
+        while(isActive) {
             try {
                 val res : SyncResponse = getSyncResponse()
                 lastTimeBatch = res.nextBatch
                 res.roomSync?.join?.forEach { (roomID, roomEvents) ->
-                    joined.add(roomID)
+                    if (!joined.contains(roomID)) joined.add(roomID)
                     roomEvents.timeline.events.forEach { event ->
                         listeners.forEach {
-                            it.onRoomEvent(event, roomID, phone, initialSync)
+                            launch { it.onRoomEvent(event, roomID, phone, initialSync) }
                         }
                     }
                 }
                 res.roomSync?.invite?.forEach { (roomID, roomEvents) ->
-                    invited.add(roomID)
+                    if (!invited.contains(roomID)) invited.add(roomID)
                     roomEvents.inviteState.events.forEach { event ->
                         listeners.forEach {
-                            it.onRoomEvent(event, roomID, phone, initialSync)
+                            launch { it.onRoomEvent(event, roomID, phone, initialSync) }
                         }
                     }
                 }
-                if (initialSync) GlobalScope.launch { initCallback(phone) }
+                if (initialSync) initCallback(phone)
                 initialSync = false
                 //println(lastTimeBatch)
             } catch (e: RuntimeException) {
                 e.printStackTrace()
-            }
-            if (stopFlag) {
-                stopFlag = false
-                break
             }
         }
     }

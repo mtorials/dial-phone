@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.listeners.Listener
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 
 interface DialPhoneApi {
@@ -30,32 +31,12 @@ interface DialPhoneApi {
      */
     val apiRequests: APIRequests
 
-//    /**
-//     * The object to handle the matrix sync api
-//     */
-//    val synchronizer: Synchronizer
 
     /**
      * Used to synchronize with the homeserver.
      * Call this method to receive events.
-     * To use the returning job you need kotlinx.coroutines.
-     * @see sync for a blocking method
-     * @return Returns an infinite lasting job
      */
-    fun syncAndReturnJob() : Job
-
-    /**
-     * Used to synchronize with the homeserver.
-     * Call this method to receive events.
-     * This method is blocking.
-     * @see syncAndReturnJob for a non-blocking method
-     */
-    suspend fun sync()
-
-    /**
-     * Stops syncing with the homeserver and ends the SyncJob returned syncAndReturnJob()
-     */
-    fun stop()
+    fun sync() : Job
 
     /**
      * Register a listener

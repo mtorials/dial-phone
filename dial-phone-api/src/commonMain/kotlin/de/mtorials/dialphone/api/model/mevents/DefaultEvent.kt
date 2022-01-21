@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class DefaultEvent(
-    override val sender: String,
+    override val sender: String? = null,
     override val content: DefaultContent
 ) : MatrixEvent {
     @Serializable

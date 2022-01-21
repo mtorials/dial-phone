@@ -1,8 +1,8 @@
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.listeners.ListenerAdapter
 import de.mtorials.dialphone.core.sendTextMessage
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope.coroutineContext
 import org.junit.Before
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,7 +13,6 @@ class JvmTest {
     private val text = Helper.getRandomName(50)
 
     lateinit var dialPhone: DialPhone
-    lateinit var messageListener: ListenerAdapter
 
     @Before
     fun `register and login as user`() {
@@ -25,11 +24,6 @@ class JvmTest {
             delay(1000)
             dialPhone = DialPhone(HOMESERVER_URL) {
                 asUser(TEST_USER, TEST_PWD)
-                addListeners(ListenerAdapter {
-                    onRoomMessageReceived {
-                        assertEquals(it.message.body, text)
-                    }
-                })
             }
         }
     }
@@ -45,17 +39,24 @@ class JvmTest {
 
     @Test
     fun `create room`() {
+        val syncJob: Job = dialPhone.sync()
         runBlocking {
-            dialPhone.sync()
-            delay(1000)
+            println("started syncing!")
+            delay(100)
             val name = Helper.getRandomName(10)
             val room = dialPhone.createRoom(name) {
                 topic = "This is a room topic"
+                makePublic()
             }
             assertEquals(room.receive().name, name)
+            dialPhone.addListener(ListenerAdapter {
+                onRoomMessageReceived {
+                    assertEquals(it.message.body, text)
+                    syncJob.cancelAndJoin()
+                }
+            })
             room.sendTextMessage(text)
-            // wait for the round trip
-            delay(1000)
+            syncJob.join()
         }
     }
 

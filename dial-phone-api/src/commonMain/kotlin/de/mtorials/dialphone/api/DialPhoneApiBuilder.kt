@@ -1,6 +1,8 @@
 package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.listeners.Listener
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.modules.SerializersModule
 
 interface DialPhoneApiBuilder {
@@ -40,4 +42,9 @@ interface DialPhoneApiBuilder {
      * Refer to te README for more detailed information on how to use custom events
      */
     fun addCustomSerializersModule(serializersModule: SerializersModule)
+
+    /**
+     * Set a custom coroutine scope
+     */
+    fun withCoroutineDispatcher(coroutineDispatcher: CoroutineDispatcher)
 }
