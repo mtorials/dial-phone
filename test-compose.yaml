@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   homeserver:
+    container_name: synapse-test
     image: matrixdotorg/synapse:latest
     environment:
       - SYNAPSE_SERVER_NAME=example.org
