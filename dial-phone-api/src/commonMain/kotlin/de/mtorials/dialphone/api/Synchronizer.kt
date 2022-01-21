@@ -2,7 +2,7 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.exceptions.SyncException
 import de.mtorials.dialphone.api.listeners.Listener
-import de.mtorials.dialphone.api.responses.SyncResponse
+import de.mtorials.dialphone.api.responses.sync.SyncResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -49,7 +49,7 @@ class Synchronizer(
             try {
                 val res : SyncResponse = getSyncResponse()
                 lastTimeBatch = res.nextBatch
-                res.roomSync.join.forEach { (roomID, roomEvents) ->
+                res.roomSync?.join?.forEach { (roomID, roomEvents) ->
                     joined.add(roomID)
                     roomEvents.timeline.events.forEach { event ->
                         listeners.forEach {
@@ -57,7 +57,7 @@ class Synchronizer(
                         }
                     }
                 }
-                res.roomSync.invite.forEach { (roomID, roomEvents) ->
+                res.roomSync?.invite?.forEach { (roomID, roomEvents) ->
                     invited.add(roomID)
                     roomEvents.inviteState.events.forEach { event ->
                         listeners.forEach {
