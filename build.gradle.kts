@@ -64,7 +64,7 @@ subprojects {
 
 extra.apply {
     set("ktorVersion", "1.6.2")
-    set("kotlinxCoroutinesVersion", "1.4.2")
+    set("kotlinxCoroutinesVersion", "1.6.0")
     set("kotlinxSerializationVersion", "1.3.2")
 }
 

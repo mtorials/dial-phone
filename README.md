@@ -53,7 +53,7 @@ implementation("io.ktor:ktor-client-okhttp:1.5.0")
 To use the SDK first create the DialPhone object.
 
 Use can create a guest account or login with a access token you can receive for example from the element client.
-Login and registration with username and password will be availibe in the future.
+Login and registration with username and password will be available in the future.
 ```kotlin
 val phone = DialPhone("<HOMESERVER_URL>") { // this: DialPhoneBuilder
     withToken("<YOUR_TOKEN>") // If you want to login with an access token
