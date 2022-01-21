@@ -28,14 +28,8 @@ class Synchronizer(
     private var lastTimeBatch: String? = null
     private var initialSync: Boolean = true
 
-    init {
-        // Cache Listeners
-        // listeners.add(UserCacheListener(phone.cache))
-    }
-
     fun addListener(listener: Listener) = listeners.add(listener)
 
-    // TODO check if room duplicates are added
     // TODO add knocked and left
     fun sync(
         coroutineScope: CoroutineScope,
@@ -45,16 +39,18 @@ class Synchronizer(
             try {
                 val res : SyncResponse = getSyncResponse()
                 lastTimeBatch = res.nextBatch
+                joined.clear()
                 res.roomSync?.join?.forEach { (roomID, roomEvents) ->
-                    if (!joined.contains(roomID)) joined.add(roomID)
+                    joined.add(roomID)
                     roomEvents.timeline.events.forEach { event ->
                         listeners.forEach {
                             launch { it.onRoomEvent(event, roomID, phone, initialSync) }
                         }
                     }
                 }
+                invited.clear()
                 res.roomSync?.invite?.forEach { (roomID, roomEvents) ->
-                    if (!invited.contains(roomID)) invited.add(roomID)
+                    invited.add(roomID)
                     roomEvents.inviteState.events.forEach { event ->
                         listeners.forEach {
                             launch { it.onRoomEvent(event, roomID, phone, initialSync) }
