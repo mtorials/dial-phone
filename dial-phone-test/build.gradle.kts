@@ -25,6 +25,7 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
                 implementation(kotlin("test-junit"))
                 //implementation("org.eclipse.jetty:jetty-client:11.0.0")
+                implementation("io.ktor:ktor-client-logging:$ktorVersion")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
@@ -43,6 +44,8 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
                 implementation(kotlin("test-junit"))
                 //implementation("org.eclipse.jetty:jetty-client:11.0.0")
+
+                implementation("io.ktor:ktor-client-logging:$ktorVersion")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")

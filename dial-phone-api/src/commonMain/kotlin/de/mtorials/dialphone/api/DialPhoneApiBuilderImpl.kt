@@ -25,6 +25,8 @@ open class DialPhoneApiBuilderImpl(
     val homeserverUrl: String,
 ) : DialPhoneApiBuilder {
 
+    override var ktorLogLevel = LogLevel.NONE
+
     protected var token: String? = null
     private var ownId: String? = null
     private var username: String? = null
@@ -100,7 +102,7 @@ open class DialPhoneApiBuilderImpl(
             }
             install(Logging) {
                 logger = Logger.DEFAULT
-                level = LogLevel.ALL
+                level = ktorLogLevel
             }
         }
         if (isGuestBool) {
