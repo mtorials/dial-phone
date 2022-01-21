@@ -30,8 +30,8 @@ class DialPhoneBuilderImpl(
             client = client,
             ownId = id,
             initCallback = {},
-            // TODO impl phone cache
-            cache = cache
+            coroutineDispatcher = coroutineDispatcher,
+            cache = cache,
         ).also {
             if (cache != null) this.addListeners(UserCacheListener(
                 cache!!,

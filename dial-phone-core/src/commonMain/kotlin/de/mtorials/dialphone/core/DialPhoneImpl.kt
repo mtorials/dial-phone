@@ -19,6 +19,7 @@ import de.mtorials.dialphone.core.ids.RoomId
 import de.mtorials.dialphone.core.ids.UserId
 import de.mtorials.dialphone.core.ids.roomId
 import io.ktor.client.*
+import kotlinx.coroutines.CoroutineDispatcher
 
 class DialPhoneImpl internal constructor(
     token: String,
@@ -28,6 +29,7 @@ class DialPhoneImpl internal constructor(
     client: HttpClient,
     initCallback: suspend (DialPhoneApi) -> Unit,
     val cache: PhoneCache?,
+    coroutineDispatcher: CoroutineDispatcher,
 ) : DialPhone, DialPhoneApiImpl(
     token = token,
     homeserverUrl = homeserverUrl,
@@ -35,6 +37,7 @@ class DialPhoneImpl internal constructor(
     ownId = ownId,
     client = client,
     initCallback = initCallback,
+    coroutineDispatcher = coroutineDispatcher,
 ) {
 
     // override val synchronizer = Synchronizer(listeners.toMutableList(), this, client, initCallback = initCallback)
