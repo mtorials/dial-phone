@@ -1,14 +1,16 @@
+package de.mtorials.dialphone.test.integration
+
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.listeners.ListenerAdapter
 import de.mtorials.dialphone.core.sendTextMessage
+import de.mtorials.dialphone.test.Helper
 import kotlinx.coroutines.*
-import kotlinx.coroutines.GlobalScope.coroutineContext
 import org.junit.Before
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-class JvmTest {
+class IntegrationTests {
 
     private val text = Helper.getRandomName(50)
 
