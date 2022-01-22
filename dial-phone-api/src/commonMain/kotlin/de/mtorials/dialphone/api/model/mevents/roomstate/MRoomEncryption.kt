@@ -19,5 +19,9 @@ class MRoomEncryption(
     @Serializable
     data class Content(
         val algorithm: RoomEncryptionAlgorithm,
+        @SerialName("rotation_period_ms")
+        val rotationPeriodMs: Int? = null,
+        @SerialName("rotation_period_msgs")
+        val rotationPeriodMessages: Int? = null,
     ) : StateEventContent
 }
