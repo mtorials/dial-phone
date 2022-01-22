@@ -17,7 +17,7 @@ class MessageReceivedEvent(
     val sender: Member,
     val message: Message,
     override val id: EventId,
-    override val phone: DialPhoneApi
+    override val phone: DialPhone
 ) : DialEvent(phone, id) {
     constructor(roomID: RoomId, event: MRoomMessage, phone: DialPhone) : this(
         RoomFutureImpl(roomID, phone),

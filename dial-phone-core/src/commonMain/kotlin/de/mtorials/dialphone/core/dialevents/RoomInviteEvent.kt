@@ -13,7 +13,7 @@ class RoomInviteEvent(
     val invitedRoomActions: InvitedRoomActions,
     val senderId: UserId,
     val content: MRoomMember.Content,
-    override val phone: DialPhoneApi
+    override val phone: DialPhone
 ) : DialEvent(phone) {
     constructor(roomId: RoomId, event: MRoomMember, phone: DialPhone) : this(
         InvitedRoomActionsImpl(
