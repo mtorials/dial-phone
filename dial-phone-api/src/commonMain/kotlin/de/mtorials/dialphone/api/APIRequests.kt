@@ -9,6 +9,8 @@ import io.ktor.util.date.*
 import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.requests.RoomCreateRequest
+import de.mtorials.dialphone.api.requests.encryption.KeyUploadRequest
+import de.mtorials.dialphone.api.responses.encryption.KeyUploadResponse
 import kotlin.random.Random
 import io.ktor.http.HttpMethod.Companion.Post
 import io.ktor.http.HttpMethod.Companion.Get
@@ -37,6 +39,8 @@ class APIRequests(
         request(Get, "directory/room/${encode(alias)}")
     suspend fun createRoom(request: RoomCreateRequest) : RoomResponse =
         request(Post, "createRoom", bodyValue = request)
+    suspend fun uploadKeys(request: KeyUploadRequest) : KeyUploadResponse =
+        request(Post, "keys/upload", bodyValue = request)
 
     // Events
     suspend fun sendMessageEvent(
