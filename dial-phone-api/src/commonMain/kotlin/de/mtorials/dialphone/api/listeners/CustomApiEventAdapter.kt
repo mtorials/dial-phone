@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
 abstract class CustomApiEventAdapter<T : MatrixEvent>(
     private val type : KClass<T>,
     private val receivePastEvent: Boolean = false
-) : Listener {
+) : ApiListener {
 
     /**
      * @param event The event you listened for

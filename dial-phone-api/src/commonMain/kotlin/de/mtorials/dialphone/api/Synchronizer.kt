@@ -1,7 +1,7 @@
 package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.exceptions.SyncException
-import de.mtorials.dialphone.api.listeners.Listener
+import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.responses.sync.SyncResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -10,12 +10,13 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.SerializationException
 
 class Synchronizer(
-    private val listeners: MutableList<Listener>,
     private val phone: DialPhoneApi,
     private val client: HttpClient,
     private val fullState: Boolean = false,
     private val initCallback: suspend (DialPhoneApi) -> Unit,
 ) {
+
+    private val listeners: MutableList<GenericListener<DialPhoneApi>> = mutableListOf()
 
     val joinedRoomIds: List<String>
         get() = joined.toList()
@@ -28,7 +29,7 @@ class Synchronizer(
     private var lastTimeBatch: String? = null
     private var initialSync: Boolean = true
 
-    fun addListener(listener: Listener) = listeners.add(listener)
+    fun addListener(listener: GenericListener<DialPhoneApi>) = listeners.add(listener)
 
     // TODO add knocked and left
     fun sync(

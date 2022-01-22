@@ -1,5 +1,6 @@
 package test
 
+import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.listeners.MessageListener
 import de.mtorials.dialphone.core.sendTextMessage
@@ -9,9 +10,12 @@ import kotlinx.coroutines.runBlocking
 fun main() {
     runBlocking {
         println("Starting....")
-        DialPhone("http://localhost:8008") {
+        DialPhoneApi("http://localhost:8008") {
             asUser("test", "test", true)
             ktorLogLevel = LogLevel.NONE
+            addListeners(MessageListener { event ->
+
+            })
         }
         val phone = DialPhone("http://localhost:8008") {
             asUser("superman", "test", true)
