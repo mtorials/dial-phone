@@ -4,6 +4,7 @@ import de.mtorials.dialphone.api.listeners.ApiListener
 import de.mtorials.dialphone.api.listeners.GenericListener
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.modules.SerializersModule
 
 interface DialPhoneApiBuilder {
@@ -47,7 +48,7 @@ interface DialPhoneApiBuilder {
     /**
      * Set a custom coroutine scope
      */
-    fun withCoroutineDispatcher(coroutineDispatcher: CoroutineDispatcher)
+    fun withCoroutineDispatcher(coroutineScope: CoroutineScope)
 
     /**
      * Set the ktor log level
