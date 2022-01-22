@@ -1,7 +1,6 @@
 package de.mtorials.dialphone.api
 
-import de.mtorials.dialphone.api.listeners.Listener
-import kotlinx.coroutines.CoroutineScope
+import de.mtorials.dialphone.api.listeners.GenericListener
 import kotlinx.coroutines.Job
 
 interface DialPhoneApi {
@@ -41,7 +40,7 @@ interface DialPhoneApi {
     /**
      * Register a listener
      */
-    fun addListener(listener: Listener)
+    fun addListeners(vararg listener: GenericListener<*>)
 
     companion object {
         const val MATRIX_PATH = "/_matrix/client/r0/"

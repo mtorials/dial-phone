@@ -26,13 +26,13 @@ class DialPhoneBuilderImpl(
         return DialPhoneImpl(
             token = this.token!!,
             homeserverUrl = homeserverUrl,
-            listeners = listenerList,
             client = client,
             ownId = id,
             initCallback = {},
             coroutineDispatcher = coroutineDispatcher,
             cache = cache,
         ).also {
+            it.addListeners(*listenerList.toTypedArray())
             if (cache != null) this.addListeners(UserCacheListener(
                 cache!!,
                 it,

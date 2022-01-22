@@ -1,10 +1,11 @@
 package de.mtorials.dialphone.core.listeners
 
-import de.mtorials.dialphone.api.listeners.Listener
+import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.core.dialevents.RoomInviteEvent
 
-interface ListenerAdapter : Listener {
+interface ListenerAdapter : GenericListener<DialPhone> {
     fun onRoomMessageReceived(block: suspend (MessageReceivedEvent) -> Unit)
     fun onRoomInvited(block: suspend (RoomInviteEvent) -> Unit)
 

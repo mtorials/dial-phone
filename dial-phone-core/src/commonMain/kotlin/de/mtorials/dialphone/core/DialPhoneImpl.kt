@@ -2,9 +2,8 @@ package de.mtorials.dialphone.core
 
 import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.DialPhoneApiImpl
-import de.mtorials.dialphone.api.Synchronizer
-import de.mtorials.dialphone.api.listeners.Listener
-import de.mtorials.dialphone.api.model.enums.RoomVisibility
+import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.listeners.ApiListener
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
 import de.mtorials.dialphone.api.responses.UserWithoutIDResponse
 import de.mtorials.dialphone.core.actions.InvitedRoomActions
@@ -24,7 +23,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 class DialPhoneImpl internal constructor(
     token: String,
     homeserverUrl: String,
-    listeners: List<Listener>,
     ownId: String,
     client: HttpClient,
     initCallback: suspend (DialPhoneApi) -> Unit,
@@ -33,14 +31,16 @@ class DialPhoneImpl internal constructor(
 ) : DialPhone, DialPhoneApiImpl(
     token = token,
     homeserverUrl = homeserverUrl,
-    listeners = listeners,
     ownId = ownId,
     client = client,
     initCallback = initCallback,
     coroutineDispatcher = coroutineDispatcher,
 ) {
 
-    // override val synchronizer = Synchronizer(listeners.toMutableList(), this, client, initCallback = initCallback)
+    // TODO cast is unchecked, when can it fail?
+    override fun addListeners(vararg listener: GenericListener<*>) {
+        listener.forEach { synchronizer.addListener(it as GenericListener<DialPhoneApi>) }
+    }
 
     override suspend fun getJoinedRoomFutures(): List<RoomFuture> = synchronizer.joinedRoomIds.map {
         RoomFutureImpl(it.roomId(),this)

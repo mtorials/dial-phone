@@ -2,7 +2,8 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.authentication.Login
 import de.mtorials.dialphone.api.authentication.Registrar
-import de.mtorials.dialphone.api.listeners.Listener
+import de.mtorials.dialphone.api.listeners.ApiListener
+import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.model.mevents.EventSerialization
 import io.ktor.client.*
 import io.ktor.client.features.*
@@ -10,9 +11,7 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
@@ -32,7 +31,7 @@ open class DialPhoneApiBuilderImpl(
     private var username: String? = null
     private var password: String? = null
     private var createUserIfNoRegistered: Boolean = false
-    protected val listenerList: MutableList<Listener> = mutableListOf()
+    protected val listenerList: MutableList<GenericListener<*>> = mutableListOf()
     protected var customSerializer: SerializersModule = SerializersModule {  }
     protected var coroutineDispatcher: CoroutineDispatcher = Dispatchers.Default
 
@@ -58,8 +57,8 @@ open class DialPhoneApiBuilderImpl(
         this.token = token
     }
 
-    override fun addListeners(vararg listeners: Listener) {
-       this.listenerList.addAll(listeners as Array<Listener>)
+    override fun addListeners(vararg listeners: GenericListener<*>) {
+       this.listenerList.addAll(listeners)
     }
 
     override fun addCustomSerializersModule(serializersModule: SerializersModule) {
@@ -151,12 +150,11 @@ open class DialPhoneApiBuilderImpl(
         return DialPhoneApiImpl(
             token = token!!,
             homeserverUrl = homeserverUrl,
-            listeners = listenerList,
             client = client,
             ownId = id,
             initCallback = {},
             coroutineDispatcher = coroutineDispatcher,
-        )
+        ).also { it.addListeners(*listenerList.toTypedArray()) }
     }
 
 //    class BotBuilderImpl : DialPhoneApiBuilder.BotBuilder {

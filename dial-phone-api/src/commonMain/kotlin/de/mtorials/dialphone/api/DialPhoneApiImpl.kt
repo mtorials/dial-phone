@@ -1,13 +1,13 @@
 package de.mtorials.dialphone.api
 
-import de.mtorials.dialphone.api.listeners.Listener
+import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.listeners.ApiListener
 import io.ktor.client.*
 import kotlinx.coroutines.*
 
 open class DialPhoneApiImpl constructor(
     final override val token: String,
     final override val homeserverUrl: String,
-    listeners: List<Listener>,
     //override val commandPrefix: String,
     override val ownId: String,
     protected val client: HttpClient,
@@ -23,10 +23,13 @@ open class DialPhoneApiImpl constructor(
 
     override val profile = Profile(this)
 
-    protected open val synchronizer = Synchronizer(listeners.toMutableList(), this, client, initCallback = initCallback)
+    protected open val synchronizer = Synchronizer(this, client, initCallback = initCallback)
 
-    override fun addListener(listener: Listener) {
-        synchronizer.addListener(listener)
+    override fun addListeners(vararg listener: GenericListener<*>) {
+        listener.forEach {
+            if (it !is ApiListener) error("This listener is not supported on DialPhoneApi, use DialPhone instead.")
+            synchronizer.addListener(it)
+        }
     }
 
     override fun sync(): Job = synchronizer.sync(GlobalScope, coroutineDispatcher)

@@ -1,9 +1,9 @@
 package de.mtorials.dialphone.api
 
-import de.mtorials.dialphone.api.listeners.Listener
+import de.mtorials.dialphone.api.listeners.ApiListener
+import de.mtorials.dialphone.api.listeners.GenericListener
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.modules.SerializersModule
 
 interface DialPhoneApiBuilder {
@@ -36,7 +36,7 @@ interface DialPhoneApiBuilder {
     /**
      * Add listener and subclasses
      */
-    fun addListeners(vararg listeners: Listener)
+    fun addListeners(vararg listeners: GenericListener<*>)
 
     /**
      * Can be used to make custom events serializable and extend the functionalities of the library.

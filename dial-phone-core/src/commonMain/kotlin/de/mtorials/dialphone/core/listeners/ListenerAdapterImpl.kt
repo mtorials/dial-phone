@@ -32,7 +32,7 @@ open class ListenerAdapterImpl(
         callbackOnRoomInvited = block
     }
 
-    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneApi, isOld: Boolean) {
+    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone, isOld: Boolean) {
         // TODO not an unchecked cast?
         if (!isOld || receivePastEvents) onEvent(event, roomId.roomId(), phone as DialPhone)
     }
