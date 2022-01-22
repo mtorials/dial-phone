@@ -25,6 +25,7 @@ import de.mtorials.dialphone.core.ids.UserId
 import de.mtorials.dialphone.core.ids.roomId
 import io.ktor.client.*
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 
 class DialPhoneImpl internal constructor(
     token: String,
@@ -33,7 +34,7 @@ class DialPhoneImpl internal constructor(
     client: HttpClient,
     initCallback: suspend (DialPhoneApi) -> Unit,
     val cache: PhoneCache?,
-    coroutineDispatcher: CoroutineDispatcher,
+    coroutineScope: CoroutineScope,
     private val useEncryption: Boolean = true,
     deviceId: String?,
 ) : DialPhone, DialPhoneApiImpl(
@@ -42,14 +43,14 @@ class DialPhoneImpl internal constructor(
     ownId = ownId,
     client = client,
     initCallback = initCallback,
-    coroutineDispatcher = coroutineDispatcher,
+    coroutineScope = coroutineScope,
     deviceId = deviceId,
 ) {
 
     // E2EE
     // TODO impl keystore
-    private val encryptionManager = EncryptionManager(object : KeyStore {}, this)
-    private val e2eeClient: E2EEClient = E2EEClient(client, token, homeserverUrl)
+    val e2eeClient: E2EEClient = E2EEClient(client, token, homeserverUrl)
+    val encryptionManager = EncryptionManager(object : KeyStore {}, this)
     private val decryptionHook = RoomEventDecryptionHook()
 
     override val synchronizer = Synchronizer(

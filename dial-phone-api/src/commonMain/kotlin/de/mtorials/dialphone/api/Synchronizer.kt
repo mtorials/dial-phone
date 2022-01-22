@@ -35,9 +35,8 @@ class Synchronizer(
 
     // TODO add knocked and left
     fun sync(
-        coroutineScope: CoroutineScope,
-        coroutineDispatcher: CoroutineDispatcher
-    ) = coroutineScope.launch(coroutineDispatcher) {
+        coroutineScope: CoroutineScope
+    ) = coroutineScope.launch {
         while(isActive) {
             try {
                 val res : SyncResponse = getSyncResponse()

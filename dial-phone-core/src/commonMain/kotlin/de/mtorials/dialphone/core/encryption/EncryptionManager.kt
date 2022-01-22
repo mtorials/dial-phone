@@ -3,19 +3,19 @@ package de.mtorials.dialphone.core.encryption
 import de.mtorials.dialphone.api.requests.encryption.DeviceKeys
 import de.mtorials.dialphone.api.requests.encryption.KeyUploadRequest
 import de.mtorials.dialphone.api.requests.encryption.SignedDeviceKeys
-import de.mtorials.dialphone.core.DialPhone
+import de.mtorials.dialphone.core.DialPhoneImpl
 import io.github.matrixkt.olm.Account
 
 // TODO abstract the account management
 class EncryptionManager(
     private val keyStore: KeyStore,
-    private val phone: DialPhone,
+    private val phone: DialPhoneImpl,
 ) {
 
     private val account = Account()
     private val deviceId = phone.deviceId ?: error("Need device id for encryption")
 
-    fun publishKeys() {
+    suspend fun publishKeys() {
         val identityKeys = account.identityKeys
         //val signed account.
         val deviceKeys = DeviceKeys(
@@ -39,6 +39,7 @@ class EncryptionManager(
             // TODO impl
             oneTimeKeys = mapOf()
         )
+        phone.e2eeClient.uploadKeys(request)
     }
 
     companion object {

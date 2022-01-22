@@ -30,7 +30,7 @@ class DialPhoneBuilderImpl(
             ownId = me.id,
             deviceId = me.deviceId,
             initCallback = {},
-            coroutineDispatcher = coroutineDispatcher,
+            coroutineScope = coroutineScope,
             cache = cache,
         ).also {
             it.addListeners(*listenerList.toTypedArray())

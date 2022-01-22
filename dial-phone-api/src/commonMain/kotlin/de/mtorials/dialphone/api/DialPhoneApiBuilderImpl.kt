@@ -11,6 +11,7 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -33,7 +34,7 @@ open class DialPhoneApiBuilderImpl(
     private var createUserIfNoRegistered: Boolean = false
     protected val listenerList: MutableList<GenericListener<*>> = mutableListOf()
     protected var customSerializer: SerializersModule = SerializersModule {  }
-    protected var coroutineDispatcher: CoroutineDispatcher = Dispatchers.Default
+    protected var coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
     private var isGuestBool = false
     // TODO remove bot stuff
@@ -65,8 +66,8 @@ open class DialPhoneApiBuilderImpl(
         this.customSerializer = serializersModule
     }
 
-    override fun withCoroutineDispatcher(coroutineDispatcher: CoroutineDispatcher) {
-        this.coroutineDispatcher = coroutineDispatcher
+    override fun withCoroutineDispatcher(coroutineScope: CoroutineScope) {
+        this.coroutineScope = coroutineScope
     }
 
 //    override fun bot(block: DialPhoneApiBuilder.BotBuilder.() -> Unit) {
@@ -154,7 +155,7 @@ open class DialPhoneApiBuilderImpl(
             client = client,
             ownId = apiRequests.getMe().id,
             initCallback = {},
-            coroutineDispatcher = coroutineDispatcher,
+            coroutineScope = coroutineScope,
             deviceId = me.deviceId
         ).also { it.addListeners(*listenerList.toTypedArray()) }
     }

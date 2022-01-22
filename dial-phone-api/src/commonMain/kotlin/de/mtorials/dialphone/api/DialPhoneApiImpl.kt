@@ -12,7 +12,7 @@ open class DialPhoneApiImpl constructor(
     override val ownId: String,
     protected val client: HttpClient,
     protected val initCallback: suspend (DialPhoneApi) -> Unit,
-    protected val coroutineDispatcher: CoroutineDispatcher,
+    protected val coroutineScope: CoroutineScope,
     override val deviceId: String?,
 ) : DialPhoneApi {
 
@@ -33,6 +33,6 @@ open class DialPhoneApiImpl constructor(
         }
     }
 
-    override fun sync(): Job = synchronizer.sync(GlobalScope, coroutineDispatcher)
+    override fun sync(): Job = synchronizer.sync(coroutineScope)
 
 }
