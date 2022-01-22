@@ -2,6 +2,7 @@ package de.mtorials.dialphone.core
 
 import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.DialPhoneApiImpl
+import de.mtorials.dialphone.api.Synchronizer
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.listeners.ApiListener
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
@@ -28,6 +29,7 @@ class DialPhoneImpl internal constructor(
     initCallback: suspend (DialPhoneApi) -> Unit,
     val cache: PhoneCache?,
     coroutineDispatcher: CoroutineDispatcher,
+    decryption: RoomEventDecryptionHook = RoomEventDecryptionHook(),
 ) : DialPhone, DialPhoneApiImpl(
     token = token,
     homeserverUrl = homeserverUrl,
@@ -36,6 +38,8 @@ class DialPhoneImpl internal constructor(
     initCallback = initCallback,
     coroutineDispatcher = coroutineDispatcher,
 ) {
+
+    override val synchronizer = Synchronizer(this, client, initCallback = initCallback, roomEventHook = decryption)
 
     // TODO cast is unchecked, when can it fail?
     override fun addListeners(vararg listener: GenericListener<*>) {

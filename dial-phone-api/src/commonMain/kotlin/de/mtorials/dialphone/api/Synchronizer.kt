@@ -2,6 +2,7 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.exceptions.SyncException
 import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.responses.sync.SyncResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -14,6 +15,7 @@ class Synchronizer(
     private val client: HttpClient,
     private val fullState: Boolean = false,
     private val initCallback: suspend (DialPhoneApi) -> Unit,
+    private val roomEventHook: RoomEventHook? = null,
 ) {
 
     private val listeners: MutableList<GenericListener<DialPhoneApi>> = mutableListOf()
@@ -40,15 +42,18 @@ class Synchronizer(
             try {
                 val res : SyncResponse = getSyncResponse()
                 lastTimeBatch = res.nextBatch
+                // Joined
                 joined.clear()
                 res.roomSync?.join?.forEach { (roomID, roomEvents) ->
                     joined.add(roomID)
-                    roomEvents.timeline.events.forEach { event ->
+                    roomEvents.timeline.events.forEach { e ->
+                        val event = roomEventHook?.manipulateEvent(e) ?: e
                         listeners.forEach {
                             launch { it.onRoomEvent(event, roomID, phone, initialSync) }
                         }
                     }
                 }
+                // Invited
                 invited.clear()
                 res.roomSync?.invite?.forEach { (roomID, roomEvents) ->
                     invited.add(roomID)
@@ -60,7 +65,6 @@ class Synchronizer(
                 }
                 if (initialSync) initCallback(phone)
                 initialSync = false
-                //println(lastTimeBatch)
             } catch (e: RuntimeException) {
                 e.printStackTrace()
             }
