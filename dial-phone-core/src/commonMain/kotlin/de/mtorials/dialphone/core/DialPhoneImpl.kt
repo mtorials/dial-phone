@@ -26,6 +26,7 @@ import de.mtorials.dialphone.core.ids.roomId
 import io.ktor.client.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class DialPhoneImpl internal constructor(
     token: String,
@@ -58,6 +59,10 @@ class DialPhoneImpl internal constructor(
         initCallback = initCallback,
         roomEventHook = if (useEncryption) decryptionHook else null
     )
+
+    init {
+        coroutineScope.launch { encryptionManager.publishKeys() }
+    }
 
     // TODO cast is unchecked, when can it fail?
     override fun addListeners(vararg listener: GenericListener<*>) {
