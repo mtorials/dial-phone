@@ -1,5 +1,7 @@
 package de.mtorials.dialphone.api.model.mevents.roommessage
 
+import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm
+import io.ktor.http.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,6 +23,6 @@ class MRoomEncrypted(
         val sessionId: String,
         @SerialName("device_id")
         val deviceId: String,
-        val algorithm: String
+        val algorithm: MessageEncryptionAlgorithm
     ) : MessageEventContent
 }
