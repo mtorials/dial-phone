@@ -17,7 +17,6 @@ class EncryptionManager(
 
     suspend fun publishKeys() {
         val identityKeys = account.identityKeys
-        //val signed account.
         val deviceKeys = DeviceKeys(
             // TODO wrong...
             algorithms = listOf("m.olm.v1.curve25519-aes-sha2", "m.megolm.v1.aes-sha2"),
@@ -37,9 +36,20 @@ class EncryptionManager(
         val request = KeyUploadRequest(
             deviceKeys = signedDeviceKeys,
             // TODO impl
-            oneTimeKeys = mapOf()
+            oneTimeKeys = createOnTimeKeyMap()
         )
         phone.e2eeClient.uploadKeys(request)
+        account.markOneTimeKeysAsPublished()
+    }
+
+    // TODO signing of the keys!
+    private fun createOnTimeKeyMap() : Map<String, String> {
+        val onetimes = account.oneTimeKeys
+        val keyMap: MutableMap<String, String> = mutableMapOf()
+        onetimes.curve25519.forEach { (id, key) ->
+            keyMap[id] = key
+        }
+        return keyMap
     }
 
     companion object {
