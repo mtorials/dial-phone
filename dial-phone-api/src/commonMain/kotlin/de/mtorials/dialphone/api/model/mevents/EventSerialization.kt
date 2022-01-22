@@ -5,6 +5,10 @@ import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomEncrypted
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomRedaction
 import de.mtorials.dialphone.api.model.mevents.roomstate.*
+import de.mtorials.dialphone.api.model.mevents.todevice.MDummy
+import de.mtorials.dialphone.api.model.mevents.todevice.MForwardedRoomKey
+import de.mtorials.dialphone.api.model.mevents.todevice.MRoomKey
+import de.mtorials.dialphone.api.model.mevents.todevice.MRoomKeyRequest
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
@@ -34,6 +38,13 @@ object EventSerialization {
             subclass(MRoomJoinRules::class)
             subclass(MRoomMember::class)
             subclass(MRoomName::class)
+            subclass(MRoomEncryption::class)
+
+            // to device
+            subclass(MRoomKey::class)
+            subclass(MRoomKeyRequest::class)
+            subclass(MForwardedRoomKey::class)
+            subclass(MDummy::class)
 
         }
 
@@ -46,6 +57,7 @@ object EventSerialization {
             subclass(MRoomJoinRules::class)
             subclass(MRoomMember::class)
             subclass(MRoomName::class)
+            subclass(MRoomEncryption::class)
         }
 
         polymorphic(MRoomMessage.MRoomMessageContent::class) {
