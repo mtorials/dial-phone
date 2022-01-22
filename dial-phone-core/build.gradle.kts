@@ -3,6 +3,15 @@ plugins {
     kotlin("plugin.serialization")
 }
 
+repositories {
+    maven("https://maven.pkg.github.com/Dominaezzz/matrix-kt") {
+        credentials {
+            username = "mtorials"
+            password = "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"
+        }
+    }
+}
+
 kotlin {
     jvm {
         compilations.all {
@@ -28,6 +37,8 @@ kotlin {
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
+
+                implementation("io.github.matrixkt:olm:0.1.8")
             }
         }
     }
