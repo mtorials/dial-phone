@@ -146,14 +146,16 @@ open class DialPhoneApiBuilderImpl(
         block()
         configure()
         // TODO necessary here?
-        val id = APIRequests(homeserverUrl = homeserverUrl, token = token!!, client = client).getMe().id
+        val apiRequests = APIRequests(homeserverUrl = homeserverUrl, token = token!!, client = client)
+        val me = apiRequests.getMe()
         return DialPhoneApiImpl(
             token = token!!,
             homeserverUrl = homeserverUrl,
             client = client,
-            ownId = id,
+            ownId = apiRequests.getMe().id,
             initCallback = {},
             coroutineDispatcher = coroutineDispatcher,
+            deviceId = me.deviceId
         ).also { it.addListeners(*listenerList.toTypedArray()) }
     }
 

@@ -16,9 +16,13 @@ import io.ktor.http.HttpMethod.Companion.Post
 import io.ktor.http.HttpMethod.Companion.Get
 
 class APIRequests(
-    private val token: String,
-    private val homeserverUrl: String,
-    private val client: HttpClient
+    token: String,
+    homeserverUrl: String,
+    client: HttpClient
+) : MatrixClient(
+    token = token,
+    homeserverUrl = homeserverUrl,
+    client = client,
 ) {
 
     private val random = Random(getTimeMillis().toInt() * 2834)
@@ -39,8 +43,6 @@ class APIRequests(
         request(Get, "directory/room/${encode(alias)}")
     suspend fun createRoom(request: RoomCreateRequest) : RoomResponse =
         request(Post, "createRoom", bodyValue = request)
-    suspend fun uploadKeys(request: KeyUploadRequest) : KeyUploadResponse =
-        request(Post, "keys/upload", bodyValue = request)
 
     // Events
     suspend fun sendMessageEvent(
@@ -81,24 +83,4 @@ class APIRequests(
                 val displayname: String = displayName
             }
         )
- 
-    private suspend inline fun <reified T> request(
-        httpMethod: HttpMethod,
-        path: String,
-        vararg parameters: Pair<String, String> = arrayOf(),
-        bodyValue: Any? = null
-    ) : T {
-        val newPath = homeserverUrl + DialPhoneApi.MATRIX_PATH + path
-        return client.request {
-            url(newPath)
-            method = httpMethod
-            header("Authorization", "Bearer $token")
-            header("Content-Type", "application/json")
-            parameters.forEach { parameter(it.first, it.second) }
-            if (bodyValue != null) body = bodyValue
-        }
-    }
-
-    // Useless hopefully
-    private fun encode(input: String) = input
 }

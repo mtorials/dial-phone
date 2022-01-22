@@ -3,6 +3,15 @@ plugins {
     kotlin("plugin.serialization")
 }
 
+repositories {
+    maven("https://maven.pkg.github.com/Dominaezzz/matrix-kt") {
+        credentials {
+            username = "mtorials"
+            password = "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"
+        }
+    }
+}
+
 kotlin {
     jvm {
         compilations.all {
@@ -21,6 +30,7 @@ kotlin {
 
                 // MODULES
                 implementation(project(":dial-phone-api"))
+                implementation(project(":dial-phone-core"))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")

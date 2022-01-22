@@ -22,12 +22,13 @@ class DialPhoneBuilderImpl(
         block()
         this.configure()
         // TODO necessary here?
-        val id = APIRequests(homeserverUrl = homeserverUrl, token = token!!, client = client).getMe().id
+        val me = APIRequests(homeserverUrl = homeserverUrl, token = token!!, client = client).getMe()
         return DialPhoneImpl(
             token = this.token!!,
             homeserverUrl = homeserverUrl,
             client = client,
-            ownId = id,
+            ownId = me.id,
+            deviceId = me.deviceId,
             initCallback = {},
             coroutineDispatcher = coroutineDispatcher,
             cache = cache,

@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.core
+package de.mtorials.dialphone.core.encryption
 
 import de.mtorials.dialphone.api.RoomEventHook
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent

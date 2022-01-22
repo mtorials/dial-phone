@@ -21,6 +21,12 @@ interface DialPhoneApi {
     val ownId: String
 
     /**
+     * The device id
+     * Null in case of an application service or similar
+     */
+    val deviceId: String?
+
+    /**
      * The url of the homeserver
      */
     val homeserverUrl: String

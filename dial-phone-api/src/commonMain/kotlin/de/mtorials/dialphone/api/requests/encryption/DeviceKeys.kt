@@ -3,20 +3,21 @@ package de.mtorials.dialphone.api.requests.encryption
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+
 /**
  * https://spec.matrix.org/v1.1/client-server-api/#key-management-api
  */
 @Serializable
-data class DeviceKeys(
-    val algorithms: List<String>,
+open class DeviceKeys(
+    open val algorithms: List<String>,
     @SerialName("device_id")
-    val deviceId: String,
-    val keys: Map<String, String>,
+    open val deviceId: String,
     /**
-     * Signatures for the device key object. A map from user ID, to a map from <algorithm>:<device_id> to the signature.
-     * The signature is calculated using the process described at Signing JSON.
+     * Public identity keys.
+     * The names of the properties should be in the format <algorithm>:<device_id>.
+     * The keys themselves should be encoded as specified by the key algorithm.
      */
-    val signatures: Map<String, Map<String, String>>,
+    open val keys: Map<String, String>,
     @SerialName("user_id")
-    val userId: String,
+    open val userId: String,
 )
