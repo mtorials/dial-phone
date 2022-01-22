@@ -32,6 +32,8 @@ kotlin {
 
                 implementation("ch.qos.logback:logback-core:$logbackVersion")
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
+
+                implementation("io.github.matrixkt:olm-jvm:0.1.8")
             }
         }
         val jvmTest by getting {
@@ -52,6 +54,8 @@ kotlin {
 
                 implementation("ch.qos.logback:logback-core:$logbackVersion")
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
+
+                implementation("io.github.matrixkt:olm-jvm:0.1.8")
             }
         }
     }

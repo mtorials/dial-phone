@@ -13,6 +13,7 @@ open class DialPhoneApiImpl constructor(
     protected val client: HttpClient,
     protected val initCallback: suspend (DialPhoneApi) -> Unit,
     protected val coroutineDispatcher: CoroutineDispatcher,
+    override val deviceId: String?,
 ) : DialPhoneApi {
 
     override val apiRequests = APIRequests(

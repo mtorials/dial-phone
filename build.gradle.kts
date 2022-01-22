@@ -29,6 +29,12 @@ allprojects {
                 create<HttpHeaderAuthentication>("header")
             }
         }
+        maven("https://maven.pkg.github.com/Dominaezzz/matrix-kt") {
+            credentials {
+                username = "mtorials"
+                password = "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"
+            }
+        }
     }
 }
 

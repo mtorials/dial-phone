@@ -9,12 +9,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class KeyUploadRequest(
     @SerialName("device_keys")
-    val deviceKeys: DeviceKeys,
+    val deviceKeys: SignedDeviceKeys? = null,
     @SerialName("one_time_keys")
     /**
      * One-time public keys for “pre-key” messages.
      * The names of the properties should be in the format <algorithm>:<key_id>.
      * The format of the key is determined by the key algorithm.
      */
-    val oneTimeKeys: Map<String, String>,
+    val oneTimeKeys: Map<String, String>? = null,
 )

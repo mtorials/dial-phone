@@ -2,14 +2,19 @@ package de.mtorials.dialphone.core
 
 import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.DialPhoneApiImpl
+import de.mtorials.dialphone.api.RoomEventHook
 import de.mtorials.dialphone.api.Synchronizer
 import de.mtorials.dialphone.api.listeners.GenericListener
-import de.mtorials.dialphone.api.listeners.ApiListener
+import de.mtorials.dialphone.api.requests.encryption.DeviceKeys
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
 import de.mtorials.dialphone.api.responses.UserWithoutIDResponse
 import de.mtorials.dialphone.core.actions.InvitedRoomActions
 import de.mtorials.dialphone.core.actions.InvitedRoomActionsImpl
 import de.mtorials.dialphone.core.cache.PhoneCache
+import de.mtorials.dialphone.core.encryption.E2EEClient
+import de.mtorials.dialphone.core.encryption.EncryptionManager
+import de.mtorials.dialphone.core.encryption.KeyStore
+import de.mtorials.dialphone.core.encryption.RoomEventDecryptionHook
 import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entities.UserImpl
 import de.mtorials.dialphone.core.entityfutures.RoomFuture
@@ -29,7 +34,8 @@ class DialPhoneImpl internal constructor(
     initCallback: suspend (DialPhoneApi) -> Unit,
     val cache: PhoneCache?,
     coroutineDispatcher: CoroutineDispatcher,
-    decryption: RoomEventDecryptionHook = RoomEventDecryptionHook(),
+    private val useEncryption: Boolean = true,
+    deviceId: String?,
 ) : DialPhone, DialPhoneApiImpl(
     token = token,
     homeserverUrl = homeserverUrl,
@@ -37,9 +43,20 @@ class DialPhoneImpl internal constructor(
     client = client,
     initCallback = initCallback,
     coroutineDispatcher = coroutineDispatcher,
+    deviceId = deviceId,
 ) {
 
-    override val synchronizer = Synchronizer(this, client, initCallback = initCallback, roomEventHook = decryption)
+    // E2EE
+    // TODO impl keystore
+    private val encryptionManager = EncryptionManager(object : KeyStore {}, this)
+    private val e2eeClient: E2EEClient = E2EEClient(client, token, homeserverUrl)
+    private val decryptionHook = RoomEventDecryptionHook()
+
+    override val synchronizer = Synchronizer(
+        this, client,
+        initCallback = initCallback,
+        roomEventHook = if (useEncryption) decryptionHook else null
+    )
 
     // TODO cast is unchecked, when can it fail?
     override fun addListeners(vararg listener: GenericListener<*>) {
@@ -52,9 +69,6 @@ class DialPhoneImpl internal constructor(
     override suspend fun getInvitedRoomActions(): List<InvitedRoomActions> = synchronizer.invitedRoomIds.map {
         InvitedRoomActionsImpl(this, it.roomId())
     }
-
-    //override suspend fun getJoinedRoomFutures() : List<RoomFuture> =
-    //    requestObject.getJoinedRooms().roomIds.map { id -> RoomFutureImpl(id, this@DialPhoneImpl) }
 
     override suspend fun getUserById(id: UserId) : User? {
         // Check cache
