@@ -6,12 +6,18 @@ import de.mtorials.dialphone.api.model.mevents.presence.MPresence
 
 @Serializable
 class SyncResponse(
-    @SerialName("presence")
-    val presenceEvents: SyncPresence? = null,
-    @SerialName("rooms")
-    val roomSync: SyncRooms? = null,
+    val presence: SyncPresence? = null,
+    val rooms: SyncRooms? = null,
     @SerialName("next_batch")
-    val nextBatch: String? = null,
+    val nextBatch: String,
+    @SerialName("to_device")
+    val toDevice: ToDevice? = null,
+    @SerialName("device_one_time_keys_count")
+    val deviceOneTimeKeysCount: Map<String, Int>? = null,
+    @SerialName("devices_list")
+    val devicesList: Map<String, List<String>>? = null,
+    @SerialName("account_data")
+    val accountData: AccountData? = null,
 ) {
     
     @Serializable
@@ -24,5 +30,10 @@ class SyncResponse(
     @Serializable
     class SyncPresence(
         val events: List<MPresence>
+    )
+    @Serializable
+    data class ToDevice(
+        val changed: List<String>,
+        val left: List<String>,
     )
 }

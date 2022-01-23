@@ -2,7 +2,6 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.exceptions.SyncException
 import de.mtorials.dialphone.api.listeners.GenericListener
-import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.responses.sync.SyncResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -43,7 +42,7 @@ class Synchronizer(
                 lastTimeBatch = res.nextBatch
                 // Joined
                 joined.clear()
-                res.roomSync?.join?.forEach { (roomID, roomEvents) ->
+                res.rooms?.join?.forEach { (roomID, roomEvents) ->
                     joined.add(roomID)
                     roomEvents.timeline.events.forEach { e ->
                         val event = roomEventHook?.manipulateEvent(e) ?: e
@@ -54,7 +53,7 @@ class Synchronizer(
                 }
                 // Invited
                 invited.clear()
-                res.roomSync?.invite?.forEach { (roomID, roomEvents) ->
+                res.rooms?.invite?.forEach { (roomID, roomEvents) ->
                     invited.add(roomID)
                     roomEvents.inviteState.events.forEach { event ->
                         listeners.forEach {
