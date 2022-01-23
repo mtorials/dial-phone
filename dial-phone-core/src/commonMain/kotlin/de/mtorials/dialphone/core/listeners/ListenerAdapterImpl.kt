@@ -11,6 +11,8 @@ import de.mtorials.dialphone.core.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.core.dialevents.RoomInviteEvent
 import de.mtorials.dialphone.core.ids.RoomId
 import de.mtorials.dialphone.core.ids.roomId
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -19,6 +21,7 @@ import kotlinx.coroutines.launch
  */
 open class ListenerAdapterImpl(
     private val receivePastEvents: Boolean = false,
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) : ListenerAdapter {
 
     protected open var callbackOnMessageReceived : EventCallback<MessageReceivedEvent> = {}
@@ -37,9 +40,12 @@ open class ListenerAdapterImpl(
         if (!isOld || receivePastEvents) onEvent(event, roomId.roomId(), phone as DialPhone)
     }
 
+    override fun onToDeviceEvent(event: MatrixEvent, phone: DialPhone, isOld: Boolean) = Unit
+    override fun onPresenceEvent(event: MatrixEvent, phone: DialPhone, isOld: Boolean) = Unit
+
     protected fun onEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhone) {
         when(event) {
-            is MRoomMessage -> GlobalScope.launch { callbackOnMessageReceived(
+            is MRoomMessage -> coroutineScope.launch { callbackOnMessageReceived(
                 MessageReceivedEvent(
                     roomID = roomId,
                     phone = phone,
@@ -47,7 +53,7 @@ open class ListenerAdapterImpl(
                 )
             ) }
             is MRoomMember -> when (event.content.membership) {
-                Membership.INVITE -> if (event.stateKey == phone.ownId) GlobalScope.launch {
+                Membership.INVITE -> if (event.stateKey == phone.ownId) coroutineScope.launch {
                     callbackOnRoomInvited(
                         RoomInviteEvent(
                             roomId = roomId,
