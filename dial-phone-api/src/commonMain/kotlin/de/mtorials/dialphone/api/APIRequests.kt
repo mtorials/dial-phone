@@ -25,8 +25,6 @@ class APIRequests(
     client = client,
 ) {
 
-    private val random = Random(getTimeMillis().toInt() * 2834)
-
     suspend fun discoverRooms() : RoomDiscovery = request(Get, "publicRooms")
     suspend fun getJoinedRooms() : JoinedRooms = request(Get, "joined_rooms")
     suspend fun getMe() : UserResponse = request(Get, "account/whoami")
