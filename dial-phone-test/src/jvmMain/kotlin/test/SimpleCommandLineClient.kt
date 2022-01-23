@@ -23,7 +23,7 @@ fun main() {
             addListeners(ListenerAdapter {
                 onRoomInvited { it.invitedRoomActions.join() }
             })
-            ktorLogLevel = LogLevel.INFO
+            ktorLogLevel = LogLevel.ALL
         }
         val room = phone.createRoom("The Riders") {
             makePublic()

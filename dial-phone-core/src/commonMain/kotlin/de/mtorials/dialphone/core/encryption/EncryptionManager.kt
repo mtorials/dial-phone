@@ -5,6 +5,7 @@ import de.mtorials.dialphone.api.requests.encryption.KeyUploadRequest
 import de.mtorials.dialphone.api.requests.encryption.SignedDeviceKeys
 import de.mtorials.dialphone.core.DialPhoneImpl
 import io.github.matrixkt.olm.Account
+import io.github.matrixkt.olm.OutboundGroupSession
 import io.github.matrixkt.olm.Session
 
 // TODO abstract the account management
@@ -30,6 +31,11 @@ class EncryptionManager(
         e2eeStore.olmSessionsBySenderKey[senderKey] = newSession
         return newSession
     }
+
+//    fun decryptMegolm() : String {
+//        // TODO use secure random
+//        OutboundGroupSession()
+//    }
 
     suspend fun publishKeys() {
         val identityKeys = account.identityKeys

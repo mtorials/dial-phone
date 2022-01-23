@@ -55,6 +55,7 @@ class DialPhoneImpl internal constructor(
     )
 
     init {
+        synchronizer.addListener(EncryptionListener(encryptionManager))
         coroutineScope.launch { encryptionManager.publishKeys() }
     }
 

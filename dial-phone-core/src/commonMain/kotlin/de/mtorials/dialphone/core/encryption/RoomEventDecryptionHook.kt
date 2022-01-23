@@ -18,8 +18,13 @@ class RoomEventDecryptionHook(
         if (event !is MRoomEncrypted) return event
         return when (event.content.algorithm) {
             OLM_V1_CURVE25519_AES_SHA1 -> handleOlm(event)
-            MEGOLM_V1_AES_SHA2 -> TODO("implement megolm decryption")
+            MEGOLM_V1_AES_SHA2 -> handleMegOlm(event)
         }
+    }
+
+    private fun handleMegOlm(event: MRoomEncrypted) : MatrixEvent {
+        // TODO replay attack message index
+        TODO("implement megolm")
     }
 
     private fun handleOlm(event: MRoomEncrypted) : MatrixEvent {
@@ -40,6 +45,7 @@ class RoomEventDecryptionHook(
             type = cypher.second.type.toLong())
         )
         println(plainText)
+        // TODO check sender, recipeint, keys, recipient keys
         TODO("impl serialization")
     }
 }
