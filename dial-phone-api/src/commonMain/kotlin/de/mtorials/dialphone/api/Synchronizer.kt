@@ -61,6 +61,18 @@ class Synchronizer(
                         }
                     }
                 }
+                // To device
+                res.toDevice?.events?.forEach { event ->
+                    listeners.forEach {
+                        launch { it.onToDeviceEvent(event, phone, initialSync) }
+                    }
+                }
+                // Presence
+                res.presence?.events?.forEach { event ->
+                    listeners.forEach {
+                        launch { it.onPresenceEvent(event, phone, initialSync) }
+                    }
+                }
                 if (initialSync) initCallback(phone)
                 initialSync = false
             } catch (e: RuntimeException) {
