@@ -2,19 +2,14 @@ package de.mtorials.dialphone.core
 
 import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.DialPhoneApiImpl
-import de.mtorials.dialphone.api.RoomEventHook
 import de.mtorials.dialphone.api.Synchronizer
 import de.mtorials.dialphone.api.listeners.GenericListener
-import de.mtorials.dialphone.api.requests.encryption.DeviceKeys
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
 import de.mtorials.dialphone.api.responses.UserWithoutIDResponse
 import de.mtorials.dialphone.core.actions.InvitedRoomActions
 import de.mtorials.dialphone.core.actions.InvitedRoomActionsImpl
 import de.mtorials.dialphone.core.cache.PhoneCache
-import de.mtorials.dialphone.core.encryption.E2EEClient
-import de.mtorials.dialphone.core.encryption.EncryptionManager
-import de.mtorials.dialphone.core.encryption.KeyStore
-import de.mtorials.dialphone.core.encryption.RoomEventDecryptionHook
+import de.mtorials.dialphone.core.encryption.*
 import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entities.UserImpl
 import de.mtorials.dialphone.core.entityfutures.RoomFuture
@@ -24,7 +19,6 @@ import de.mtorials.dialphone.core.ids.RoomId
 import de.mtorials.dialphone.core.ids.UserId
 import de.mtorials.dialphone.core.ids.roomId
 import io.ktor.client.*
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -51,8 +45,8 @@ class DialPhoneImpl internal constructor(
     // E2EE
     // TODO impl keystore
     val e2eeClient: E2EEClient = E2EEClient(client, token, homeserverUrl)
-    val encryptionManager = EncryptionManager(object : KeyStore {}, this)
-    private val decryptionHook = RoomEventDecryptionHook()
+    val encryptionManager = EncryptionManager(InMemoryE2EEStore(), this)
+    private val decryptionHook = RoomEventDecryptionHook(encryptionManager)
 
     override val synchronizer = Synchronizer(
         this, client,

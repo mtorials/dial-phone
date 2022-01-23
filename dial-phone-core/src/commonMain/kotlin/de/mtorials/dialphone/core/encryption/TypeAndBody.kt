@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.api.model.mevents
+package de.mtorials.dialphone.core.encryption
 
 import kotlinx.serialization.Serializable
 
