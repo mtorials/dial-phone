@@ -1,8 +1,6 @@
 package de.mtorials.dialphone.api.model.mevents.roommessage
 
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm
-import de.mtorials.dialphone.api.model.mevents.TypeAndBody
-import io.ktor.http.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -20,7 +18,8 @@ class MRoomEncrypted(
         @SerialName("sender_key")
         val senderKey: String? = null,
         @SerialName("ciphertext")
-        val cipherText: Pair<String, TypeAndBody>,
+        // can be string with megolm, can be object with olm
+        val cipherText: String,
         @SerialName("session_id")
         val sessionId: String? = null,
         @SerialName("device_id")
