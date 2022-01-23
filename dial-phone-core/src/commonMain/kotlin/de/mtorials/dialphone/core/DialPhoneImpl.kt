@@ -2,6 +2,7 @@ package de.mtorials.dialphone.core
 
 import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.DialPhoneApiImpl
+import de.mtorials.dialphone.api.E2EEClient
 import de.mtorials.dialphone.api.Synchronizer
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.responses.DiscoveredRoom

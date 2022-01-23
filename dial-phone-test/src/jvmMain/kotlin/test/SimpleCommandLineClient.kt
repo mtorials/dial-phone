@@ -34,6 +34,7 @@ fun main() {
         while(true) {
             val msg = readln()
             if (msg == "exit") break
+            if (msg == "!ping") phone.getJoinedRoomFutures().forEach { it.sendTextMessage("ping!") }
             room.sendTextMessage(msg)
         }
     }

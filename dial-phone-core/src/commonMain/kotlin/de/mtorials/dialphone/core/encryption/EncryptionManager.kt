@@ -7,6 +7,9 @@ import de.mtorials.dialphone.core.DialPhoneImpl
 import io.github.matrixkt.olm.Account
 import io.github.matrixkt.olm.OutboundGroupSession
 import io.github.matrixkt.olm.Session
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlin.random.Random
 
 // TODO abstract the account management
 // TODO remember account
@@ -40,7 +43,6 @@ class EncryptionManager(
     suspend fun publishKeys() {
         val identityKeys = account.identityKeys
         val deviceKeys = DeviceKeys(
-            // TODO make both available
             algorithms = listOf(
                 "m.olm.v1.curve25519-aes-sha2",
                 "m.megolm.v1.aes-sha2",
@@ -63,16 +65,20 @@ class EncryptionManager(
             // TODO impl
             oneTimeKeys = createOnTimeKeyMap()
         )
+        // TODO remove
+        Json { prettyPrint = true }.encodeToString(request).run { println(this) }
         phone.e2eeClient.uploadKeys(request)
         account.markOneTimeKeysAsPublished()
     }
 
     // TODO signing of the keys!
     private fun createOnTimeKeyMap() : Map<String, String> {
+        // TODO use secure random?
+        account.generateOneTimeKeys(10, random = Random)
         val onetimes = account.oneTimeKeys
         val keyMap: MutableMap<String, String> = mutableMapOf()
         onetimes.curve25519.forEach { (id, key) ->
-            keyMap[id] = key
+            keyMap["$CURVE25519:$id"] = key
         }
         return keyMap
     }

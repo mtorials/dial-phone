@@ -3,7 +3,6 @@ package de.mtorials.dialphone.core.encryption
 import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
-import de.mtorials.dialphone.core.DialPhone
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

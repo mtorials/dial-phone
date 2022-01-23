@@ -3,12 +3,16 @@ package de.mtorials.dialphone.api
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.util.date.*
+import kotlin.random.Random
 
 abstract class MatrixClient(
     protected val homeserverUrl: String,
     protected val client: HttpClient,
     protected val token: String,
 ) {
+
+    protected val random = Random(getTimeMillis().toInt() * 2834)
 
     protected suspend inline fun <reified T> request(
         httpMethod: HttpMethod,
