@@ -2,9 +2,11 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.requests.SendToDeviceRequest
 import de.mtorials.dialphone.api.requests.encryption.KeyClaimRequest
+import de.mtorials.dialphone.api.requests.encryption.KeyQueryRequest
 import de.mtorials.dialphone.api.requests.encryption.KeyUploadRequest
 import de.mtorials.dialphone.api.responses.EventResponse
 import de.mtorials.dialphone.api.responses.encryption.KeyClaimResponse
+import de.mtorials.dialphone.api.responses.encryption.KeyQueryResponse
 import de.mtorials.dialphone.api.responses.encryption.KeyUploadResponse
 import io.ktor.client.*
 import io.ktor.http.*
@@ -27,6 +29,9 @@ class E2EEClient(
      */
     suspend fun claimKeys(request: KeyClaimRequest) : KeyClaimResponse =
         request(HttpMethod.Post, "keys/claim", bodyValue = request)
+
+    suspend fun queryKeys(request: KeyQueryRequest) : KeyQueryResponse =
+        request(HttpMethod.Post, "keys/query", bodyValue = request)
 
     suspend fun sendEventToDevice(
         eventType: String,
