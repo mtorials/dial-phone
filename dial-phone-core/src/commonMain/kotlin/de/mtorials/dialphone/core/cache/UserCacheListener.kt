@@ -17,6 +17,10 @@ class UserCacheListener(
     override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneApi, isOld: Boolean) {
         cache(event, roomId.roomId())
     }
+
+    override fun onToDeviceEvent(event: MatrixEvent, phone: DialPhoneApi, isOld: Boolean) = Unit
+    override fun onPresenceEvent(event: MatrixEvent, phone: DialPhoneApi, isOld: Boolean) = Unit
+
     private fun cache(event: MatrixEvent, roomId: RoomId) {
         if (event !is MRoomMember) return
         cache.users[event.stateKey] = UserImpl(
