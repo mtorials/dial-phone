@@ -1,9 +1,6 @@
 package de.mtorials.dialphone.core.encryption
 
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.*
 
@@ -17,11 +14,22 @@ object EncryptionUtilities {
 // TODO TESTING!
 class CanonicalSerializer : KSerializer<JsonElement> by JsonElement.serializer() {
     override fun serialize(encoder: Encoder, value: JsonElement) {
-        val e = buildJsonObject {
-            value.jsonObject.entries.sortedBy { it.key }.forEach { (key, value) ->
-                put(key, value)
-            }
-        }
+        val e = sortJsonElement(value)
         return JsonElement.serializer().serialize(encoder, e)
+    }
+
+    private fun sortJsonElement(value: JsonElement) : JsonElement {
+        if (value is JsonObject) {
+            val obj = buildJsonObject {
+                value.entries.sortedBy { (key, _) ->
+                    key
+                }.forEach { (key, el) ->
+                    val sortedEl = if (el is JsonObject) sortJsonElement(el) else el
+                    put(key, sortedEl)
+                }
+            }
+            return obj
+        }
+        return value
     }
 }
