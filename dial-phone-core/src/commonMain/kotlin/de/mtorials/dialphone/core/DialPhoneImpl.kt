@@ -22,6 +22,7 @@ import de.mtorials.dialphone.core.ids.roomId
 import io.ktor.client.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 
 class DialPhoneImpl internal constructor(
     token: String,
@@ -33,6 +34,7 @@ class DialPhoneImpl internal constructor(
     coroutineScope: CoroutineScope,
     private val useEncryption: Boolean = true,
     deviceId: String?,
+    dialPhoneJson: Json,
 ) : DialPhone, DialPhoneApiImpl(
     token = token,
     homeserverUrl = homeserverUrl,
@@ -45,8 +47,14 @@ class DialPhoneImpl internal constructor(
 
     // E2EE
     // TODO impl keystore
-    val e2eeClient: E2EEClient = E2EEClient(client, token, homeserverUrl)
-    val encryptionManager = EncryptionManager(InMemoryE2EEStore(), this)
+    private val encryptionManager = EncryptionManager(
+        store = InMemoryE2EEStore(),
+        client = E2EEClient(client, token, homeserverUrl),
+        deviceId = deviceId ?: throw RuntimeException("DialPhone has no device id. This is possible if used as an appservice"),
+        ownId = ownId,
+        phone = this,
+        dialPhoneJson = dialPhoneJson,
+    )
     private val decryptionHook = RoomEventDecryptionHook(encryptionManager)
 
     override val synchronizer = Synchronizer(

@@ -32,6 +32,7 @@ class DialPhoneBuilderImpl(
             initCallback = {},
             coroutineScope = coroutineScope,
             cache = cache,
+            dialPhoneJson = format,
         ).also {
             it.addListeners(*listenerList.toTypedArray())
             if (cache != null) this.addListeners(UserCacheListener(

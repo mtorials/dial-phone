@@ -11,10 +11,10 @@ class MRoomEncrypted(
     override val sender: String,
     @SerialName("event_id")
     override val id: String,
-    override val content: Content
+    override val content: MRoomEncryptedContent
 ) : MatrixMessageEvent {
     @Serializable
-    data class Content(
+    data class MRoomEncryptedContent(
         @SerialName("sender_key")
         val senderKey: String? = null,
         @SerialName("ciphertext")
