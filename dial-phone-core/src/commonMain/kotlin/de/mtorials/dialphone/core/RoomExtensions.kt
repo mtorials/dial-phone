@@ -11,12 +11,12 @@ import kotlinx.coroutines.launch
 /**
  * Write a message to the room
  */
-infix fun RoomActions.write(message: String) = GlobalScope.launch { this@write.sendTextMessage(message) }
+suspend infix fun RoomActions.write(message: String) = this@write.sendTextMessage(message)
 
 /**
  * rename the room
  */
-infix fun RoomActions.rename(name: String) = setName(name)
+suspend infix fun RoomActions.rename(name: String) = setName(name)
 
 /**
  * Send a message and get back a message future to for example redact the message
@@ -64,6 +64,4 @@ suspend fun RoomActions.sendImageWithUrl(url: String, title: String? = null) : S
 /**
  * Change the name of the room
  */
-fun RoomActions.setName(name: String) = GlobalScope.launch {
-    this@setName.sendStateEvent(MRoomName.Content(name = name), "m.room.name")
-}
+suspend fun RoomActions.setName(name: String) = this@setName.sendStateEvent(MRoomName.Content(name = name), "m.room.name")

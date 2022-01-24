@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.api.requests
 
 import de.mtorials.dialphone.api.model.mevents.EventContent
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 
 /**

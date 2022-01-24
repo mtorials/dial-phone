@@ -18,24 +18,28 @@ fun main() {
         val phone = DialPhone("http://localhost:8008") {
             asUser("superman", "test", true)
             addListeners(MessageListener(false) { event ->
-                event.run { println("${message.author.receive().displayName} : ${message.body}") }
+                event.run { println("${message.author.userId} : ${message.body}") }
             })
             addListeners(ListenerAdapter {
                 onRoomInvited { it.invitedRoomActions.join() }
             })
-            ktorLogLevel = LogLevel.ALL
+            ktorLogLevel = LogLevel.BODY
         }
-        val room = phone.createRoom("The Riders") {
-            makePublic()
-            topic = "please come and ride with me"
-        }
+//        val room = phone.createRoom("The Riders") {
+//            makePublic()
+//            topic = "please come and ride with me"
+//        }
         println("Created room, start syncing...")
         phone.sync()
         while(true) {
             val msg = readln()
             if (msg == "exit") break
-            if (msg == "!ping") phone.getJoinedRoomFutures().forEach { it.sendTextMessage("ping!") }
-            room.sendTextMessage(msg)
+            if (msg == "!ping") phone.getJoinedRoomFutures().forEach {
+                print(it.receive().name)
+                it.sendTextMessage("ping!")
+            }
+//            else room.sendTextMessage(msg)
+            println()
         }
     }
 }

@@ -4,7 +4,7 @@ import de.mtorials.dialphone.api.RoomEventHook
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm.*
-import de.mtorials.dialphone.core.exceptions.UnexpectedEncryptionAlgorithmException
+import de.mtorials.dialphone.core.exceptions.encryption.UnexpectedEncryptionAlgorithmException
 
 class RoomEventDecryptionHook(
     private val manager: EncryptionManager,

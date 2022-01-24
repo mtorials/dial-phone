@@ -12,6 +12,7 @@ abstract class MatrixClient(
     protected val token: String,
 ) {
 
+    // TODO only positive txids
     protected val random = Random(getTimeMillis().toInt() * 2834)
 
     protected suspend inline fun <reified T> request(

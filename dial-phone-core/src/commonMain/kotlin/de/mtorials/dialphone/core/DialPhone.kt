@@ -15,20 +15,16 @@ import de.mtorials.dialphone.core.ids.UserId
 
 interface DialPhone : DialPhoneApi {
 
-//    /**
-//     * The cache
-//     */
-//    val cache: PhoneCache
-
     /**
      * @return Returns the entity futures of all rooms the user has joined
      */
     suspend fun getJoinedRoomFutures() : List<RoomFuture>
 
     /**
+     * Returns null if no cache is used
      * @return Returns the room actions for all invited rooms
      */
-    suspend fun getInvitedRoomActions() : List<InvitedRoomActions>
+    suspend fun getInvitedRoomActions() : List<InvitedRoomActions>?
 
     /**
      * @param id The id of the user you want to get
