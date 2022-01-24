@@ -11,7 +11,11 @@ open class RoomActionsImpl(
 ) : RoomActions {
 
     override suspend fun sendMessageEvent(content: MessageEventContent, eventType: String) : String {
-        return phone.apiRequests.sendMessageEvent(eventType, content, id.toString())
+        return phone.sendMessageEvent(
+            type = eventType,
+            roomId = id.toString(),
+            content = content
+        )
     }
 
     override suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: String): String {

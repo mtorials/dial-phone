@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.api.requests.encryption
 
+import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,7 +11,7 @@ class SignedDeviceKeys(
      * The signature is calculated using the process described at Signing JSON.
      */
     val signatures: Map<String, Map<String, String>>,
-    val algorithms: List<String>,
+    val algorithms: List<MessageEncryptionAlgorithm>,
     @SerialName("device_id")
     val deviceId: String,
     val keys: Map<String, String>,

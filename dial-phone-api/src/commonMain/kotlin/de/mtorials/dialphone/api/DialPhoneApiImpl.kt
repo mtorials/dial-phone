@@ -2,6 +2,7 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.listeners.ApiListener
+import de.mtorials.dialphone.api.model.mevents.EventContent
 import io.ktor.client.*
 import kotlinx.coroutines.*
 
@@ -21,6 +22,10 @@ open class DialPhoneApiImpl constructor(
         token = token,
         client = client
     )
+
+    override suspend fun sendMessageEvent(roomId: String, type: String, content: EventContent) : String {
+        return apiRequests.sendMessageEvent(type, content, roomId)
+    }
 
     override val profile = Profile(this)
 

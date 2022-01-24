@@ -9,6 +9,7 @@ import de.mtorials.dialphone.api.responses.encryption.KeyClaimResponse
 import de.mtorials.dialphone.api.responses.encryption.KeyQueryResponse
 import de.mtorials.dialphone.api.responses.encryption.KeyUploadResponse
 import io.ktor.client.*
+import io.ktor.client.request.*
 import io.ktor.http.*
 
 class E2EEClient(
@@ -33,14 +34,19 @@ class E2EEClient(
     suspend fun queryKeys(request: KeyQueryRequest) : KeyQueryResponse =
         request(HttpMethod.Post, "keys/query", bodyValue = request)
 
+    /**
+     * can't use normal serialization, because EventContents are not registered
+     */
     suspend fun sendEventToDevice(
         eventType: String,
         content: SendToDeviceRequest,
-    ) : String {
-        return request<EventResponse>(
-            httpMethod = HttpMethod.Put,
-            path = "sendToDevice/$eventType/${random.nextInt()}",
-            bodyValue = content
-        ).id
+    ) {
+        return client.request(
+            urlString = "${homeserverUrl}${DialPhoneApi.MATRIX_PATH}sendToDevice/$eventType/${random.nextInt()}"
+        ) {
+            contentType(ContentType.Application.Json)
+            method = HttpMethod.Put
+            body = content
+        }
     }
 }

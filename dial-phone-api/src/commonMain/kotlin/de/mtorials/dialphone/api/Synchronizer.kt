@@ -15,17 +15,10 @@ class Synchronizer(
     private val fullState: Boolean = false,
     private val initCallback: suspend (DialPhoneApi) -> Unit,
     private val roomEventHook: RoomEventHook? = null,
+    private val syncCallback: (SyncResponse) -> Unit = {},
 ) {
 
     private val listeners: MutableList<GenericListener<DialPhoneApi>> = mutableListOf()
-
-    val joinedRoomIds: List<String>
-        get() = joined.toList()
-    val invitedRoomIds: List<String>
-        get() = invited.toList()
-
-    private val joined: MutableList<String> = mutableListOf()
-    private val invited: MutableList<String> = mutableListOf()
 
     private var lastTimeBatch: String? = null
     private var initialSync: Boolean = true
@@ -33,6 +26,7 @@ class Synchronizer(
     fun addListener(listener: GenericListener<DialPhoneApi>) = listeners.add(listener)
 
     // TODO add knocked and left
+    // TODO tidy up
     fun sync(
         coroutineScope: CoroutineScope
     ) = coroutineScope.launch {
@@ -41,10 +35,14 @@ class Synchronizer(
                 val res : SyncResponse = getSyncResponse()
                 lastTimeBatch = res.nextBatch
                 // Joined
-                joined.clear()
                 res.rooms?.join?.forEach { (roomID, roomEvents) ->
-                    joined.add(roomID)
                     roomEvents.timeline.events.forEach { e ->
+                        val event = roomEventHook?.manipulateEvent(e) ?: e
+                        listeners.forEach {
+                            launch { it.onRoomEvent(event, roomID, phone, initialSync) }
+                        }
+                    }
+                    roomEvents.state?.events?.forEach { e ->
                         val event = roomEventHook?.manipulateEvent(e) ?: e
                         listeners.forEach {
                             launch { it.onRoomEvent(event, roomID, phone, initialSync) }
@@ -52,9 +50,7 @@ class Synchronizer(
                     }
                 }
                 // Invited
-                invited.clear()
                 res.rooms?.invite?.forEach { (roomID, roomEvents) ->
-                    invited.add(roomID)
                     roomEvents.inviteState.events.forEach { event ->
                         listeners.forEach {
                             launch { it.onRoomEvent(event, roomID, phone, initialSync) }
@@ -75,6 +71,7 @@ class Synchronizer(
                 }
                 if (initialSync) initCallback(phone)
                 initialSync = false
+                syncCallback(res)
             } catch (e: RuntimeException) {
                 e.printStackTrace()
             }

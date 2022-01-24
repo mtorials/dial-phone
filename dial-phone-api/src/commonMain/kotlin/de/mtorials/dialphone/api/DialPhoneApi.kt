@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.model.mevents.EventContent
 import kotlinx.coroutines.Job
 
 interface DialPhoneApi {
@@ -36,6 +37,10 @@ interface DialPhoneApi {
      */
     val apiRequests: APIRequests
 
+    /**
+     * Send an event to a room
+     */
+    suspend fun sendMessageEvent(roomId: String, type: String, content: EventContent) : String
 
     /**
      * Used to synchronize with the homeserver.

@@ -5,6 +5,7 @@ import de.mtorials.dialphone.api.DialPhoneApiImpl
 import de.mtorials.dialphone.api.E2EEClient
 import de.mtorials.dialphone.api.Synchronizer
 import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
 import de.mtorials.dialphone.api.responses.UserWithoutIDResponse
 import de.mtorials.dialphone.core.actions.InvitedRoomActions
@@ -68,17 +69,27 @@ class DialPhoneImpl internal constructor(
         coroutineScope.launch { encryptionManager.publishKeys() }
     }
 
+    override suspend fun sendMessageEvent(roomId: String, type: String, content: EventContent): String {
+        if (encryptionManager.checkIfRoomEncrypted(roomId.roomId())) println("room encrypted! $roomId")
+        if (!encryptionManager.checkIfRoomEncrypted(roomId.roomId()) || !useEncryption) {
+            return super.sendMessageEvent(roomId, type, content)
+        }
+        // TODO remove
+        println("encrypting event")
+        val encryptedContent = encryptionManager.encryptMegolm(content = content, roomId = roomId.roomId(), type = type)
+        return super.sendMessageEvent(roomId, "m.room.encrypted", encryptedContent)
+    }
+
     // TODO cast is unchecked, when can it fail?
     override fun addListeners(vararg listener: GenericListener<*>) {
         listener.forEach { synchronizer.addListener(it as GenericListener<DialPhoneApi>) }
     }
 
-    override suspend fun getJoinedRoomFutures(): List<RoomFuture> = synchronizer.joinedRoomIds.map {
+    override suspend fun getJoinedRoomFutures(): List<RoomFuture> = apiRequests.getJoinedRooms().roomIds.map {
         RoomFutureImpl(it.roomId(),this)
     }
-    override suspend fun getInvitedRoomActions(): List<InvitedRoomActions> = synchronizer.invitedRoomIds.map {
-        InvitedRoomActionsImpl(this, it.roomId())
-    }
+
+    override suspend fun getInvitedRoomActions(): List<InvitedRoomActions>? = null
 
     override suspend fun getUserById(id: UserId) : User? {
         // Check cache
