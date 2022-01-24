@@ -1,6 +1,6 @@
 package de.mtorials.dialphone.core.exceptions
 
-import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomEncrypted
+import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
 
 class OlmSessionNotFound(
     val event: MRoomEncrypted,

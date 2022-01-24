@@ -4,7 +4,7 @@ import de.mtorials.dialphone.api.E2EEClient
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm
 import de.mtorials.dialphone.api.model.enums.RoomEncryptionAlgorithm
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
-import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomEncrypted
+import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
 import de.mtorials.dialphone.api.model.mevents.todevice.MRoomKey
 import de.mtorials.dialphone.api.requests.SendToDeviceRequest
 import de.mtorials.dialphone.api.requests.encryption.*
@@ -16,6 +16,7 @@ import de.mtorials.dialphone.core.ids.RoomId
 import de.mtorials.dialphone.core.ids.UserId
 import de.mtorials.dialphone.core.ids.userId
 import io.github.matrixkt.olm.*
+import io.ktor.http.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.*
@@ -39,6 +40,8 @@ class EncryptionManager(
     }
 
     private fun getPreKeySession(senderKey: String, body: String) : Session {
+        // TODO remove
+        println(body)
         val oldSession: Session? = getOlmSession(senderKey)
         if (oldSession != null) return oldSession
         // TODO matches inbound session
@@ -55,11 +58,23 @@ class EncryptionManager(
 
     fun decryptOlm(event: MRoomEncrypted) : MatrixEvent {
         // TODO does this work?
-        val cypher: Pair<String, TypeAndBody> = Json.decodeFromString(event.content.cipherText)
-        val session: Session = when (cypher.second.type) {
+        // TODO remove
+        println(dialPhoneJson.encodeToString(event))
+        val ct = event.content.cipherText
+        if (ct !is JsonObject) throw MalformedEncryptedEvent(event)
+        var type: Int? = null
+        var body: String? = null
+        var senderDeviceKey: String? = null
+        ct.forEach { (key, el) ->
+            senderDeviceKey = key
+            type = (el as JsonObject)["type"]?.jsonPrimitive?.int ?: throw MalformedEncryptedEvent(event)
+            body = el["body"]?.jsonPrimitive?.content ?: throw MalformedEncryptedEvent(event)
+        }
+        if (type == null || body == null || senderDeviceKey == null) throw MalformedEncryptedEvent(event)
+        val session: Session = when (type) {
             0 -> getPreKeySession(
                 senderKey = event.content.senderKey ?: throw MalformedEncryptedEvent(event),
-                body = cypher.second.body
+                body = body!!
             )
             else -> getOlmSession(
                 senderKey = event.content.senderKey ?: throw MalformedEncryptedEvent(event),
@@ -68,12 +83,14 @@ class EncryptionManager(
         // Really type and body?
         val plainText = session.decrypt(
             Message.invoke(
-            cipherText = cypher.second.body,
-            type = cypher.second.type.toLong())
+            cipherText = body!!,
+            type = type!!.toLong())
         )
+        // TODO remove
+        println("This should be the message:!!!!")
         println(plainText)
         // TODO check sender, recipient, keys, recipient keys
-        TODO("impl serialization")
+        return dialPhoneJson.decodeFromString(plainText)
     }
 
     private suspend fun encryptOlm(
@@ -90,14 +107,16 @@ class EncryptionManager(
             senderKey = account.identityKeys.curve25519,
             algorithm = MessageEncryptionAlgorithm.OLM_V1_CURVE25519_AES_SHA1,
             // TODO fix double serialization
-            cipherText = dialPhoneJson.encodeToString(mapOf(
-                "type" to encryptedText.type,
-                "body" to encryptedText.cipherText,
-            ))
+            cipherText = buildJsonObject {
+                identityKey to buildJsonObject {
+                    "type" to encryptedText.type
+                    "body" to encryptedText.cipherText
+                }
+            }
         )
     }
 
-    suspend fun startOlmSession(userId: UserId, deviceId: String, identityKey: String) : Session {
+    private suspend fun startOlmSession(userId: UserId, deviceId: String, identityKey: String) : Session {
         val res = client.claimKeys(KeyClaimRequest(
             mapOf(userId.toString() to mapOf(
                 deviceId to ED25519
@@ -140,9 +159,15 @@ class EncryptionManager(
         // TODO replay attack message index
         val megolmSession = store.inboundSessionsBySessionId[event.content.sessionId]
             ?: throw RuntimeException("Cant find megolm session to decrypt event")
-        val plainText = megolmSession.decrypt(event.content.cipherText)
+        if (event.content.cipherText !is JsonPrimitive) throw MalformedEncryptedEvent(event)
+        val plainText = megolmSession.decrypt((event.content.cipherText as JsonPrimitive).content)
         println(plainText)
-        TODO("no serialization impl for decryption")
+        val jsonObject : JsonObject = dialPhoneJson.decodeFromString(plainText.message)
+        val newObj = jsonObject.toMutableMap().apply {
+            this["sender"] = JsonPrimitive(event.sender)
+            this["event_id"] = JsonPrimitive(event.id)
+        }.run { JsonObject(this) }
+        return dialPhoneJson.decodeFromJsonElement(newObj)
     }
 
     fun handleKeyEvent(event: MRoomKey, senderKey: String) {

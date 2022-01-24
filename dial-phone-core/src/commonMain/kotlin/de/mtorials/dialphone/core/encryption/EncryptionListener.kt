@@ -4,7 +4,7 @@ import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
-import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomEncrypted
+import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
 import de.mtorials.dialphone.api.model.mevents.todevice.MRoomKey
 import de.mtorials.dialphone.core.exceptions.MalformedEncryptedEvent
 import de.mtorials.dialphone.core.exceptions.UnexpectedEncryptionAlgorithmException
@@ -17,8 +17,6 @@ class EncryptionListener(
     override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneApi, isOld: Boolean) = Unit
 
     override fun onToDeviceEvent(event: MatrixEvent, phone: DialPhoneApi, isOld: Boolean) {
-        // TODO remove
-        println(Json { prettyPrint = true }.encodeToString(event))
         if (event !is MRoomEncrypted) return
         if (event.content.algorithm != MessageEncryptionAlgorithm.OLM_V1_CURVE25519_AES_SHA1)
             throw UnexpectedEncryptionAlgorithmException("to-device")
