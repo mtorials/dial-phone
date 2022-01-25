@@ -9,8 +9,8 @@ import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.EventCallback
 import de.mtorials.dialphone.core.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.core.dialevents.RoomInviteEvent
-import de.mtorials.dialphone.core.ids.RoomId
-import de.mtorials.dialphone.core.ids.roomId
+import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.roomId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

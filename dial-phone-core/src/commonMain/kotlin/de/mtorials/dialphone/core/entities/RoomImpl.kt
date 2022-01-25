@@ -5,9 +5,9 @@ import de.mtorials.dialphone.api.model.enums.Membership
 import de.mtorials.dialphone.api.model.mevents.roomstate.*
 import de.mtorials.dialphone.core.actions.RoomActions
 import de.mtorials.dialphone.core.entityfutures.RoomFutureImpl
-import de.mtorials.dialphone.core.ids.RoomId
-import de.mtorials.dialphone.core.ids.roomId
-import de.mtorials.dialphone.core.ids.userId
+import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.roomId
+import de.mtorials.dialphone.api.ids.userId
 
 class RoomImpl(
     action: RoomFutureImpl,

@@ -1,5 +1,6 @@
-package de.mtorials.dialphone.api.model.mevents
+package de.mtorials.dialphone.api.serialization
 
+import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.api.model.mevents.todevice.MRoomKey
 import kotlinx.serialization.modules.SerializersModule

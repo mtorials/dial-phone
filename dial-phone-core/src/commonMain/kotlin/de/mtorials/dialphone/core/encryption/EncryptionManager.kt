@@ -14,9 +14,9 @@ import de.mtorials.dialphone.core.exceptions.encryption.MalformedEncryptedEvent
 import de.mtorials.dialphone.core.exceptions.encryption.MissingKeyException
 import de.mtorials.dialphone.core.exceptions.encryption.OlmSessionNotFound
 import de.mtorials.dialphone.core.exceptions.encryption.RoomKeyHandleException
-import de.mtorials.dialphone.core.ids.RoomId
-import de.mtorials.dialphone.core.ids.UserId
-import de.mtorials.dialphone.core.ids.userId
+import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.UserId
+import de.mtorials.dialphone.api.ids.userId
 import io.github.matrixkt.olm.*
 import kotlinx.coroutines.delay
 import kotlinx.serialization.*
@@ -100,8 +100,9 @@ class EncryptionManager(
         // Really type and body?
         val plainText = session.decrypt(
             Message.invoke(
-            cipherText = body!!,
-            type = type!!.toLong())
+                cipherText = body!!,
+                type = type!!.toLong(),
+            )
         )
         // TODO check sender, recipient, keys, recipient keys
         return dialPhoneJson.decodeFromString(plainText)

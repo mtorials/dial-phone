@@ -16,10 +16,10 @@ import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entities.UserImpl
 import de.mtorials.dialphone.core.entityfutures.RoomFuture
 import de.mtorials.dialphone.core.entityfutures.RoomFutureImpl
-import de.mtorials.dialphone.core.ids.RoomAlias
-import de.mtorials.dialphone.core.ids.RoomId
-import de.mtorials.dialphone.core.ids.UserId
-import de.mtorials.dialphone.core.ids.roomId
+import de.mtorials.dialphone.api.ids.RoomAlias
+import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.UserId
+import de.mtorials.dialphone.api.ids.roomId
 import io.ktor.client.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

@@ -6,9 +6,9 @@ import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomMember
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.entities.UserImpl
-import de.mtorials.dialphone.core.ids.RoomId
-import de.mtorials.dialphone.core.ids.roomId
-import de.mtorials.dialphone.core.ids.userId
+import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.roomId
+import de.mtorials.dialphone.api.ids.userId
 
 class UserCacheListener(
     private val cache: PhoneCache,

@@ -2,8 +2,8 @@ package de.mtorials.dialphone.core.entities
 
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.entityfutures.UserFutureImpl
-import de.mtorials.dialphone.core.ids.RoomId
-import de.mtorials.dialphone.core.ids.UserId
+import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.UserId
 
 class MemberImpl(
     override val roomId: RoomId,

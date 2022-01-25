@@ -2,16 +2,14 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.authentication.Login
 import de.mtorials.dialphone.api.authentication.Registrar
-import de.mtorials.dialphone.api.listeners.ApiListener
 import de.mtorials.dialphone.api.listeners.GenericListener
-import de.mtorials.dialphone.api.model.mevents.EventContentSerialization
-import de.mtorials.dialphone.api.model.mevents.EventSerialization
+import de.mtorials.dialphone.api.serialization.EventContentSerialization
+import de.mtorials.dialphone.api.serialization.EventSerialization
 import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.ExperimentalSerializationApi

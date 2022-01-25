@@ -5,7 +5,7 @@ import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.actions.RoomActionsImpl
 import de.mtorials.dialphone.core.entities.Room
 import de.mtorials.dialphone.core.entities.RoomImpl
-import de.mtorials.dialphone.core.ids.RoomId
+import de.mtorials.dialphone.api.ids.RoomId
 
 class RoomFutureImpl(
     override val id: RoomId,
