@@ -1,10 +1,11 @@
 package de.mtorials.dialphone.api.model.mevents
 
+import de.mtorials.dialphone.api.ids.UserId
 import kotlinx.serialization.Serializable
 
 @Serializable
 class DefaultEvent(
-    override val sender: String? = null,
+    override val sender: UserId? = null,
     override val content: DefaultContent = DefaultContent(),
 ) : MatrixEvent {
     @Serializable

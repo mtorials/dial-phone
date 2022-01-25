@@ -1,5 +1,8 @@
 package de.mtorials.dialphone.api
 
+import de.mtorials.dialphone.api.ids.EventId
+import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.model.mevents.EventContent
 import kotlinx.coroutines.Job
@@ -19,7 +22,7 @@ interface DialPhoneApi {
     /**
      * The users fully qualified matrix id
      */
-    val ownId: String
+    val ownId: UserId
 
     /**
      * The device id
@@ -40,7 +43,7 @@ interface DialPhoneApi {
     /**
      * Send an event to a room
      */
-    suspend fun sendMessageEvent(roomId: String, type: String, content: EventContent) : String
+    suspend fun sendMessageEvent(roomId: RoomId, type: String, content: EventContent) : EventId
 
     /**
      * Used to synchronize with the homeserver.

@@ -11,7 +11,7 @@ class SignedDeviceKeys(
      * Signatures for the device key object. A map from user ID, to a map from <algorithm>:<device_id> to the signature.
      * The signature is calculated using the process described at Signing JSON.
      */
-    val signatures: Map<String, Map<String, String>>,
+    val signatures: Map<UserId, Map<String, String>>,
     val algorithms: List<MessageEncryptionAlgorithm>,
     @SerialName("device_id")
     val deviceId: String,
@@ -19,7 +19,7 @@ class SignedDeviceKeys(
     @SerialName("user_id")
     val userId: UserId,
 ) {
-    constructor(deviceKeys: DeviceKeys, signatures: Map<String, Map<String, String>>) : this(
+    constructor(deviceKeys: DeviceKeys, signatures: Map<UserId, Map<String, String>>) : this(
         algorithms = deviceKeys.algorithms,
         deviceId = deviceKeys.deviceId,
         keys = deviceKeys.keys,

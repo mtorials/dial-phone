@@ -4,8 +4,10 @@ import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.DialPhoneApiImpl
 import de.mtorials.dialphone.api.E2EEClient
 import de.mtorials.dialphone.api.Synchronizer
+import de.mtorials.dialphone.api.ids.*
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.model.mevents.EventContent
+import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
 import de.mtorials.dialphone.api.responses.UserWithoutIDResponse
 import de.mtorials.dialphone.core.actions.InvitedRoomActions
@@ -16,10 +18,6 @@ import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entities.UserImpl
 import de.mtorials.dialphone.core.entityfutures.RoomFuture
 import de.mtorials.dialphone.core.entityfutures.RoomFutureImpl
-import de.mtorials.dialphone.api.ids.RoomAlias
-import de.mtorials.dialphone.api.ids.RoomId
-import de.mtorials.dialphone.api.ids.UserId
-import de.mtorials.dialphone.api.ids.roomId
 import io.ktor.client.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -28,7 +26,7 @@ import kotlinx.serialization.json.Json
 class DialPhoneImpl internal constructor(
     token: String,
     homeserverUrl: String,
-    ownId: String,
+    ownId: UserId,
     client: HttpClient,
     initCallback: suspend (DialPhoneApi) -> Unit,
     val cache: PhoneCache?,
@@ -69,11 +67,11 @@ class DialPhoneImpl internal constructor(
         coroutineScope.launch { encryptionManager.publishKeys() }
     }
 
-    override suspend fun sendMessageEvent(roomId: String, type: String, content: EventContent): String {
-        if (!encryptionManager.checkIfRoomEncrypted(roomId.roomId()) || !useEncryption) {
+    override suspend fun sendMessageEvent(roomId: RoomId, type: String, content: EventContent): EventId {
+        if (!encryptionManager.checkIfRoomEncrypted(roomId) || !useEncryption) {
             return super.sendMessageEvent(roomId, type, content)
         }
-        val encryptedContent = encryptionManager.encryptMegolm(content = content, roomId = roomId.roomId(), type = type)
+        val encryptedContent = encryptionManager.encryptMegolm(content = content, roomId = roomId, type = type)
         return super.sendMessageEvent(roomId, "m.room.encrypted", encryptedContent)
     }
 
@@ -83,7 +81,7 @@ class DialPhoneImpl internal constructor(
     }
 
     override suspend fun getJoinedRoomFutures(): List<RoomFuture> = apiRequests.getJoinedRooms().roomIds.map {
-        RoomFutureImpl(it.roomId(),this)
+        RoomFutureImpl(it,this)
     }
 
     override suspend fun getInvitedRoomActions(): List<InvitedRoomActions>? = null
@@ -104,7 +102,7 @@ class DialPhoneImpl internal constructor(
     override suspend fun getRoomByAlias(alias: RoomAlias): InvitedRoomActions =
         InvitedRoomActionsImpl(
             this,
-            apiRequests.getRoomIdForAlias(alias.toString()).roomId.roomId()
+            apiRequests.getRoomIdForAlias(alias.toString()).roomId
         )
 
     override suspend fun getJoinedRoomFutureById(id: RoomId) : RoomFuture? =
@@ -115,14 +113,14 @@ class DialPhoneImpl internal constructor(
 
     override suspend fun createRoom(name: String, block: RoomBuilder.() -> Unit): RoomFuture =
         apiRequests.createRoom(RoomBuilderImpl(name).apply(block).build())
-            .run { RoomFutureImpl(this.id.roomId(), this@DialPhoneImpl) }
+            .run { RoomFutureImpl(this.id, this@DialPhoneImpl) }
 
 
     override suspend fun discoverRooms(): List<Pair<InvitedRoomActions, DiscoveredRoom>> {
         return apiRequests.discoverRooms().rooms.map { Pair(
             InvitedRoomActionsImpl(
                 this,
-                it.id.roomId()
+                it.id
             ), it) }
     }
 }

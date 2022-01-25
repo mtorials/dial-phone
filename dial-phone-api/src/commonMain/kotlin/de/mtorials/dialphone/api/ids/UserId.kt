@@ -14,7 +14,7 @@ class UserId(
 class UserIdSerializer : MatrixIdSerializer<UserId>("userId") {
     override fun deserialize(decoder: Decoder): UserId {
         val value = decoder.decodeString()
-        checkIdType(value, MatrixID.IDType.USER)
+        checkIfType(value, MatrixID.IDType.USER)
         return UserId(value)
     }
 }

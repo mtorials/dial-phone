@@ -1,5 +1,7 @@
 package de.mtorials.dialphone.api
 
+import de.mtorials.dialphone.api.ids.EventId
+import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.responses.*
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 import io.ktor.client.HttpClient
@@ -46,8 +48,8 @@ class APIRequests(
     suspend fun sendMessageEvent(
         eventType: String,
         content: EventContent,
-        roomID: String
-    ) : String {
+        roomID: RoomId
+    ) : EventId {
         return request<EventResponse>(
             httpMethod = HttpMethod.Put,
             path = "rooms/${encode(roomID)}/send/$eventType/${random.nextInt()}",
@@ -60,7 +62,7 @@ class APIRequests(
         content: EventContent,
         roomID: String,
         stateKey: String
-    ) : String {
+    ) : EventId {
         return request<EventResponse>(
             httpMethod = HttpMethod.Put,
             path = "rooms/${encode(roomID)}/state/${eventType}/${stateKey}",

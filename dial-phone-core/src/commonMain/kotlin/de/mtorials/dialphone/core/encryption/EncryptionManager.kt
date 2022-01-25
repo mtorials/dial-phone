@@ -30,7 +30,7 @@ class EncryptionManager(
     private val store: E2EEStore,
     private val client: E2EEClient,
     private val deviceId: String,
-    private val ownId: String,
+    private val ownId: UserId,
     private val phone: DialPhone,
     private val dialPhoneJson: Json,
 ) {
@@ -58,12 +58,12 @@ class EncryptionManager(
 
     private suspend fun startOlmSession(userId: UserId, theirDeviceId: String, theirIdentityKey: String) : Session {
         val res = client.claimKeys(KeyClaimRequest(
-            mapOf(userId.toString() to mapOf(
+            mapOf(userId to mapOf(
                 theirDeviceId to SIGNED_CURVE25519
             ))
         ))
         // TODO check the signature
-        val theirOneTimeKey = res.oneTimeKeys[userId.toString()]?.get(theirDeviceId)?.jsonObject?.entries?.first()?.value
+        val theirOneTimeKey = res.oneTimeKeys[userId]?.get(theirDeviceId)?.jsonObject?.entries?.first()?.value
             ?.jsonObject?.get("key")?.jsonPrimitive?.content
                 ?: throw RuntimeException("can get one time key")
         val olmSession = Session.createOutboundSession(
@@ -159,7 +159,7 @@ class EncryptionManager(
         val inbound = InboundGroupSession(outbound.sessionKey)
         store.inboundSessionsBySessionId[outbound.sessionId] = inbound
         val devices = downloadDeviceList(roomId = roomId)
-        val userToDeviceToEncrypted : MutableMap<String, MutableMap<String, JsonElement>> = mutableMapOf()
+        val userToDeviceToEncrypted : MutableMap<UserId, MutableMap<String, JsonElement>> = mutableMapOf()
         devices.forEach { (userId, d) ->
             userToDeviceToEncrypted[userId] = mutableMapOf()
             d.forEach { (theirDeviceId, deviceKeys) ->
@@ -174,7 +174,7 @@ class EncryptionManager(
                     sessionId = outbound.sessionId,
                     sessionKey = outbound.sessionKey,
                 )
-                val encrypted = encryptOlm(content, userId.userId(), theirDeviceId, theirCurveKey, theirEDKey)
+                val encrypted = encryptOlm(content, userId, theirDeviceId, theirCurveKey, theirEDKey)
                 userToDeviceToEncrypted[userId]?.put(theirDeviceId, encrypted)
             }
         }
@@ -215,8 +215,8 @@ class EncryptionManager(
         val plainText = megolmSession.decrypt((event.content.cipherText as JsonPrimitive).content)
         val jsonObject : JsonObject = dialPhoneJson.decodeFromString(plainText.message)
         val newObj = jsonObject.toMutableMap().apply {
-            this["sender"] = JsonPrimitive(event.sender)
-            this["event_id"] = JsonPrimitive(event.id)
+            this["sender"] = JsonPrimitive(event.sender.toString())
+            this["event_id"] = JsonPrimitive(event.id.toString())
         }.run { JsonObject(this) }
         return dialPhoneJson.decodeFromJsonElement(newObj)
     }
@@ -238,13 +238,13 @@ class EncryptionManager(
     /**
      * userid to device id to device information
      */
-    private suspend fun downloadDeviceList(roomId: RoomId) : Map<String, Map<String, SignedDeviceKeys>> {
+    private suspend fun downloadDeviceList(roomId: RoomId) : Map<UserId, Map<String, SignedDeviceKeys>> {
         val deviceList = client.queryKeys(KeyQueryRequest(
             deviceKeys = phone.getJoinedRoomFutureById(roomId)?.receive()?.members?.associate {
-                it.userId.toString() to emptyList()
+                it.userId to emptyList()
             } ?: throw RoomKeyHandleException("Cant find room with provided it")
         ))
-        // TODO a lot of checks
+        // TODO a lot of checks<
         return deviceList.deviceKeys ?: throw RuntimeException("No devices Found in device list")
     }
 
@@ -291,7 +291,7 @@ class EncryptionManager(
             "$SIGNED_CURVE25519:$id" to buildJsonObject {
                 put("key", key)
                 put("signatures", buildJsonObject {
-                    put(phone.ownId, buildJsonObject {
+                    put(phone.ownId.toString(), buildJsonObject {
                         put("$ED25519:$deviceId", signature)
                     })
                 })

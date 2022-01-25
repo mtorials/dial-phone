@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.api
 
+import de.mtorials.dialphone.api.ids.MatrixID
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -34,4 +35,5 @@ abstract class MatrixClient(
 
     // Useless hopefully
     protected fun encode(input: String) = input
+    protected fun encode(input: MatrixID) = input.value
 }
