@@ -56,7 +56,7 @@ interface DialPhone : DialPhoneApi {
     suspend fun discoverRooms() : List<Pair<InvitedRoomActions, DiscoveredRoom>>
 
     companion object {
-        suspend operator fun invoke(homeserverUrl: String, block: DialPhoneApiBuilder.() -> Unit) : DialPhone {
+        suspend operator fun invoke(homeserverUrl: String, block: DialPhoneBuilder.() -> Unit) : DialPhone {
             return DialPhoneBuilderImpl(
                 homeserverUrl = homeserverUrl
             ).buildDialPhone(block)

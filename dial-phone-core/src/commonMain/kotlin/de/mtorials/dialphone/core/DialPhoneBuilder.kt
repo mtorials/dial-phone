@@ -12,6 +12,11 @@ interface DialPhoneBuilder : DialPhoneApiBuilder {
     var cache: PhoneCache?
 
     /**
+     * Call to enable encryption
+     */
+    fun useEncryption()
+
+    /**
      * Use the in memory cache implementation
      * @see cache to choose use a custom cache implementation
      */
