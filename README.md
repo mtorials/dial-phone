@@ -3,8 +3,6 @@
 
 # DialPhone
 
-[![](https://jitci.com/gh/mtorials/dial-phone/svg)](https://jitci.com/gh/mtorials/dial-phone)
-
 ![dialphone-logo](https://raw.githubusercontent.com/mtorials/dial-phone/master/logo.png)
 
 *work in progress*
@@ -17,7 +15,7 @@ Supported platforms are jvm and js, but testing is mostly done on the jvm.
 See my [dial-bot](https://github.com/mtorials/dialbot) repository for a reference bot implementation.
 (outdated currently)
 
-E2EE is currently not supported.
+Basic e2ee is implemented, but very experimental.
 
 ## Installation
 
@@ -48,6 +46,13 @@ implementation("de.mtorials.dail-phone:dial-phone-bot-jvm:<SEE_RELEASES>")
 implementation("io.ktor:ktor-client-okhttp:1.5.0")
 ```
 
+## Documentation
+
+Specific documentation can be found in `/docs`. At the time there is:
+
+-[Events](docs/events.md)
+-[Building](docs/BUILDING.md)
+
 ## Getting Started
 
 To use the SDK first create the DialPhone object.
@@ -59,7 +64,6 @@ val phone = DialPhone("<HOMESERVER_URL>") { // this: DialPhoneBuilder
     withToken("<YOUR_TOKEN>") // If you want to login with an access token
     asGuets() // If you want to create a guest account
     asUser("myusername", "mypassword") // login with credentials
-    client hasCommandPrefix "!" // If you want to use the command listener, default is "!"
     addListeners(
         ExampleListener(),
         SecondExampleListener()
@@ -67,24 +71,15 @@ val phone = DialPhone("<HOMESERVER_URL>") { // this: DialPhoneBuilder
     addCustomEventTypes(
         TestStateEvent::class
     )
+    useEncryption() // To enable E2EE (very early)
 }
 
 ```
 
-To receive events you have to start synchronizing.
+To receive events you have to start syncing.
 
 ```kotlin
 phone.sync()
-```
-
-If you want to use [koltinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-do not forget to wait for the returned job to join.
-Otherwise, your code will just stop executing at the end of your main function (you need to install kotlinx.coroutines).
-
-```kotlin
-val syncJob = phone.syncAndReturnJob()
-// ...
-syncJob.join()
 ```
 
 ## Entities
@@ -102,64 +97,7 @@ println(myRoom.name)
 ```
 All events, entity futures and entities also have a `phone` property to access the `DialPhone` object.
 
-## Events
-
-### Types of Events
-
-There are classes that represent native Matrix events, all inheriting from `MatrixEvent`, but there are also DialPhone
-events. These DialPhone events offer a higher level api and are more convenient to use.
-
-#### DialPhone Events
-
-- inherit from `DialEvent`
-- are passed to the `ListenerAdapter`
-- contain the `DialPhone` object
-
-These events are passed to the ListenerAdapter.
-
-#### Matrix Events
-
-- inherit from `MatrixEvent`
-- there are multiple sub types (`RoomStateEvent`, `RoomMessageEvent`)
-- can be sent by using the `sendMessageEvent` or `sendStateEvent` method on `RoomAction`.
-- you can use custom matrix events (see *Custom Events*)
-
-See the matrix.org specifications on how Matrix events work.
-
-### Listening for Events
-
-To react to events you have to implement either the `Listener` interface
-or one of the abstract classes `Listener Adapter` or `Command Adapter` if you want to use
-the command feature of this SDK to use it as a bot.
-You can pass these as parameters to the `DialPhone` constructor or add them later with:
-
-```kotlin
-phone.addListener(MyListener())
-```
-
-You can set in the constructor of each of these abstract classes 
-whether you want to listen to new events only or also receive past events on startup.
-
-### Sending Events
-
-You can use the `sendMessageEvent` or `sendStateEvent` method on every type which inherits from RoomActions.
-These are RoomFuture and Room.
-To send the event you have to instantiate the Content class inside the actual event class.
-Only matrix events are supported.
-
-```kotlin
-myRoomFuture.sendMessageEvent(MRoomMessage.Content("Hi!"))
-```
-
-You can also use the extension functions to send specific events like for example:
-
-```kotlin
-myRoomFuture.sendTextMessage("Hi!")
-```
-
-In this case both examples are equivalent.
-
-#### Reacting to an event
+### Reacting to an event
 
 There are (infix) extension functions that allow you to react to an DialPhone event easily.
 
@@ -168,7 +106,7 @@ There are (infix) extension functions that allow you to react to an DialPhone ev
 event answer "I received a message!"
 ```
 
-#### Redacting
+### Redacting
 
 To delete a message the message class has a according method:
 
@@ -211,61 +149,6 @@ class InviteListener : ListenerAdapter() {
 }
 ```
 
-## Custom Events
-
-This library has the ability to send custom events. To do so, you have to first create a class inheriting from
-the `MatrixEvent` interface or subclasses depending on what type of event you want to create.
-The content field has to be an extra class marked with the according `EventContent` interface.
-To specify the name of the event use the `@JsonTypeName` annotation of the Jackson library.
-Use the `@ContentEventType` annotation to specify the according event type of the `EventContent` type.
-
-An example of a room message event that carries a positional data (x,y,z coordinates):
-```kotlin
-@Serializable
-class PositionEvent(
-    override val sender: String,
-    @JsonProperty("event_id")
-    override val id: String,
-    override val content: Content
-) : MatrixMessageEvent {
-    @Serializable
-    data class Content(
-        val x: Int,
-        val y: Int,
-        val z: Int
-    ) : MessageEventContent
-}
-```
-
-If you want to receive your custom events you have to register these when creating the `DailPhone` object.
-THis is done with a `SerializersModule`.
-
-*More information necessary, feel free to contact me...*
-
-### Send Custom Events
-
-See *Sending Events*.
-
-### Receive Custom Events
-
-To receive custom events you have to implement the interface `Listener` directly:
-With the second constructor parameter you can control if you want to receive past events too.
-
-```kotlin
-class CustomListener : MatrixEventAdapter<MyEvent>(MyEvent::class, true) {
-    override fun onMatrixEvent(event: MyEvent, roomFuture: RoomFuture) {
-        println("Received custom event with payload ${event.content.payload}.")
-    }
-}
-```
-
-# Integration Tests
-
-Integration tests are performed against synapse running in a container. The container is defined in 
-the `test-compose.yaml` file and all configuration for the synapse server is in the `synapse` directory. When performing
-integration tests with gradle a gradle plugin is used to create, start, stop and remove the container. The synapse
-database is not persistent.
-
 # Contact
 
 If you want to contact me join the [#dial-phone:mtorials.de](https://matrix.to/#/#dial-phone:mtorials.de) room.
@@ -277,7 +160,6 @@ Everyone is welcome to contribute. See the [CONTRIBUTING.md](https://github.com/
 
 # TODO
 
-- support for the most used Matrix events
 - complete room management
 - support for all Matrix events
 - DialPhone events for the most used native Matrix events
