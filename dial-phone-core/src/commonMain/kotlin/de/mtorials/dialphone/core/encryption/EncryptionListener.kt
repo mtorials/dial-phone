@@ -26,6 +26,7 @@ class EncryptionListener(
         if (event.content.algorithm != MessageEncryptionAlgorithm.OLM_V1_CURVE25519_AES_SHA1)
             throw UnexpectedEncryptionAlgorithmException("to-device")
         val senderKey = event.content.senderKey ?: throw MalformedEncryptedEvent(event)
+        // HERE! cyphertext is empty object? why? m.dummy? own event?
         val e = encryptionManager.decryptOlm(event)
         if (e !is MRoomKey) return
         encryptionManager.handleKeyEvent(e, senderKey)

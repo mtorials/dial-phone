@@ -60,13 +60,6 @@ object EventSerialization {
             subclass(MRoomEncryption::class)
         }
 
-        polymorphic(MRoomMessage.MRoomMessageContent::class) {
-
-            subclass(MRoomMessage.EmptyContent::class)
-            subclass(MRoomMessage.ImageContent::class)
-            subclass(MRoomMessage.TextContent::class)
-        }
-
 //        polymorphic(EventContent::class) {
 //            subclass(MRoomEncrypted.MRoomEncryptedContent::class)
 //        }

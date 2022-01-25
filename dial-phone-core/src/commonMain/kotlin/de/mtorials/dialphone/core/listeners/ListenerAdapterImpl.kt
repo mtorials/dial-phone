@@ -40,9 +40,6 @@ open class ListenerAdapterImpl(
         if (!isOld || receivePastEvents) onEvent(event, roomId.roomId(), phone as DialPhone)
     }
 
-    override fun onToDeviceEvent(event: MatrixEvent, phone: DialPhone, isOld: Boolean) = Unit
-    override fun onPresenceEvent(event: MatrixEvent, phone: DialPhone, isOld: Boolean) = Unit
-
     protected fun onEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhone) {
         when(event) {
             is MRoomMessage -> coroutineScope.launch { callbackOnMessageReceived(
