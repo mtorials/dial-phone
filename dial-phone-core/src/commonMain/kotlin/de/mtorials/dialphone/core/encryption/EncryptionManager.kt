@@ -18,6 +18,7 @@ import de.mtorials.dialphone.core.ids.RoomId
 import de.mtorials.dialphone.core.ids.UserId
 import de.mtorials.dialphone.core.ids.userId
 import io.github.matrixkt.olm.*
+import kotlinx.coroutines.delay
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import kotlin.random.Random
@@ -35,6 +36,7 @@ class EncryptionManager(
 ) {
 
     private val account = Account()
+    private val keys = account.identityKeys
 
     /**
      * OLM
@@ -45,8 +47,6 @@ class EncryptionManager(
     }
 
     private fun getPreKeySession(senderKey: String, body: String) : Session {
-        // TODO remove
-        println(body)
         val oldSession: Session? = getOlmSession(senderKey)
         if (oldSession != null) return oldSession
         // TODO matches inbound session
@@ -74,9 +74,6 @@ class EncryptionManager(
     }
 
     fun decryptOlm(event: MRoomEncrypted) : MatrixEvent {
-        // TODO does this work?
-        // TODO remove
-        println(dialPhoneJson.encodeToString(event))
         val ct = event.content.cipherText
         if (ct !is JsonObject) throw MalformedEncryptedEvent(event)
         var type: Int? = null
@@ -103,46 +100,44 @@ class EncryptionManager(
             cipherText = body!!,
             type = type!!.toLong())
         )
-        // TODO remove
-        println("This should be the message:!!!!")
-        println(plainText)
         // TODO check sender, recipient, keys, recipient keys
         return dialPhoneJson.decodeFromString(plainText)
     }
 
     private suspend fun encryptOlm(
-        event: MRoomKey,
+        eventContent: MRoomKey.MRoomKeyContent,
         theirUserId: UserId,
         theirDeviceId: String,
         theirCurveKey: String,
         theirEDKey: String,
     ) : JsonElement {
-        val fullEventAsJson = dialPhoneJson.encodeToJsonElement(event)
+        //val fullEventAsJson = dialPhoneJson.encodeToJsonElement(event)
         val session = startOlmSession(theirUserId, theirDeviceId, theirCurveKey)
         val payload = OlmMessagePayload(
             // if not standard json -> trying to get type will result in error
-            content = dialPhoneJson.encodeToJsonElement(MRoomKey.MRoomKeyContent.serializer(), event.content),
-            type = "m.room.key",
+            content = dialPhoneJson.encodeToJsonElement(MRoomKey.MRoomKeyContent.serializer(), eventContent),
+            type = MRoomKeyType,
             sender = ownId,
             recipient = theirUserId.toString(),
             recipientKeys = mapOf(
                 ED25519 to theirEDKey,
             ),
             keys = mapOf(
-                ED25519 to account.identityKeys.ed25519,
+                ED25519 to keys.ed25519,
             ),
         )
         val plainTextPayload = dialPhoneJson.encodeToString(payload)
         // TODO use secure random?
         val encryptedText = session.encrypt(plainTextPayload, Random)
         val content = MRoomEncrypted.MRoomEncryptedContent(
-            senderKey = account.identityKeys.curve25519,
+            senderKey = keys.curve25519,
             algorithm = MessageEncryptionAlgorithm.OLM_V1_CURVE25519_AES_SHA1,
             cipherText = buildJsonObject {
-                theirCurveKey to buildJsonObject {
-                    "type" to encryptedText.type
-                    "body" to encryptedText.cipherText
-                }
+                // TODO should be theirCruveKey, tring if working with ED
+                put(theirCurveKey, buildJsonObject {
+                    put("type", encryptedText.type)
+                    put("body", encryptedText.cipherText)
+                })
             }
         )
         return dialPhoneJson.encodeToJsonElement(MRoomEncrypted.MRoomEncryptedContent.serializer(), content)
@@ -157,29 +152,37 @@ class EncryptionManager(
         // TODO call olm_init_outbound_group_session, and store the details of the outbound session for future use.
         val outbound = OutboundGroupSession()
         store.outboundSessionByRoomId[roomId] = outbound
-        store.inboundSessionsBySessionId[outbound.sessionId] = InboundGroupSession(outbound.sessionKey)
+        val inbound = InboundGroupSession(outbound.sessionKey)
+        store.inboundSessionsBySessionId[outbound.sessionId] = inbound
+//        // TODO remove
+//        println("Are the same: ")
+//        println(outbound.sessionId == inbound.sessionId) // true
         val devices = downloadDeviceList(roomId = roomId)
+        val userToDeviceToEncrypted : MutableMap<String, MutableMap<String, JsonElement>> = mutableMapOf()
         devices.forEach { (userId, d) ->
+            userToDeviceToEncrypted[userId] = mutableMapOf()
             d.forEach { (theirDeviceId, deviceKeys) ->
                 //val theirDeviceId = deviceKeys.deviceId
                 val theirCurveKey = deviceKeys.keys["$CURVE25519:$theirDeviceId"]
-                    ?: throw MissingKeyException("Cant find curve25519 identity key in query.")
+                    ?: throw MissingKeyException("Cant find $CURVE25519 identity key in query.")
                 val theirEDKey = deviceKeys.keys["$ED25519:$theirDeviceId"]
-                    ?: throw MissingKeyException("Cant find curve25519 identity key in query.")
-                val mRoomKey = MRoomKey(
-                    content = MRoomKey.MRoomKeyContent(
-                        algorithm = RoomEncryptionAlgorithm.MEGOLM_V1_AES_SHA2,
-                        roomId = roomId.toString(),
-                        sessionId = outbound.sessionId,
-                        sessionKey = outbound.sessionKey,
-                    )
+                    ?: throw MissingKeyException("Cant find $ED25519 identity key in query.")
+                val content = MRoomKey.MRoomKeyContent(
+                    algorithm = RoomEncryptionAlgorithm.MEGOLM_V1_AES_SHA2,
+                    roomId = roomId.toString(),
+                    sessionId = outbound.sessionId,
+                    sessionKey = outbound.sessionKey,
                 )
-                val encrypted = encryptOlm(mRoomKey, userId.userId(), theirDeviceId, theirCurveKey, theirEDKey)
-                client.sendEventToDevice("m.room.encrypted", SendToDeviceRequest(
-                    mapOf(userId to mapOf(theirDeviceId to encrypted))
-                ))
+                // TODO remove
+                println(dialPhoneJson.encodeToString(content))
+                val encrypted = encryptOlm(content, userId.userId(), theirDeviceId, theirCurveKey, theirEDKey)
+                userToDeviceToEncrypted[userId]?.put(theirDeviceId, encrypted)
             }
         }
+        val request = SendToDeviceRequest(userToDeviceToEncrypted)
+        // TODO remove
+        println(dialPhoneJson.encodeToString(request))
+        client.sendEventToDevice("m.room.encrypted", request)
         return outbound
     }
 
@@ -192,18 +195,21 @@ class EncryptionManager(
         val outbound = store.outboundSessionByRoomId[roomId] ?: startMegolmSession(roomId)
         val jsonContent: JsonElement = dialPhoneJson.encodeToJsonElement(content)
         val toEncrypt = buildJsonObject {
-            "content" to jsonContent
-            "room_id" to roomId.toString()
-            "type" to type
+            put("content", jsonContent)
+            put("room_id", roomId.toString())
+            put("type", type)
         }
         val encryptedText = outbound.encrypt(dialPhoneJson.encodeToString(toEncrypt))
-        return MRoomEncrypted.MRoomEncryptedContent(
-            senderKey = account.identityKeys.curve25519,
+        val encryptedContent = MRoomEncrypted.MRoomEncryptedContent(
+            senderKey = keys.curve25519,
             cipherText = JsonPrimitive(encryptedText),
             algorithm = MessageEncryptionAlgorithm.MEGOLM_V1_AES_SHA2,
             sessionId = outbound.sessionId,
             deviceId = deviceId,
         )
+        // TOTO remove
+        println(dialPhoneJson.encodeToString(encryptedContent))
+        return encryptedContent
     }
 
     fun decryptMegolm(event: MRoomEncrypted) : MatrixEvent {
@@ -212,7 +218,6 @@ class EncryptionManager(
             ?: throw RuntimeException("Cant find megolm session to decrypt event")
         if (event.content.cipherText !is JsonPrimitive) throw MalformedEncryptedEvent(event)
         val plainText = megolmSession.decrypt((event.content.cipherText as JsonPrimitive).content)
-        println(plainText)
         val jsonObject : JsonObject = dialPhoneJson.decodeFromString(plainText.message)
         val newObj = jsonObject.toMutableMap().apply {
             this["sender"] = JsonPrimitive(event.sender)
@@ -249,7 +254,6 @@ class EncryptionManager(
     }
 
     suspend fun publishKeys() {
-        val identityKeys = account.identityKeys
         val deviceKeys = DeviceKeys(
             algorithms = listOf(
                 MessageEncryptionAlgorithm.MEGOLM_V1_AES_SHA2,
@@ -258,13 +262,11 @@ class EncryptionManager(
             deviceId = deviceId,
             userId = ownId,
             keys = mapOf(
-                "$ED25519:$deviceId" to identityKeys.ed25519,
-                "$CURVE25519:$deviceId" to identityKeys.curve25519
+                "$ED25519:$deviceId" to keys.ed25519,
+                "$CURVE25519:$deviceId" to keys.curve25519
             )
         )
         val plainTextToSign = EncryptionUtilities.getCanonicalJson(deviceKeys)
-        // TODO remove
-        println(plainTextToSign)
         val signedDeviceKeys = SignedDeviceKeys(
             deviceKeys,
             mapOf(ownId to
@@ -276,8 +278,6 @@ class EncryptionManager(
             // TODO impl
             oneTimeKeys = createOnTimeKeyMap()
         )
-        // TODO remove
-        Json { prettyPrint = true }.encodeToString(request).run { println(this) }
         client.uploadKeys(request)
         account.markOneTimeKeysAsPublished()
     }
@@ -316,5 +316,6 @@ class EncryptionManager(
         const val ED25519 = "ed25519"
         const val CURVE25519 = "curve25519"
         const val SIGNED_CURVE25519 = "signed_curve25519"
+        const val MRoomKeyType = "m.room_key"
     }
 }

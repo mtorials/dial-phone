@@ -23,7 +23,7 @@ fun main() {
             addListeners(ListenerAdapter {
                 onRoomInvited { it.invitedRoomActions.join() }
             })
-            ktorLogLevel = LogLevel.BODY
+            ktorLogLevel = LogLevel.NONE
         }
 //        val room = phone.createRoom("The Riders") {
 //            makePublic()
@@ -35,7 +35,6 @@ fun main() {
             val msg = readln()
             if (msg == "exit") break
             if (msg == "!ping") phone.getJoinedRoomFutures().forEach {
-                print(it.receive().name)
                 it.sendTextMessage("ping!")
             }
 //            else room.sendTextMessage(msg)
