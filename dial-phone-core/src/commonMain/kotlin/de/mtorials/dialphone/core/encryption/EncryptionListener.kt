@@ -9,7 +9,7 @@ import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomEncryption
 import de.mtorials.dialphone.api.model.mevents.todevice.MRoomKey
 import de.mtorials.dialphone.core.exceptions.encryption.MalformedEncryptedEvent
 import de.mtorials.dialphone.core.exceptions.encryption.UnexpectedEncryptionAlgorithmException
-import de.mtorials.dialphone.core.ids.roomId
+import de.mtorials.dialphone.api.ids.roomId
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

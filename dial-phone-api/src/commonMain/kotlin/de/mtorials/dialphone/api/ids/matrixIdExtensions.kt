@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.core.ids
+package de.mtorials.dialphone.api.ids
 
 fun String.roomId() = RoomId(this)
 fun String.eventId() = EventId(this)

@@ -1,6 +1,6 @@
 package de.mtorials.dialphone.core.entities
 
-import de.mtorials.dialphone.core.ids.MatrixID
+import de.mtorials.dialphone.api.ids.MatrixID
 import de.mtorials.dialphone.core.DialPhone
 
 /**

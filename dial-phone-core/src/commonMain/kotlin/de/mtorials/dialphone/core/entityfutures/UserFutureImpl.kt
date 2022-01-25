@@ -1,6 +1,6 @@
 package de.mtorials.dialphone.core.entityfutures
 
-import de.mtorials.dialphone.core.ids.UserId
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entities.UserImpl

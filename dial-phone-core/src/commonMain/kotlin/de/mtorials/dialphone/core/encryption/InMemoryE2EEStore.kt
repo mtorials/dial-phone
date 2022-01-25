@@ -1,6 +1,6 @@
 package de.mtorials.dialphone.core.encryption
 
-import de.mtorials.dialphone.core.ids.RoomId
+import de.mtorials.dialphone.api.ids.RoomId
 import io.github.matrixkt.olm.InboundGroupSession
 import io.github.matrixkt.olm.OutboundGroupSession
 import io.github.matrixkt.olm.Session

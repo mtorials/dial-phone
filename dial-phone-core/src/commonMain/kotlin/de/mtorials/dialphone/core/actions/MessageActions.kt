@@ -1,8 +1,8 @@
 package de.mtorials.dialphone.core.actions
 
-import de.mtorials.dialphone.core.ids.EventId
+import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.core.DialPhone
-import de.mtorials.dialphone.core.ids.RoomId
+import de.mtorials.dialphone.api.ids.RoomId
 
 interface MessageActions {
 

@@ -3,7 +3,7 @@ package de.mtorials.dialphone.core.actions
 import de.mtorials.dialphone.api.model.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.api.model.mevents.roomstate.StateEventContent
 import de.mtorials.dialphone.core.DialPhone
-import de.mtorials.dialphone.core.ids.RoomId
+import de.mtorials.dialphone.api.ids.RoomId
 
 /**
  * All actions you can perform on a room

@@ -3,7 +3,7 @@ package de.mtorials.dialphone.core.actions
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.entityfutures.RoomFuture
 import de.mtorials.dialphone.core.entityfutures.RoomFutureImpl
-import de.mtorials.dialphone.core.ids.RoomId
+import de.mtorials.dialphone.api.ids.RoomId
 
 open class InvitedRoomActionsImpl(
     override val phone: DialPhone,
