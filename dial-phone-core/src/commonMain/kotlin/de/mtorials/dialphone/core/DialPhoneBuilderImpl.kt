@@ -13,6 +13,11 @@ class DialPhoneBuilderImpl(
     homeserverUrl = homeserverUrl
 ) {
     override var cache: PhoneCache? = null
+    var encryption: Boolean = false
+
+    override fun useEncryption() {
+        encryption = true
+    }
 
     override fun cacheInMemory() {
         cache = InMemoryCache()
@@ -33,6 +38,7 @@ class DialPhoneBuilderImpl(
             coroutineScope = coroutineScope,
             cache = cache,
             dialPhoneJson = format,
+            useEncryption = encryption,
         ).also {
             it.addListeners(*listenerList.toTypedArray())
             if (cache != null) this.addListeners(UserCacheListener(
