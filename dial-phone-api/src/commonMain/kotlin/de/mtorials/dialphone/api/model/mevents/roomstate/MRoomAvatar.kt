@@ -1,14 +1,16 @@
 package de.mtorials.dialphone.api.model.mevents.roomstate
 
+import de.mtorials.dialphone.api.ids.EventId
+import de.mtorials.dialphone.api.ids.UserId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @SerialName("m.room.avatar")
 @Serializable
 class MRoomAvatar(
-    override val sender: String,
+    override val sender: UserId,
     @SerialName("event_id")
-    override val id: String? = null,
+    override val id: EventId? = null,
     @Serializable
     override val content: Content,
     @SerialName("state_key")

@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.api.requests
 
+import de.mtorials.dialphone.api.ids.UserId
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
@@ -11,5 +12,5 @@ data class SendToDeviceRequest(
     /**
      * userid to deviceId to content
      */
-    val messages: Map<String, Map<String, JsonElement>>
+    val messages: Map<UserId, Map<String, JsonElement>>
 )

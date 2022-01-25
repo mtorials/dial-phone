@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.api.model.mevents.presence
 
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import kotlinx.serialization.SerialName
@@ -8,7 +9,7 @@ import kotlinx.serialization.Serializable
 @SerialName("m.presence")
 @Serializable
 class MPresence(
-        override val sender: String,
+        override val sender: UserId,
         override val content: PresenceContent
 ) : MatrixEvent {
     @Serializable

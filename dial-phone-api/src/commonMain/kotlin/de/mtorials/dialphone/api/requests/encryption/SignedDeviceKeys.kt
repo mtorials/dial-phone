@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.api.requests.encryption
 
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -16,7 +17,7 @@ class SignedDeviceKeys(
     val deviceId: String,
     val keys: Map<String, String>,
     @SerialName("user_id")
-    val userId: String,
+    val userId: UserId,
 ) {
     constructor(deviceKeys: DeviceKeys, signatures: Map<String, Map<String, String>>) : this(
         algorithms = deviceKeys.algorithms,

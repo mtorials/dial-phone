@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.api.model.mevents.todevice
 
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import kotlinx.serialization.SerialName
@@ -10,7 +11,7 @@ import kotlinx.serialization.Serializable
 data class MDummy(
     override val content: MDummyContent,
 ) : MatrixEvent {
-    override val sender: String? = null
+    override val sender: UserId? = null
     @Serializable
     class MDummyContent : EventContent
 }

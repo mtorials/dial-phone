@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.api.responses.encryption
 
+import de.mtorials.dialphone.api.ids.UserId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -15,5 +16,5 @@ data class KeyClaimResponse(
      * A map from user ID, to a map from devices to a map from <algorithm>:<key_id> to the key object.
      */
     @SerialName("one_time_keys")
-    val oneTimeKeys: Map<String, Map<String, JsonElement>>
+    val oneTimeKeys: Map<UserId, Map<String, JsonElement>>
 )

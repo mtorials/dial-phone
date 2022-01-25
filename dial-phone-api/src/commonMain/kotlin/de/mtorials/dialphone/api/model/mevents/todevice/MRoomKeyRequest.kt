@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.api.model.mevents.todevice
 
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.model.RequestedKeyInfo
 import de.mtorials.dialphone.api.model.enums.KeyRequestAction
 import de.mtorials.dialphone.api.model.mevents.EventContent
@@ -12,7 +13,7 @@ import kotlinx.serialization.Serializable
 data class MRoomKeyRequest(
     override val content: MRoomKeyRequestContent,
 ) : MatrixEvent {
-    override val sender: String? = null
+    override val sender: UserId? = null
     @Serializable
     data class MRoomKeyRequestContent(
         val action: KeyRequestAction,

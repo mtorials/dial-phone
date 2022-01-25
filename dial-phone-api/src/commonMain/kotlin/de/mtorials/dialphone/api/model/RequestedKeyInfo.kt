@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.api.model
 
+import de.mtorials.dialphone.api.ids.RoomId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -7,7 +8,7 @@ import kotlinx.serialization.Serializable
 data class RequestedKeyInfo(
     val algorithm: String,
     @SerialName("room_id")
-    val roomId: String,
+    val roomId: RoomId,
     @SerialName("sender_key")
     val senderKey: String,
     @SerialName("session_id")

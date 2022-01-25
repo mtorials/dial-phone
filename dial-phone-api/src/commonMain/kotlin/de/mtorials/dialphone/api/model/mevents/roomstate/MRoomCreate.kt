@@ -1,14 +1,16 @@
 package de.mtorials.dialphone.api.model.mevents.roomstate
 
+import de.mtorials.dialphone.api.ids.EventId
+import de.mtorials.dialphone.api.ids.UserId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @SerialName("m.room.create")
 @Serializable
 class MRoomCreate(
-    override val sender: String,
+    override val sender: UserId,
     @SerialName("event_id")
-    override val id: String? = null,
+    override val id: EventId? = null,
     override val content: Content,
     @SerialName("state_key")
     override val stateKey: String,
@@ -18,8 +20,7 @@ class MRoomCreate(
     @Serializable
     data class Content(
         @SerialName("room_version")
-        @Serializable
         val roomVersion: Int,
-        val creator: String
+        val creator: UserId
     ) : StateEventContent
 }
