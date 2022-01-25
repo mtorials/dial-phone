@@ -66,11 +66,14 @@ class EncryptionManager(
         val theirOneTimeKey = res.oneTimeKeys[userId.toString()]?.get(theirDeviceId)?.jsonObject?.entries?.first()?.value
             ?.jsonObject?.get("key")?.jsonPrimitive?.content
                 ?: throw RuntimeException("can get one time key")
-        return Session.createOutboundSession(
+        val olmSession = Session.createOutboundSession(
             account = account,
             theirIdentityKey = theirIdentityKey,
             theirOneTimeKey = theirOneTimeKey
         )
+        // TODO check if identity key (seems to work though)
+        store.olmSessionsBySenderKey[theirIdentityKey] = olmSession
+        return olmSession
     }
 
     fun decryptOlm(event: MRoomEncrypted) : MatrixEvent {
@@ -154,9 +157,6 @@ class EncryptionManager(
         store.outboundSessionByRoomId[roomId] = outbound
         val inbound = InboundGroupSession(outbound.sessionKey)
         store.inboundSessionsBySessionId[outbound.sessionId] = inbound
-//        // TODO remove
-//        println("Are the same: ")
-//        println(outbound.sessionId == inbound.sessionId) // true
         val devices = downloadDeviceList(roomId = roomId)
         val userToDeviceToEncrypted : MutableMap<String, MutableMap<String, JsonElement>> = mutableMapOf()
         devices.forEach { (userId, d) ->
@@ -173,15 +173,11 @@ class EncryptionManager(
                     sessionId = outbound.sessionId,
                     sessionKey = outbound.sessionKey,
                 )
-                // TODO remove
-                println(dialPhoneJson.encodeToString(content))
                 val encrypted = encryptOlm(content, userId.userId(), theirDeviceId, theirCurveKey, theirEDKey)
                 userToDeviceToEncrypted[userId]?.put(theirDeviceId, encrypted)
             }
         }
         val request = SendToDeviceRequest(userToDeviceToEncrypted)
-        // TODO remove
-        println(dialPhoneJson.encodeToString(request))
         client.sendEventToDevice("m.room.encrypted", request)
         return outbound
     }
@@ -207,8 +203,6 @@ class EncryptionManager(
             sessionId = outbound.sessionId,
             deviceId = deviceId,
         )
-        // TOTO remove
-        println(dialPhoneJson.encodeToString(encryptedContent))
         return encryptedContent
     }
 

@@ -2,10 +2,12 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.exceptions.SyncException
 import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.responses.sync.SyncResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.network.sockets.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.SerializationException
 
@@ -31,50 +33,48 @@ class Synchronizer(
         coroutineScope: CoroutineScope
     ) = coroutineScope.launch {
         while(isActive) {
-            try {
-                val res : SyncResponse = getSyncResponse()
-                lastTimeBatch = res.nextBatch
-                // Joined
-                res.rooms?.join?.forEach { (roomID, roomEvents) ->
-                    roomEvents.timeline.events.forEach { e ->
-                        val event = roomEventHook?.manipulateEvent(e) ?: e
-                        listeners.forEach {
-                            launch { it.onRoomEvent(event, roomID, phone, initialSync) }
-                        }
-                    }
-                    roomEvents.state?.events?.forEach { e ->
-                        val event = roomEventHook?.manipulateEvent(e) ?: e
-                        listeners.forEach {
-                            launch { it.onRoomEvent(event, roomID, phone, initialSync) }
-                        }
-                    }
-                }
-                // Invited
-                res.rooms?.invite?.forEach { (roomID, roomEvents) ->
-                    roomEvents.inviteState.events.forEach { event ->
-                        listeners.forEach {
-                            launch { it.onRoomEvent(event, roomID, phone, initialSync) }
-                        }
-                    }
-                }
-                // To device
-                res.toDevice?.events?.forEach { event ->
-                    listeners.forEach {
-                        launch { it.onToDeviceEvent(event, phone, initialSync) }
-                    }
-                }
-                // Presence
-                res.presence?.events?.forEach { event ->
-                    listeners.forEach {
-                        launch { it.onPresenceEvent(event, phone, initialSync) }
-                    }
-                }
-                if (initialSync) initCallback(phone)
-                initialSync = false
-                syncCallback(res)
-            } catch (e: RuntimeException) {
-                e.printStackTrace()
+            val res : SyncResponse = getSyncResponse()
+            lastTimeBatch = res.nextBatch
+            // Joined
+            res.rooms?.join?.forEach { (roomID, roomEvents) ->
+                roomEvents.timeline.events.forEach { toRoomListeners(it, roomID) }
+                roomEvents.state?.events?.forEach { toRoomListeners(it, roomID) }
             }
+            // Invited
+            res.rooms?.invite?.forEach { (roomID, roomEvents) ->
+                roomEvents.inviteState.events.forEach { toRoomListeners(it, roomID) }
+            }
+            // To device
+            res.toDevice?.events?.forEach { toDeviceListeners(it) }
+            // Presence
+            res.presence?.events?.forEach { toPresenceListener(it) }
+            if (initialSync) initCallback(phone)
+            initialSync = false
+            syncCallback(res)
+        }
+    }
+
+    private fun CoroutineScope.toRoomListeners(event: MatrixEvent, roomId: String) {
+        listeners.forEach {
+            try {
+                val e = roomEventHook?.manipulateEvent(event) ?: event
+                launch { it.onRoomEvent(e, roomId, phone, initialSync) }
+            }
+            catch (e: RuntimeException) { e.printStackTrace() }
+        }
+    }
+
+    private fun CoroutineScope.toDeviceListeners(event: MatrixEvent) {
+        listeners.forEach {
+            try { launch { it.onToDeviceEvent(event, phone, initialSync) } }
+            catch (e: RuntimeException) { e.printStackTrace() }
+        }
+    }
+
+    private fun CoroutineScope.toPresenceListener(event: MatrixEvent) {
+        listeners.forEach {
+            try { launch { it.onPresenceEvent(event, phone, initialSync) } }
+            catch (e: RuntimeException) { e.printStackTrace() }
         }
     }
 
