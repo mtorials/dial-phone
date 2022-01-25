@@ -70,12 +70,9 @@ class DialPhoneImpl internal constructor(
     }
 
     override suspend fun sendMessageEvent(roomId: String, type: String, content: EventContent): String {
-        if (encryptionManager.checkIfRoomEncrypted(roomId.roomId())) println("room encrypted! $roomId")
         if (!encryptionManager.checkIfRoomEncrypted(roomId.roomId()) || !useEncryption) {
             return super.sendMessageEvent(roomId, type, content)
         }
-        // TODO remove
-        println("encrypting event")
         val encryptedContent = encryptionManager.encryptMegolm(content = content, roomId = roomId.roomId(), type = type)
         return super.sendMessageEvent(roomId, "m.room.encrypted", encryptedContent)
     }

@@ -29,7 +29,6 @@ class EncryptionListener(
         val senderKey = event.content.senderKey ?: throw MalformedEncryptedEvent(event)
         val e = encryptionManager.decryptOlm(event)
         if (e !is MRoomKey) return
-        //println("[Incoming to-device] " + Json { prettyPrint = true }.encodeToString(e))
         encryptionManager.handleKeyEvent(e, senderKey)
     }
 }
