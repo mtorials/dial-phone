@@ -50,8 +50,8 @@ implementation("io.ktor:ktor-client-okhttp:1.5.0")
 
 Specific documentation can be found in `/docs`. At the time there is:
 
--[Events](docs/events.md)
--[Building](docs/BUILDING.md)
+- [Events](docs/events.md)
+- [Building](docs/BUILDING.md)
 
 ## Getting Started
 
