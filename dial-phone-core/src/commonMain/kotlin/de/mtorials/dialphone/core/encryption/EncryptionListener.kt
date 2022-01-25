@@ -10,6 +10,8 @@ import de.mtorials.dialphone.api.model.mevents.todevice.MRoomKey
 import de.mtorials.dialphone.core.exceptions.encryption.MalformedEncryptedEvent
 import de.mtorials.dialphone.core.exceptions.encryption.UnexpectedEncryptionAlgorithmException
 import de.mtorials.dialphone.core.ids.roomId
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class EncryptionListener(
     private val encryptionManager: EncryptionManager,
@@ -17,7 +19,6 @@ class EncryptionListener(
 
     override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneApi, isOld: Boolean) {
         if (event !is MRoomEncryption) return
-        println("Room $roomId is encrypted!")
         encryptionManager.markRoomEncrypted(roomId.roomId())
     }
 
@@ -26,9 +27,9 @@ class EncryptionListener(
         if (event.content.algorithm != MessageEncryptionAlgorithm.OLM_V1_CURVE25519_AES_SHA1)
             throw UnexpectedEncryptionAlgorithmException("to-device")
         val senderKey = event.content.senderKey ?: throw MalformedEncryptedEvent(event)
-        // HERE! cyphertext is empty object? why? m.dummy? own event?
         val e = encryptionManager.decryptOlm(event)
         if (e !is MRoomKey) return
+        //println("[Incoming to-device] " + Json { prettyPrint = true }.encodeToString(e))
         encryptionManager.handleKeyEvent(e, senderKey)
     }
 }
