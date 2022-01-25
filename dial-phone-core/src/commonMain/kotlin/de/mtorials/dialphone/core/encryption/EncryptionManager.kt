@@ -18,8 +18,7 @@ import de.mtorials.dialphone.core.ids.RoomId
 import de.mtorials.dialphone.core.ids.UserId
 import de.mtorials.dialphone.core.ids.userId
 import io.github.matrixkt.olm.*
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
+import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import kotlin.random.Random
 
@@ -117,12 +116,12 @@ class EncryptionManager(
         theirDeviceId: String,
         theirCurveKey: String,
         theirEDKey: String,
-    ) : MRoomEncrypted.MRoomEncryptedContent {
+    ) : JsonElement {
         val fullEventAsJson = dialPhoneJson.encodeToJsonElement(event)
         val session = startOlmSession(theirUserId, theirDeviceId, theirCurveKey)
         val payload = OlmMessagePayload(
             // if not standard json -> trying to get type will result in error
-            content = Json.encodeToJsonElement(MRoomKey.MRoomKeyContent.serializer(), event.content),
+            content = dialPhoneJson.encodeToJsonElement(MRoomKey.MRoomKeyContent.serializer(), event.content),
             type = "m.room.key",
             sender = ownId,
             recipient = theirUserId.toString(),
@@ -136,7 +135,7 @@ class EncryptionManager(
         val plainTextPayload = dialPhoneJson.encodeToString(payload)
         // TODO use secure random?
         val encryptedText = session.encrypt(plainTextPayload, Random)
-        return MRoomEncrypted.MRoomEncryptedContent(
+        val content = MRoomEncrypted.MRoomEncryptedContent(
             senderKey = account.identityKeys.curve25519,
             algorithm = MessageEncryptionAlgorithm.OLM_V1_CURVE25519_AES_SHA1,
             cipherText = buildJsonObject {
@@ -146,6 +145,7 @@ class EncryptionManager(
                 }
             }
         )
+        return dialPhoneJson.encodeToJsonElement(MRoomEncrypted.MRoomEncryptedContent.serializer(), content)
     }
 
     /**
@@ -183,6 +183,7 @@ class EncryptionManager(
         return outbound
     }
 
+    @OptIn(InternalSerializationApi::class)
     suspend fun encryptMegolm(
         content: EventContent,
         roomId: RoomId,

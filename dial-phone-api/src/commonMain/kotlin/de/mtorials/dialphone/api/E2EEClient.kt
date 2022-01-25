@@ -34,19 +34,31 @@ class E2EEClient(
     suspend fun queryKeys(request: KeyQueryRequest) : KeyQueryResponse =
         request(HttpMethod.Post, "keys/query", bodyValue = request)
 
-    /**
-     * can't use normal serialization, because EventContents are not registered
-     */
+
     suspend fun sendEventToDevice(
         eventType: String,
         content: SendToDeviceRequest,
     ) {
-        return client.request(
-            urlString = "${homeserverUrl}${DialPhoneApi.MATRIX_PATH}sendToDevice/$eventType/${random.nextInt()}"
-        ) {
-            contentType(ContentType.Application.Json)
-            method = HttpMethod.Put
-            body = content
-        }
+        return request(
+            httpMethod = HttpMethod.Put,
+            path = "sendToDevice/$eventType/${random.nextInt()}",
+            bodyValue = content,
+        )
     }
+
+//    /**
+//     * can't use normal serialization, because EventContents are not registered
+//     */
+//    suspend fun sendEventToDevice(
+//        eventType: String,
+//        content: SendToDeviceRequest,
+//    ) {
+//        return client.request(
+//            urlString = "${homeserverUrl}${DialPhoneApi.MATRIX_PATH}sendToDevice/$eventType/${random.nextInt()}"
+//        ) {
+//            contentType(ContentType.Application.Json)
+//            method = HttpMethod.Put
+//            body = content
+//        }
+//    }
 }

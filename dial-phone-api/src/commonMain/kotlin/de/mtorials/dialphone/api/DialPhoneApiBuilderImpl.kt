@@ -4,6 +4,7 @@ import de.mtorials.dialphone.api.authentication.Login
 import de.mtorials.dialphone.api.authentication.Registrar
 import de.mtorials.dialphone.api.listeners.ApiListener
 import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.model.mevents.EventContentSerialization
 import de.mtorials.dialphone.api.model.mevents.EventSerialization
 import io.ktor.client.*
 import io.ktor.client.features.*
@@ -94,7 +95,7 @@ open class DialPhoneApiBuilderImpl(
             explicitNulls = false
             serializersModule =
                     // TODO check if I broke smth
-                EventSerialization.serializersModule + customSerializer
+                EventSerialization.serializersModule + EventContentSerialization.serializersModule + customSerializer
         }
         client = HttpClient {
             install(JsonFeature) {
