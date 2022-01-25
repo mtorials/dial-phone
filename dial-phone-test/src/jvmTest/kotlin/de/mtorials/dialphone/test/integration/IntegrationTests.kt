@@ -51,7 +51,7 @@ class IntegrationTests {
                 makePublic()
             }
             assertEquals(room.receive().name, name)
-            dialPhone.addListener(ListenerAdapter {
+            dialPhone.addListeners(ListenerAdapter {
                 onRoomMessageReceived {
                     assertEquals(it.message.body, text)
                     syncJob.cancelAndJoin()
