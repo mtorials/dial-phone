@@ -1,12 +1,14 @@
 package de.mtorials.dialphone.api.responses
 
+import de.mtorials.dialphone.api.ids.RoomAlias
+import de.mtorials.dialphone.api.ids.RoomId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 class DiscordedRoomImpl(
     override val name: String,
-    override val aliases: List<String> = listOf(),
+    override val aliases: List<RoomAlias> = listOf(),
     @SerialName("avatar_url")
     override val avatarURL: String?,
     @SerialName("guest_can_join")
@@ -17,7 +19,8 @@ class DiscordedRoomImpl(
     @SerialName("world_readable")
     override val worldReadable: Boolean,
     @SerialName("room_id")
-    override val id: String,
+    override val id: RoomId,
+    // TODO check if required
     @SerialName("canonical_alias")
-    override val canonicalAlias: String
+    override val canonicalAlias: RoomAlias,
 ) : DiscoveredRoom

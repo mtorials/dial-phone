@@ -1,7 +1,7 @@
-package de.mtorials.dialphone.api.model.mevents
+package de.mtorials.dialphone.api.model.mevents.roommessage
 
-import de.mtorials.dialphone.api.model.mevents.roommessage.MatrixMessageEvent
-import de.mtorials.dialphone.api.model.mevents.roommessage.MessageEventContent
+import de.mtorials.dialphone.api.ids.EventId
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.model.enums.MessageType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -13,9 +13,9 @@ import kotlinx.serialization.Serializable
 @SerialName("m.reaction")
 @Serializable
 class MReaction(
-    override val sender: String,
+    override val sender: UserId,
     @SerialName("event_id")
-    override val id: String,
+    override val id: EventId,
     override val content: Content
 ) : MatrixMessageEvent {
     @Serializable

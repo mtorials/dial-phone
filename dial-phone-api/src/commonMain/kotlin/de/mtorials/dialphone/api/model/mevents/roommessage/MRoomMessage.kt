@@ -1,5 +1,7 @@
 package de.mtorials.dialphone.api.model.mevents.roommessage
 
+import de.mtorials.dialphone.api.ids.EventId
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.serialization.MessageEventContentSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -7,9 +9,9 @@ import kotlinx.serialization.Serializable
 @SerialName("m.room.message")
 @Serializable
 class MRoomMessage(
-    override val sender: String,
+    override val sender: UserId,
     @SerialName("event_id")
-    override val id: String,
+    override val id: EventId,
     @Serializable(with = MessageEventContentSerializer::class)
     override val content: MRoomMessageContent
 ) : MatrixMessageEvent {

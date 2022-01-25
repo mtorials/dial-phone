@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.api.requests.encryption
 
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -20,5 +21,5 @@ open class DeviceKeys(
      */
     open val keys: Map<String, String>,
     @SerialName("user_id")
-    open val userId: String,
+    open val userId: UserId,
 )

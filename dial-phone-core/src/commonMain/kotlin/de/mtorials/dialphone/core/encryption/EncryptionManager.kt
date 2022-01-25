@@ -170,7 +170,7 @@ class EncryptionManager(
                     ?: throw MissingKeyException("Cant find $ED25519 identity key in query.")
                 val content = MRoomKey.MRoomKeyContent(
                     algorithm = RoomEncryptionAlgorithm.MEGOLM_V1_AES_SHA2,
-                    roomId = roomId.toString(),
+                    roomId = roomId,
                     sessionId = outbound.sessionId,
                     sessionKey = outbound.sessionKey,
                 )

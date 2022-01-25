@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.api.model
+package de.mtorials.dialphone.api.model.mevents
 
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 

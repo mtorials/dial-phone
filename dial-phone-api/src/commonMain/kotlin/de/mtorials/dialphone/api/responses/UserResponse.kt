@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.api.responses
 
+import de.mtorials.dialphone.api.ids.UserId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,7 +11,7 @@ class UserResponse(
 //    @SerialName("displayname")
 //    val displayName: String? = null,
     @SerialName("user_id")
-    val id: String,
+    val id: UserId,
     /**
      * Can be omitted in the case of an application service
      */

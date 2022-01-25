@@ -1,11 +1,14 @@
 package de.mtorials.dialphone.api.responses
 
+import de.mtorials.dialphone.api.ids.RoomAlias
+import de.mtorials.dialphone.api.ids.RoomId
+
 
 interface DiscoveredRoom {
-    val id: String
+    val id: RoomId
     val name: String
-    val aliases: List<String>
-    val canonicalAlias: String
+    val aliases: List<RoomAlias>
+    val canonicalAlias: RoomAlias
     val avatarURL: String?
     val guestCanJoin: Boolean
     val numberMembers: Int
