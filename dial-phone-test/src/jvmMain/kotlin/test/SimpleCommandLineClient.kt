@@ -2,6 +2,7 @@ package test
 
 import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.core.DialPhone
+import de.mtorials.dialphone.core.dialevents.answer
 import de.mtorials.dialphone.core.listeners.ListenerAdapter
 import de.mtorials.dialphone.core.listeners.MessageListener
 import de.mtorials.dialphone.core.sendTextMessage
@@ -21,10 +22,19 @@ fun main() {
                 event.run { println("${message.author.userId} : ${message.body}") }
             })
             addListeners(ListenerAdapter {
-                onRoomInvited { it.invitedRoomActions.join() }
+                onRoomInvited { it.actions.join() }
             })
             useEncryption()
             ktorLogLevel = LogLevel.NONE
+        }
+        val myListener = ListenerAdapter {
+            onRoomInvited { event ->
+                event.actions.join()
+                event.room.sendTextMessage("Hey, I join everywhere!")
+            }
+            onRoomMessageReceived { event ->
+                if (event.message.body == "ping") event answer "pong!"
+            }
         }
 //        val room = phone.createRoom("The Riders") {
 //            makePublic()
