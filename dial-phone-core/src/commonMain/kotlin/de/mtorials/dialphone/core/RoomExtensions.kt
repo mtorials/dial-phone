@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.core
 
+import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomName
 import de.mtorials.dialphone.core.actions.RoomActions
@@ -23,7 +24,7 @@ suspend infix fun RoomActions.rename(name: String) = setName(name)
  */
 suspend fun RoomActions.sendAndGet(message: String) =
     MessageFuture(
-        this@sendAndGet.sendTextMessage(message).eventId(),
+        this@sendAndGet.sendTextMessage(message),
         this@sendAndGet.id,
         this@sendAndGet.phone
     )
@@ -31,7 +32,7 @@ suspend fun RoomActions.sendAndGet(message: String) =
 /**
  * Send a Text message
  */
-suspend fun RoomActions.sendTextMessage(content: String) : String = this.sendMessageEvent(
+suspend fun RoomActions.sendTextMessage(content: String) : EventId = this.sendMessageEvent(
     content = MRoomMessage.TextContent(
         body = content
     ),
@@ -41,7 +42,7 @@ suspend fun RoomActions.sendTextMessage(content: String) : String = this.sendMes
 /**
  * Send a HTML message
  */
-suspend fun RoomActions.sendHtmlMessage(content: String, nonFormattedContent: String? = null) : String = this.sendMessageEvent(
+suspend fun RoomActions.sendHtmlMessage(content: String, nonFormattedContent: String? = null) : EventId = this.sendMessageEvent(
     content = MRoomMessage.TextContent(
         body = nonFormattedContent ?: content,
         format = MRoomMessage.htmlFormat,
@@ -53,7 +54,7 @@ suspend fun RoomActions.sendHtmlMessage(content: String, nonFormattedContent: St
 /**
  * Send an image
  */
-suspend fun RoomActions.sendImageWithUrl(url: String, title: String? = null) : String = this.sendMessageEvent(
+suspend fun RoomActions.sendImageWithUrl(url: String, title: String? = null) : EventId = this.sendMessageEvent(
     content = MRoomMessage.ImageContent(
         body = title ?: "image send with dial-phone",
         url = url

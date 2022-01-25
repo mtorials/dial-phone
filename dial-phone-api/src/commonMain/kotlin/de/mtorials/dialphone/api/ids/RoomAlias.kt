@@ -14,7 +14,7 @@ class RoomAlias(
 class RoomAliasSerializer : MatrixIdSerializer<RoomAlias>("roomAlias") {
     override fun deserialize(decoder: Decoder): RoomAlias {
         val value = decoder.decodeString()
-        checkIdType(value, MatrixID.IDType.ROOM_ALIAS)
+        checkIfType(value, MatrixID.IDType.ROOM_ALIAS)
         return RoomAlias(value)
     }
 }

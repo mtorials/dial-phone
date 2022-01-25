@@ -18,7 +18,7 @@ abstract class MatrixIdSerializer<T : MatrixID>(
         encoder.encodeString(value.value)
     }
 
-    protected fun checkIdType(value: String, type: MatrixID.IDType) {
-        if (value[1].toString() != type.symbol) throw SerializationException("ID type does not match the given id.")
+    protected fun checkIfType(value: String, type: MatrixID.IDType) {
+        if (!value.startsWith(type.symbol)) throw SerializationException("ID type does not match the given id.")
     }
 }

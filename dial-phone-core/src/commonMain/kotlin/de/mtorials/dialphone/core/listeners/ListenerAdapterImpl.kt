@@ -50,7 +50,7 @@ open class ListenerAdapterImpl(
                 )
             ) }
             is MRoomMember -> when (event.content.membership) {
-                Membership.INVITE -> if (event.stateKey == phone.ownId) coroutineScope.launch {
+                Membership.INVITE -> if (event.stateKey == phone.ownId.toString()) coroutineScope.launch {
                     callbackOnRoomInvited(
                         RoomInviteEvent(
                             roomId = roomId,

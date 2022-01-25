@@ -1,5 +1,8 @@
 package de.mtorials.dialphone.api
 
+import de.mtorials.dialphone.api.ids.EventId
+import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.listeners.ApiListener
 import de.mtorials.dialphone.api.model.mevents.EventContent
@@ -10,7 +13,7 @@ open class DialPhoneApiImpl constructor(
     final override val token: String,
     final override val homeserverUrl: String,
     //override val commandPrefix: String,
-    override val ownId: String,
+    override val ownId: UserId,
     protected val client: HttpClient,
     protected val initCallback: suspend (DialPhoneApi) -> Unit,
     protected val coroutineScope: CoroutineScope,
@@ -23,7 +26,7 @@ open class DialPhoneApiImpl constructor(
         client = client
     )
 
-    override suspend fun sendMessageEvent(roomId: String, type: String, content: EventContent) : String {
+    override suspend fun sendMessageEvent(roomId: RoomId, type: String, content: EventContent) : EventId {
         return apiRequests.sendMessageEvent(type, content, roomId)
     }
 

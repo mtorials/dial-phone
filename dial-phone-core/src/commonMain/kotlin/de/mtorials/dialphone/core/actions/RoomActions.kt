@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.core.actions
 
+import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.api.model.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.api.model.mevents.roomstate.StateEventContent
 import de.mtorials.dialphone.core.DialPhone
@@ -18,7 +19,7 @@ interface RoomActions {
      * @param eventType The matrix event type (e.g. m.room.message)
      * @return The event Id
      */
-    suspend fun sendMessageEvent(content: MessageEventContent, eventType: String) : String
+    suspend fun sendMessageEvent(content: MessageEventContent, eventType: String) : EventId
 
     /**
      * Sends an MatrixStateEvent and returns the id
@@ -27,7 +28,7 @@ interface RoomActions {
      * @param stateKey The state key. Mostly empty. See matrix specifications
      * @return The event Id
      */
-    suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: String = "") : String
+    suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: String = "") : EventId
 
     /**
      * Leave the room

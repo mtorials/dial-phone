@@ -2,7 +2,6 @@ package de.mtorials.dialphone.api.ids
 
 import de.mtorials.dialphone.api.serialization.MatrixIdSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encoding.Decoder
 
 
@@ -16,7 +15,7 @@ class EventId(
 class EventIdSerializer : MatrixIdSerializer<EventId>("eventId") {
     override fun deserialize(decoder: Decoder): EventId {
         val value = decoder.decodeString()
-        checkIdType(value, MatrixID.IDType.EVENT)
+        checkIfType(value, MatrixID.IDType.EVENT)
         return EventId(value)
     }
 }

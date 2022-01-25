@@ -24,7 +24,7 @@ class MessageFuture(
             roomFuture = RoomFutureImpl(roomId, phone),
             id = id,
             author = MemberImpl(
-                userId = event.sender.userId(),
+                userId = event.sender,
                 roomId = roomId,
                 phone = phone
             )

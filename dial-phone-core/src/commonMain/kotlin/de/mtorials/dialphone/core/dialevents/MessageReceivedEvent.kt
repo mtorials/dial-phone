@@ -22,7 +22,7 @@ class MessageReceivedEvent(
     constructor(roomID: RoomId, event: MRoomMessage, phone: DialPhone) : this(
         RoomFutureImpl(roomID, phone),
         MemberImpl(
-            userId = event.sender.userId(),
+            userId = event.sender,
             roomId = roomID,
             phone = phone
         ),
@@ -31,11 +31,11 @@ class MessageReceivedEvent(
             messageType = event.content::class,
             phone = phone,
             roomFuture = RoomFutureImpl(roomID, phone),
-            id = event.id.eventId(),
+            id = event.id,
             author = MemberImpl(
-                userId = event.sender.userId(),
+                userId = event.sender,
                 roomId = roomID,
                 phone = phone
             )
-        ), event.id.eventId(), phone)
+        ), event.id, phone)
 }

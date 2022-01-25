@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.core.encryption
 
+import de.mtorials.dialphone.api.ids.UserId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -8,7 +9,7 @@ import kotlinx.serialization.json.JsonElement
 data class OlmMessagePayload(
     val type: String,
     val content: JsonElement,
-    val sender: String,
+    val sender: UserId,
     val recipient: String,
     @SerialName("recipient_keys")
     val recipientKeys: Map<String, String>,

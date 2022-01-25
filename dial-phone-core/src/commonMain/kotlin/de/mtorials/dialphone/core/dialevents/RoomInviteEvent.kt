@@ -19,5 +19,5 @@ class RoomInviteEvent(
         InvitedRoomActionsImpl(
             phone,
             roomId
-        ), event.sender.userId(), event.content, phone)
+        ), event.sender, event.content, phone)
 }
