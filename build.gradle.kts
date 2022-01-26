@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "de.mtorials"
-version = "0.2.1"
+version = "0.2.0"
 
 allprojects {
     repositories {
