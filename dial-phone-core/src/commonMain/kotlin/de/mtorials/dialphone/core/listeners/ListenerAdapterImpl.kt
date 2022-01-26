@@ -11,6 +11,7 @@ import de.mtorials.dialphone.core.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.core.dialevents.RoomInviteEvent
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.roomId
+import de.mtorials.dialphone.api.listeners.GenericListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -22,7 +23,7 @@ import kotlinx.coroutines.launch
 open class ListenerAdapterImpl(
     private val receivePastEvents: Boolean = false,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
-) : ListenerAdapter {
+) : ListenerAdapter, GenericListener<DialPhone> {
 
     protected open var callbackOnMessageReceived : EventCallback<MessageReceivedEvent> = {}
     protected open var callbackOnRoomInvited : EventCallback<RoomInviteEvent> = {}
@@ -36,8 +37,7 @@ open class ListenerAdapterImpl(
     }
 
     override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone, isOld: Boolean) {
-        // TODO not an unchecked cast?
-        if (!isOld || receivePastEvents) onEvent(event, roomId.roomId(), phone as DialPhone)
+        if (!isOld || receivePastEvents) onEvent(event, roomId.roomId(), phone)
     }
 
     protected fun onEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhone) {
