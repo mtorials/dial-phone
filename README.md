@@ -51,6 +51,7 @@ implementation("io.ktor:ktor-client-okhttp:1.5.0")
 Specific documentation can be found in `/docs`. At the time there is:
 
 - [Events](docs/events.md)
+- [Login and Registration](docs/login.md)
 - [Building](docs/BUILDING.md)
 
 ## Getting Started
@@ -61,15 +62,10 @@ Use can create a guest account or login with a access token you can receive for 
 Login and registration with username and password will be available in the future.
 ```kotlin
 val phone = DialPhone("<HOMESERVER_URL>") { // this: DialPhoneBuilder
-    withToken("<YOUR_TOKEN>") // If you want to login with an access token
-    asGuets() // If you want to create a guest account
     asUser("myusername", "mypassword") // login with credentials
     addListeners(
         ExampleListener(),
         SecondExampleListener()
-    )
-    addCustomEventTypes(
-        TestStateEvent::class
     )
     useEncryption() // To enable E2EE (very early)
 }
