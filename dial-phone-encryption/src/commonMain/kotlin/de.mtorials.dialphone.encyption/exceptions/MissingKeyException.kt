@@ -1,3 +1,3 @@
-package de.mtorials.dialphone.core.exceptions.encryption
+package de.mtorials.dialphone.encyption.exceptions
 
 class MissingKeyException(message: String) : EncryptionException(message)

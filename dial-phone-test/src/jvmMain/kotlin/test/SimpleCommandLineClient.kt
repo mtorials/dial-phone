@@ -6,17 +6,20 @@ import de.mtorials.dialphone.core.dialevents.answer
 import de.mtorials.dialphone.core.listeners.ListenerAdapter
 import de.mtorials.dialphone.core.listeners.MessageListener
 import de.mtorials.dialphone.core.sendTextMessage
+import de.mtorials.dialphone.encyption.useEncryption
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.runBlocking
+
+const val ADDR = "http://localhost:80"
 
 fun main() {
     runBlocking {
         println("Starting....")
-        DialPhoneApi("http://localhost:8008") {
+        DialPhoneApi(ADDR) {
             asUser("test", "test", true)
             ktorLogLevel = LogLevel.NONE
         }
-        val phone = DialPhone("http://localhost:8008") {
+        val phone = DialPhone(ADDR) {
             asUser("superman", "test", true)
             addListeners(MessageListener(false) { event ->
                 event.run { println("${message.author.userId} : ${message.body}") }

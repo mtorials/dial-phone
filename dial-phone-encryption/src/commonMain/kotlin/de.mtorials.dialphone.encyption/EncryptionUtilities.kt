@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.core.encryption
+package de.mtorials.dialphone.encyption
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.encoding.Encoder

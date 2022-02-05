@@ -7,7 +7,6 @@ import de.mtorials.dialphone.api.responses.sync.SyncResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.network.sockets.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.SerializationException
 
@@ -16,9 +15,10 @@ class Synchronizer(
     private val client: HttpClient,
     private val fullState: Boolean = false,
     private val initCallback: suspend (DialPhoneApi) -> Unit,
-    private val roomEventHook: RoomEventHook? = null,
     private val syncCallback: (SyncResponse) -> Unit = {},
 ) {
+
+    var beforeRoomEvent: (MatrixEvent) -> MatrixEvent = { it }
 
     private val listeners: MutableList<GenericListener<DialPhoneApi>> = mutableListOf()
 
@@ -57,8 +57,10 @@ class Synchronizer(
     private fun CoroutineScope.toRoomListeners(event: MatrixEvent, roomId: String) {
         listeners.forEach {
             try {
-                val e = roomEventHook?.manipulateEvent(event) ?: event
-                launch { it.onRoomEvent(e, roomId, phone, initialSync) }
+                launch {
+                    val e = beforeRoomEvent(event) ?: event
+                    it.onRoomEvent(e, roomId, phone, initialSync)
+                }
             }
             catch (e: RuntimeException) { e.printStackTrace() }
         }

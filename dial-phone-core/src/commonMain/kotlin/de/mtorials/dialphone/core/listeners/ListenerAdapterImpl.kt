@@ -1,6 +1,5 @@
 package de.mtorials.dialphone.core.listeners
 
-import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.model.enums.Membership
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
@@ -14,7 +13,6 @@ import de.mtorials.dialphone.api.ids.roomId
 import de.mtorials.dialphone.api.listeners.GenericListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 /**

@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.core.exceptions.encryption
+package de.mtorials.dialphone.encyption.exceptions
 
 import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
 

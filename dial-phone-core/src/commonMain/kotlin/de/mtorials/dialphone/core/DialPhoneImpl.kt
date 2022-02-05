@@ -1,13 +1,10 @@
 package de.mtorials.dialphone.core
 
-import de.mtorials.dialphone.api.DialPhoneApi
-import de.mtorials.dialphone.api.DialPhoneApiImpl
-import de.mtorials.dialphone.api.E2EEClient
-import de.mtorials.dialphone.api.Synchronizer
+import de.mtorials.dialphone.api.*
 import de.mtorials.dialphone.api.ids.*
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.model.mevents.EventContent
-import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
+import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
 import de.mtorials.dialphone.api.responses.UserWithoutIDResponse
 import de.mtorials.dialphone.core.actions.InvitedRoomActions
@@ -31,9 +28,7 @@ class DialPhoneImpl internal constructor(
     initCallback: suspend (DialPhoneApi) -> Unit,
     val cache: PhoneCache?,
     coroutineScope: CoroutineScope,
-    private val useEncryption: Boolean = true,
     deviceId: String?,
-    dialPhoneJson: Json,
 ) : DialPhone, DialPhoneApiImpl(
     token = token,
     homeserverUrl = homeserverUrl,
@@ -44,35 +39,17 @@ class DialPhoneImpl internal constructor(
     deviceId = deviceId,
 ) {
 
-    // E2EE
-    // TODO impl keystore
-    private val encryptionManager = EncryptionManager(
-        store = InMemoryE2EEStore(),
-        client = E2EEClient(client, token, homeserverUrl),
-        deviceId = deviceId ?: throw RuntimeException("DialPhone has no device id. This is possible if used as an appservice"),
-        ownId = ownId,
-        phone = this,
-        dialPhoneJson = dialPhoneJson,
-    )
-    private val decryptionHook = RoomEventDecryptionHook(encryptionManager)
-
     override val synchronizer = Synchronizer(
         this, client,
         initCallback = initCallback,
-        roomEventHook = if (useEncryption) decryptionHook else null
     )
 
-    init {
-        synchronizer.addListener(EncryptionListener(encryptionManager))
-        coroutineScope.launch { encryptionManager.publishKeys() }
+    fun beforeMessageEventPublish(block: suspend (RoomId, String, EventContent) -> Pair<String, EventContent>) {
+        apiRequests.beforeMessageEventPublish = block
     }
 
-    override suspend fun sendMessageEvent(roomId: RoomId, type: String, content: EventContent): EventId {
-        if (!encryptionManager.checkIfRoomEncrypted(roomId) || !useEncryption) {
-            return super.sendMessageEvent(roomId, type, content)
-        }
-        val encryptedContent = encryptionManager.encryptMegolm(content = content, roomId = roomId, type = type)
-        return super.sendMessageEvent(roomId, "m.room.encrypted", encryptedContent)
+    fun beforeRoomEventListener(block: (MatrixEvent) -> MatrixEvent) {
+        synchronizer.beforeRoomEvent = block
     }
 
     // TODO cast is unchecked, when can it fail?

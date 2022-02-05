@@ -3,7 +3,6 @@ package de.mtorials.dialphone.core.entities
 import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.core.DialPhone
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
 class UserImpl(
     @SerialName("avatar_url")

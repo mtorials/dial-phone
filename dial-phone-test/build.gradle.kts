@@ -20,6 +20,7 @@ kotlin {
                 // MODULES
                 implementation(project(":dial-phone-core"))
                 implementation(project(":dial-phone-api"))
+                implementation(project(":dial-phone-encryption"))
 
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
@@ -32,8 +33,6 @@ kotlin {
 
                 implementation("ch.qos.logback:logback-core:$logbackVersion")
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
-
-                implementation("io.github.matrixkt:olm-jvm:0.1.8")
             }
         }
         val jvmTest by getting {
@@ -41,6 +40,7 @@ kotlin {
                 // MODULES
                 implementation(project(":dial-phone-core"))
                 implementation(project(":dial-phone-api"))
+                implementation(project(":dial-phone-encryption"))
 
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
@@ -55,7 +55,6 @@ kotlin {
                 implementation("ch.qos.logback:logback-core:$logbackVersion")
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
-                implementation("io.github.matrixkt:olm-jvm:0.1.8")
             }
         }
     }

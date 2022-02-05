@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.core
 
 import de.mtorials.dialphone.api.DialPhoneApiBuilder
+import de.mtorials.dialphone.api.EventHook
 import de.mtorials.dialphone.core.cache.PhoneCache
 
 interface DialPhoneBuilder : DialPhoneApiBuilder {
@@ -12,9 +13,9 @@ interface DialPhoneBuilder : DialPhoneApiBuilder {
     var cache: PhoneCache?
 
     /**
-     * Call to enable encryption
+     * To inject code into the build processes, for modularity reasons
      */
-    fun useEncryption()
+    fun afterInitialization(block: DialPhoneBuilderImpl.(DialPhoneImpl) -> Unit)
 
     /**
      * Use the in memory cache implementation
