@@ -39,9 +39,4 @@ publish:
   script: gradle publish
   only:
     - tags
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
-    paths:
-      - build
-      - .gradle
+  environment: publishing-env
