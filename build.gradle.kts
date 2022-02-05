@@ -17,7 +17,7 @@ allprojects {
         mavenCentral()
         jcenter()
         maven {
-            url = uri("https://gitlab.example.com/api/v4/groups/mtorials/-/packages/maven")
+            url = uri("https://git.mt32.net/api/v4/groups/mtorials/-/packages/maven")
             name = "GitLab"
             credentials(HttpHeaderCredentials::class) {
                 name = "Job-Token"
@@ -30,6 +30,8 @@ allprojects {
         maven("https://maven.pkg.github.com/Dominaezzz/matrix-kt") {
             credentials {
                 username = System.getenv("GH_USER")
+                // TODO remove
+                println(System.getenv("GH_USER"))
                 password = System.getenv("GH_TOKEN")
             }
         }
