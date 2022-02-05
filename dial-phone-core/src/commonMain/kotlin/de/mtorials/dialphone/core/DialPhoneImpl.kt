@@ -1,7 +1,11 @@
 package de.mtorials.dialphone.core
 
-import de.mtorials.dialphone.api.*
-import de.mtorials.dialphone.api.ids.*
+import de.mtorials.dialphone.api.DialPhoneApi
+import de.mtorials.dialphone.api.DialPhoneApiImpl
+import de.mtorials.dialphone.api.Synchronizer
+import de.mtorials.dialphone.api.ids.RoomAlias
+import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
@@ -10,15 +14,12 @@ import de.mtorials.dialphone.api.responses.UserWithoutIDResponse
 import de.mtorials.dialphone.core.actions.InvitedRoomActions
 import de.mtorials.dialphone.core.actions.InvitedRoomActionsImpl
 import de.mtorials.dialphone.core.cache.PhoneCache
-import de.mtorials.dialphone.core.encryption.*
 import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entities.UserImpl
 import de.mtorials.dialphone.core.entityfutures.RoomFuture
 import de.mtorials.dialphone.core.entityfutures.RoomFutureImpl
 import io.ktor.client.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 
 class DialPhoneImpl internal constructor(
     token: String,
