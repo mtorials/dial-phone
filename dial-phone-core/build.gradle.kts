@@ -28,8 +28,6 @@ kotlin {
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
-
-                implementation("io.github.matrixkt:olm:0.1.8")
             }
         }
     }
