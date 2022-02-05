@@ -15,7 +15,7 @@ Supported platforms are jvm and js, but testing is mostly done on the jvm.
 See my [dial-bot](https://github.com/mtorials/dialbot) repository for a reference bot implementation.
 (outdated currently)
 
-Basic e2ee is implemented, but very experimental.
+Basic e2ee is implemented, but very experimental and only works on the jvm.
 
 ## Installation
 
@@ -36,11 +36,12 @@ Add to dependencies:
 
 ```kotlin
 // build.gradle.kts
-// If you use the library for js, replace jvm with js
-implementation("de.mtorials.dail-phone:dial-phone-api-jvm:<SEE_RELEASES>")
-implementation("de.mtorials.dail-phone:dial-phone-core-jvm:<SEE_RELEASES>")
-// If you want to use bot features, not well supported at the moment
-implementation("de.mtorials.dail-phone:dial-phone-bot-jvm:<SEE_RELEASES>")
+implementation("de.mtorials.dail-phone:dial-phone-api:<SEE_RELEASES>")
+implementation("de.mtorials.dail-phone:dial-phone-core:<SEE_RELEASES>")
+// If you want to use encryption (jvm only)
+implementation("de.mtorials.dail-phone:dial-phone-bot-encryption:<SEE_RELEASES>")
+// If you want to use bot features, not well-supported at the moment
+implementation("de.mtorials.dail-phone:dial-phone-bot:<SEE_RELEASES>")
 // A ktor client of your choice, here okhttp
 // please check for a newer version!
 implementation("io.ktor:ktor-client-okhttp:1.5.0")
