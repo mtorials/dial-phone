@@ -39,4 +39,3 @@ publish:
   script: gradle publish
   only:
     - tags
-  environment: publishing-env
