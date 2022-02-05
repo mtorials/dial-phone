@@ -1,6 +1,5 @@
 package de.mtorials.dialphone.core.dialevents
 
-import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.core.DialPhone
@@ -9,8 +8,6 @@ import de.mtorials.dialphone.core.entities.MemberImpl
 import de.mtorials.dialphone.core.entities.Message
 import de.mtorials.dialphone.core.entityfutures.RoomFutureImpl
 import de.mtorials.dialphone.api.ids.RoomId
-import de.mtorials.dialphone.api.ids.eventId
-import de.mtorials.dialphone.api.ids.userId
 
 class MessageReceivedEvent(
     val roomFuture: RoomFutureImpl,

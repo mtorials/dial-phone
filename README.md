@@ -39,7 +39,7 @@ Add to dependencies:
 // If you use the library for js, replace jvm with js
 implementation("de.mtorials.dail-phone:dial-phone-api-jvm:<SEE_RELEASES>")
 implementation("de.mtorials.dail-phone:dial-phone-core-jvm:<SEE_RELEASES>")
-// If you want to use bot features
+// If you want to use bot features, not well supported at the moment
 implementation("de.mtorials.dail-phone:dial-phone-bot-jvm:<SEE_RELEASES>")
 // A ktor client of your choice, here okhttp
 // please check for a newer version!
@@ -83,7 +83,7 @@ phone.sync()
 To get a room you first have to get the corresponding entity future object.
 ```kotlin
 val myRoomFuture : RoomFuture = phone.getJoinedRoomFutureById("!YIqYutrrBUdGDombnI:mtorials.de")
-    ?: throw Exception("Not Found!")
+    ?: error("Room Not Found!")
 ```
 You can perform actions on the entity future. To get the entity data you have to receive it first:
 ```kotlin
@@ -144,6 +144,10 @@ class InviteListener : ListenerAdapter() {
     }
 }
 ```
+# Dependencies
+
+All packages depend on kotlinx.coroutines and kotlinx.serialization.
+The core package depends on the kotlin olm bindings by Dominaezzz [matrix-kt](https://github.com/Dominaezzz/matrix-kt).
 
 # Contact
 
@@ -152,7 +156,8 @@ You can of course also just open an issue.
 
 # Contributing
 
-Everyone is welcome to contribute. See the [CONTRIBUTING.md](https://github.com/mtorials/dial-phone/blob/master/CONTRIBUTING.md) for more information.
+Everyone is welcome to contribute.
+See the [CONTRIBUTING.md](https://github.com/mtorials/dial-phone/blob/master/CONTRIBUTING.md) for more information.
 
 # TODO
 

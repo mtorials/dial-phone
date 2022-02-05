@@ -2,6 +2,7 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.authentication.Login
 import de.mtorials.dialphone.api.authentication.Registrar
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.serialization.EventContentSerialization
 import de.mtorials.dialphone.api.serialization.EventSerialization
@@ -26,14 +27,15 @@ open class DialPhoneApiBuilderImpl(
 
     override var ktorLogLevel = LogLevel.NONE
 
-    protected var token: String? = null
-    private var ownId: String? = null
+    var token: String? = null
+    var ownId: UserId? = null
+    var deviceId: String? = null
     private var username: String? = null
     private var password: String? = null
     private var createUserIfNoRegistered: Boolean = false
-    protected val listenerList: MutableList<GenericListener<*>> = mutableListOf()
-    protected var customSerializer: SerializersModule = SerializersModule {  }
-    protected var coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+    val listenerList: MutableList<GenericListener<*>> = mutableListOf()
+    var customSerializer: SerializersModule = SerializersModule {  }
+    var coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
     private var isGuestBool = false
     // TODO remove bot stuff
@@ -107,7 +109,6 @@ open class DialPhoneApiBuilderImpl(
         if (isGuestBool) {
             val guest = Registrar(client).registerGuest(homeserverUrl)
             token = guest.token
-            ownId = guest.userId
         }
         if (token == null) {
             if (username == null || password == null) error("choose login method in builder")
@@ -139,6 +140,10 @@ open class DialPhoneApiBuilderImpl(
             }
 
         }
+        val apiRequests = APIRequests(homeserverUrl = homeserverUrl, token = token!!, client = client)
+        val me = apiRequests.getMe()
+        ownId = me.id
+        deviceId = me.deviceId
 //        if (commandListener != null) listenerList.add(commandListener!!)
     }
 
@@ -146,16 +151,14 @@ open class DialPhoneApiBuilderImpl(
         block()
         configure()
         // TODO necessary here?
-        val apiRequests = APIRequests(homeserverUrl = homeserverUrl, token = token!!, client = client)
-        val me = apiRequests.getMe()
         return DialPhoneApiImpl(
             token = token!!,
             homeserverUrl = homeserverUrl,
             client = client,
-            ownId = apiRequests.getMe().id,
+            ownId = ownId ?: error("Got no id"),
             initCallback = {},
             coroutineScope = coroutineScope,
-            deviceId = me.deviceId
+            deviceId = deviceId
         ).also { it.addListeners(*listenerList.toTypedArray()) }
     }
 

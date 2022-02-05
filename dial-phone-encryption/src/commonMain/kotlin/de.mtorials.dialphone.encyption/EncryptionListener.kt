@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.core.encryption
+package de.mtorials.dialphone.encyption
 
 import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.listeners.GenericListener
@@ -7,11 +7,9 @@ import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
 import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomEncryption
 import de.mtorials.dialphone.api.model.mevents.todevice.MRoomKey
-import de.mtorials.dialphone.core.exceptions.encryption.MalformedEncryptedEvent
-import de.mtorials.dialphone.core.exceptions.encryption.UnexpectedEncryptionAlgorithmException
+import de.mtorials.dialphone.encyption.exceptions.MalformedEncryptedEvent
+import de.mtorials.dialphone.encyption.exceptions.UnexpectedEncryptionAlgorithmException
 import de.mtorials.dialphone.api.ids.roomId
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class EncryptionListener(
     private val encryptionManager: EncryptionManager,

@@ -1,9 +1,7 @@
 package de.mtorials.dialphone.api
 
-import de.mtorials.dialphone.api.listeners.ApiListener
 import de.mtorials.dialphone.api.listeners.GenericListener
 import io.ktor.client.features.logging.*
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.modules.SerializersModule
 

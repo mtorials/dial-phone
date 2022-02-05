@@ -7,7 +7,6 @@ import de.mtorials.dialphone.core.entities.MemberImpl
 import de.mtorials.dialphone.core.entities.Message
 import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.api.ids.RoomId
-import de.mtorials.dialphone.api.ids.userId
 
 class MessageFuture(
     id: EventId,

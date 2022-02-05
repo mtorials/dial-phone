@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.core.encryption
+package de.mtorials.dialphone.encyption
 
 import de.mtorials.dialphone.api.E2EEClient
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm
@@ -10,15 +10,13 @@ import de.mtorials.dialphone.api.model.mevents.todevice.MRoomKey
 import de.mtorials.dialphone.api.requests.SendToDeviceRequest
 import de.mtorials.dialphone.api.requests.encryption.*
 import de.mtorials.dialphone.core.DialPhone
-import de.mtorials.dialphone.core.exceptions.encryption.MalformedEncryptedEvent
-import de.mtorials.dialphone.core.exceptions.encryption.MissingKeyException
-import de.mtorials.dialphone.core.exceptions.encryption.OlmSessionNotFound
-import de.mtorials.dialphone.core.exceptions.encryption.RoomKeyHandleException
+import de.mtorials.dialphone.encyption.exceptions.MalformedEncryptedEvent
+import de.mtorials.dialphone.encyption.exceptions.MissingKeyException
+import de.mtorials.dialphone.encyption.exceptions.OlmSessionNotFound
+import de.mtorials.dialphone.encyption.exceptions.RoomKeyHandleException
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.UserId
-import de.mtorials.dialphone.api.ids.userId
 import io.github.matrixkt.olm.*
-import kotlinx.coroutines.delay
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import kotlin.random.Random
@@ -244,7 +242,7 @@ class EncryptionManager(
                 it.userId to emptyList()
             } ?: throw RoomKeyHandleException("Cant find room with provided it")
         ))
-        // TODO a lot of checks<
+        // TODO a lot of checks
         return deviceList.deviceKeys ?: throw RuntimeException("No devices Found in device list")
     }
 
@@ -291,7 +289,7 @@ class EncryptionManager(
             "$SIGNED_CURVE25519:$id" to buildJsonObject {
                 put("key", key)
                 put("signatures", buildJsonObject {
-                    put(phone.ownId.toString(), buildJsonObject {
+                    put(ownId.toString(), buildJsonObject {
                         put("$ED25519:$deviceId", signature)
                     })
                 })

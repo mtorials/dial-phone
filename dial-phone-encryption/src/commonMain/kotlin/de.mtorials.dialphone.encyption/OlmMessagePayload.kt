@@ -1,4 +1,4 @@
-package de.mtorials.dialphone.core.encryption
+package de.mtorials.dialphone.encyption
 
 import de.mtorials.dialphone.api.ids.UserId
 import kotlinx.serialization.SerialName

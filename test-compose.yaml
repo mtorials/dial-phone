@@ -10,6 +10,6 @@ services:
       - SYNAPSE_HTTP_PORT=8008
       - SYNAPSE_CONFIG_DIR=/config
     ports:
-      - 8008:8008
+      - 80:8008
     volumes:
       - ./synapse:/config
