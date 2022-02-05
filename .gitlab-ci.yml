@@ -4,6 +4,10 @@
 # https://github.com/gradle/gradle
 image: gradle:6.8.0-jdk11
 
+stages:
+  - build
+  - publish
+
 # Disable the Gradle daemon for Continuous Integration servers as correctness
 # is usually a priority over speed in CI environments. Using a fresh
 # runtime for each build is more reliable since the runtime is completely
