@@ -26,6 +26,6 @@ data class MCallAnswer(
     @Serializable
     data class Answer(
         val sdp: String,
-        val type: VOIPSessionDescription = VOIPSessionDescription.ANSWER,
+        val type: VOIPSessionDescription,
     )
 }

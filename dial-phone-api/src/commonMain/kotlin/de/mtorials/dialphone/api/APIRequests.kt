@@ -46,6 +46,8 @@ class APIRequests(
         request(Get, "directory/room/${encode(alias)}")
     suspend fun createRoom(request: RoomCreateRequest) : RoomResponse =
         request(Post, "createRoom", bodyValue = request)
+    suspend fun turnCredentials() : TurnCredentialsResponse =
+        request(Get, "voip/turnServer")
 
     // Events
     suspend fun sendMessageEvent(
