@@ -34,14 +34,16 @@ maven { url = uri("https://git.mt32.net/api/v4/projects/59/packages/maven") }
 
 Add to dependencies:
 
+Always check for a newer version!
+
 ```kotlin
 // build.gradle.kts
-implementation("de.mtorials.dail-phone:dial-phone-api:<SEE_RELEASES>")
-implementation("de.mtorials.dail-phone:dial-phone-core:<SEE_RELEASES>")
+implementation("de.mtorials.dail-phone:dial-phone-api:0.2.0")
+implementation("de.mtorials.dail-phone:dial-phone-core:0.2.0")
 // If you want to use encryption (jvm only)
-implementation("de.mtorials.dail-phone:dial-phone-bot-encryption:<SEE_RELEASES>")
+implementation("de.mtorials.dail-phone:dial-phone-encryption:0.2.0")
 // If you want to use bot features, not well-supported at the moment
-implementation("de.mtorials.dail-phone:dial-phone-bot:<SEE_RELEASES>")
+implementation("de.mtorials.dail-phone:dial-phone-bot:0.2.0")
 // A ktor client of your choice, here okhttp
 // please check for a newer version!
 implementation("io.ktor:ktor-client-okhttp:1.5.0")
