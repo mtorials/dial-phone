@@ -10,13 +10,15 @@ import de.mtorials.dialphone.encyption.useEncryption
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.runBlocking
 
-const val ADDR = "http://localhost:80"
+const val LOCAL_ADDR = "http://localhost:80"
+const val REMOTE_ADDR = "https://matrix.mtorials.de"
+const val ADDR = LOCAL_ADDR
 
 fun main() {
     runBlocking {
         println("Starting....")
         DialPhoneApi(ADDR) {
-            asUser("test", "test", true)
+            asUser("tes", "tes", true)
             ktorLogLevel = LogLevel.NONE
         }
         val phone = DialPhone(ADDR) {
@@ -27,8 +29,8 @@ fun main() {
             addListeners(ListenerAdapter {
                 onRoomInvited { it.actions.join() }
             })
-            useEncryption()
-            ktorLogLevel = LogLevel.NONE
+            //useEncryption()
+            ktorLogLevel = LogLevel.ALL
         }
         val myListener = ListenerAdapter {
             onRoomInvited { event ->
@@ -43,6 +45,9 @@ fun main() {
 //            makePublic()
 //            topic = "please come and ride with me"
 //        }
+
+        println(phone.apiRequests.turnCredentials())
+
         println("Created room, start syncing...")
         phone.sync()
         while(true) {

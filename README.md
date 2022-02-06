@@ -5,8 +5,6 @@
 
 ![dialphone-logo](https://raw.githubusercontent.com/mtorials/dial-phone/master/logo.png)
 
-*work in progress*
-
 A simple-to-use [Matrix](https://matrix.org/) client-server sdk for kotlin multiplatform in alpha.
 The library uses kotlinx.serialization and kotlinx.coroutines.
 
