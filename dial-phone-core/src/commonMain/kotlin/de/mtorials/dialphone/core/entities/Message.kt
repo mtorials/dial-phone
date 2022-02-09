@@ -1,21 +1,20 @@
 package de.mtorials.dialphone.core.entities
 
 import de.mtorials.dialphone.api.ids.EventId
+import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
-import de.mtorials.dialphone.core.DialPhone
-import de.mtorials.dialphone.core.actions.MessageActionsImpl
-import de.mtorials.dialphone.core.entityfutures.RoomFuture
-import kotlin.reflect.KClass
+import de.mtorials.dialphone.core.entities.room.JoinedRoom
 
-class Message(
-    val body: String,
-    id: EventId,
-    phone: DialPhone,
-    val roomFuture: RoomFuture,
-    val messageType: KClass<out MRoomMessage.MRoomMessageContent>,
+interface Message : Entity {
+    override val id: EventId
+    val roomId: RoomId
+    val content: MRoomMessage.MRoomMessageContent
+    val room: JoinedRoom
+    val messageType: MRoomMessage.MRoomMessageEventContentType
     val author: Member
-) : MessageActionsImpl(
-    id = id,
-    phone = phone,
-    roomId = roomFuture.id
-)
+
+    /**
+     * Redact the message event
+     */
+    suspend fun redact(reason: String? = null)
+}

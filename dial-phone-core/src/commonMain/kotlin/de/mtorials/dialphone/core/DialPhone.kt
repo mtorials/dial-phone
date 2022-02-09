@@ -2,7 +2,6 @@ package de.mtorials.dialphone.core
 
 import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
-import de.mtorials.dialphone.core.actions.InvitedRoomActions
 import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entityfutures.RoomFuture
 import de.mtorials.dialphone.api.ids.RoomAlias

@@ -3,11 +3,7 @@ package de.mtorials.dialphone.core
 import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomName
-import de.mtorials.dialphone.core.actions.RoomActions
 import de.mtorials.dialphone.core.entityfutures.MessageFuture
-import de.mtorials.dialphone.api.ids.eventId
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 /**
  * Write a message to the room

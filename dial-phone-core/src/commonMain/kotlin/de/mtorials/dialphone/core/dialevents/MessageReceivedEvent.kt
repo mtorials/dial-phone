@@ -5,14 +5,14 @@ import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.entities.Member
 import de.mtorials.dialphone.core.entities.MemberImpl
-import de.mtorials.dialphone.core.entities.Message
+import de.mtorials.dialphone.core.entities.MessageImpl
 import de.mtorials.dialphone.core.entityfutures.RoomFutureImpl
 import de.mtorials.dialphone.api.ids.RoomId
 
 class MessageReceivedEvent(
     val roomFuture: RoomFutureImpl,
     val sender: Member,
-    val message: Message,
+    val message: MessageImpl,
     override val id: EventId,
     override val phone: DialPhone
 ) : DialEvent(phone, id) {
@@ -23,7 +23,7 @@ class MessageReceivedEvent(
             roomId = roomID,
             phone = phone
         ),
-        Message(
+        MessageImpl(
             body = event.content.body,
             messageType = event.content::class,
             phone = phone,
