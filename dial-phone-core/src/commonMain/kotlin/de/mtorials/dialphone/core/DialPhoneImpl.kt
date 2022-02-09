@@ -11,8 +11,6 @@ import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.responses.DiscoveredRoom
 import de.mtorials.dialphone.api.responses.UserWithoutIDResponse
-import de.mtorials.dialphone.core.actions.InvitedRoomActions
-import de.mtorials.dialphone.core.actions.InvitedRoomActionsImpl
 import de.mtorials.dialphone.core.cache.PhoneCache
 import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entities.UserImpl

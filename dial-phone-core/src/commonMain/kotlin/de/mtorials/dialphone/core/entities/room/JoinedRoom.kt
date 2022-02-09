@@ -1,17 +1,22 @@
-package de.mtorials.dialphone.core.actions
+package de.mtorials.dialphone.core.entities.room
 
 import de.mtorials.dialphone.api.ids.EventId
+import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.model.enums.JoinRule
 import de.mtorials.dialphone.api.model.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.api.model.mevents.roomstate.StateEventContent
-import de.mtorials.dialphone.core.DialPhone
-import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.core.entities.Entity
+import de.mtorials.dialphone.core.entities.Member
 
 /**
- * All actions you can perform on a room
+ * A matrix room
  */
-interface RoomActions {
-    val phone: DialPhone
-    val id: RoomId
+interface JoinedRoom : Entity {
+    override val id: RoomId
+    val name: String
+    val members: List<Member>
+    val avatarUrl: String?
+    val joinRule: JoinRule
 
     /**
      * Sends an MatrixMessageEvent and returns the id
