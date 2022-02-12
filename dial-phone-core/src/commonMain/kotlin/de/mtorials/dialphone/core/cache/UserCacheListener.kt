@@ -1,33 +1,31 @@
 package de.mtorials.dialphone.core.cache
 
-import de.mtorials.dialphone.api.DialPhoneApi
-import de.mtorials.dialphone.api.listeners.ApiListener
-import de.mtorials.dialphone.api.model.mevents.MatrixEvent
-import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomMember
-import de.mtorials.dialphone.core.DialPhone
-import de.mtorials.dialphone.core.entities.UserImpl
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.roomId
 import de.mtorials.dialphone.api.ids.userId
+import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.model.mevents.MatrixEvent
+import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomMember
+import de.mtorials.dialphone.core.DialPhone
+import de.mtorials.dialphone.core.DialPhoneImpl
+import de.mtorials.dialphone.core.entities.UserImpl
 
 class UserCacheListener(
     private val cache: PhoneCache,
     private val phone: DialPhone,
-) : ApiListener {
-    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneApi, isOld: Boolean) {
+) : GenericListener<DialPhoneImpl> {
+
+    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneImpl, isOld: Boolean) {
         cache(event, roomId.roomId())
     }
 
-    override fun onToDeviceEvent(event: MatrixEvent, phone: DialPhoneApi, isOld: Boolean) = Unit
-    override fun onPresenceEvent(event: MatrixEvent, phone: DialPhoneApi, isOld: Boolean) = Unit
-
     private fun cache(event: MatrixEvent, roomId: RoomId) {
-        if (event !is MRoomMember) return
-        cache.users[event.stateKey] = UserImpl(
-            id = event.stateKey.userId(),
-            avatarURL = event.content.avatarURL,
-            displayName = event.content.displayName,
-            phone = phone
-        )
+//        if (event !is MRoomMember) return
+//        cache.users[event.stateKey] = UserImpl(
+//            id = event.stateKey.userId(),
+//            avatarURL = event.content.avatarURL,
+//            displayName = event.content.displayName,
+//            phone = phone
+//        )
     }
 }

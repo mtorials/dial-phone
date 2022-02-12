@@ -1,18 +1,19 @@
 package de.mtorials.dialphone.core
 
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.model.enums.RoomVisibility
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.api.requests.RoomCreateRequest
-import de.mtorials.dialphone.core.entityfutures.UserFuture
+import de.mtorials.dialphone.core.entities.User
 
 class RoomBuilderImpl(private val name: String) : RoomBuilder {
 
-    private val invites: MutableList<String> = mutableListOf()
+    private val invites: MutableList<UserId> = mutableListOf()
     private var visibility: RoomVisibility = RoomVisibility.PRIVATE
     private val state: MutableList<MatrixStateEvent> = mutableListOf()
 
-    override fun invite(vararg users: UserFuture) {
-        invites.addAll(users.map { it.userId.toString() })
+    override fun invite(vararg users: User) {
+        invites.addAll(users.map { it.id })
     }
 
     override var topic: String = ""

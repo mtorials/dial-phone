@@ -10,4 +10,10 @@ import de.mtorials.dialphone.core.DialPhoneImpl
 interface Entity {
     val id : MatrixID
     val phone: DialPhone
+
+    /**
+     * Updates all the entities props by making a request to the api
+     * Useful when not using a cache
+     */
+    suspend fun forceUpdate()
 }

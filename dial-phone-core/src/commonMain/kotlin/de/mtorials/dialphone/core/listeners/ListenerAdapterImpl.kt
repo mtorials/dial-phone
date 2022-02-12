@@ -11,6 +11,11 @@ import de.mtorials.dialphone.core.dialevents.RoomInviteEvent
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.roomId
 import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.core.DialPhoneImpl
+import de.mtorials.dialphone.core.entities.MemberImpl
+import de.mtorials.dialphone.core.entities.MessageImpl
+import de.mtorials.dialphone.core.entities.room.InvitedRoom
+import de.mtorials.dialphone.core.entities.room.InvitedRoomImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +26,7 @@ import kotlinx.coroutines.launch
 open class ListenerAdapterImpl(
     private val receivePastEvents: Boolean = false,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
-) : ListenerAdapter, GenericListener<DialPhone> {
+) : ListenerAdapter, GenericListener<DialPhoneImpl> {
 
     protected open var callbackOnMessageReceived : EventCallback<MessageReceivedEvent> = {}
     protected open var callbackOnRoomInvited : EventCallback<RoomInviteEvent> = {}
@@ -34,26 +39,41 @@ open class ListenerAdapterImpl(
         callbackOnRoomInvited = block
     }
 
-    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhone, isOld: Boolean) {
+    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneImpl, isOld: Boolean) {
         if (!isOld || receivePastEvents) onEvent(event, roomId.roomId(), phone)
     }
 
-    protected fun onEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhone) {
+    protected fun onEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhoneImpl) {
         when(event) {
-            is MRoomMessage -> coroutineScope.launch { callbackOnMessageReceived(
-                MessageReceivedEvent(
-                    roomID = roomId,
-                    phone = phone,
-                    event = event
+            is MRoomMessage -> coroutineScope.launch {
+                val room = phone.getJoinedRoomById(roomId) ?: error("Can not find joined room")
+                callbackOnMessageReceived(
+                    MessageReceivedEvent(
+                        phone = phone,
+                        id = event.id,
+                        room = room,
+                        message = MessageImpl(
+                            phone,
+                            id = event.id,
+                            room = room,
+                            author = MemberImpl(phone.getUserById(event.sender) ?: error("Can not find user"), room),
+                            messageType = event.content.msgType,
+                            content = event.content,
+                        )
+                    )
                 )
-            ) }
+            }
             is MRoomMember -> when (event.content.membership) {
                 Membership.INVITE -> if (event.stateKey == phone.ownId.toString()) coroutineScope.launch {
                     callbackOnRoomInvited(
                         RoomInviteEvent(
-                            roomId = roomId,
                             phone = phone,
-                            event = event
+                            room = InvitedRoomImpl(
+                                phone = phone,
+                                id = roomId,
+                            ),
+                            sender = phone.getUserById(event.sender) ?: error("Can not find user"),
+                            content = event.content,
                         )
                     )
                 }

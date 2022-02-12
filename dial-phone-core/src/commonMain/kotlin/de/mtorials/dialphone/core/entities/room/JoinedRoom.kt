@@ -4,9 +4,11 @@ import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.model.enums.JoinRule
 import de.mtorials.dialphone.api.model.mevents.roommessage.MessageEventContent
+import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.api.model.mevents.roomstate.StateEventContent
 import de.mtorials.dialphone.core.entities.Entity
 import de.mtorials.dialphone.core.entities.Member
+import de.mtorials.dialphone.core.entities.Message
 
 /**
  * A matrix room
@@ -17,6 +19,11 @@ interface JoinedRoom : Entity {
     val members: List<Member>
     val avatarUrl: String?
     val joinRule: JoinRule
+
+    /**
+     * All matrix state events corresponding to this room
+     */
+    val stateEvents: List<MatrixStateEvent>
 
     /**
      * Sends an MatrixMessageEvent and returns the id

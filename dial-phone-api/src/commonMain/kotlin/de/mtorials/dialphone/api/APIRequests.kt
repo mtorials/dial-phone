@@ -76,7 +76,7 @@ class APIRequests(
             bodyValue = content
         ).id
     }
-    suspend fun redactEventWithIdInRoom(roomId: String, id: String, reason: String? = null) : EventResponse =
+    suspend fun redactEventWithIdInRoom(roomId: RoomId, id: EventId, reason: String? = null) : EventResponse =
         request(httpMethod = HttpMethod.Put, path = "rooms/${encode(roomId)}/redact/${encode(id)}/${random.nextInt()}", bodyValue = ReasonResponse(reason))
 
     //Profile

@@ -4,9 +4,7 @@ import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.dialevents.answer
 import de.mtorials.dialphone.core.listeners.ListenerAdapter
-import de.mtorials.dialphone.core.listeners.MessageListener
 import de.mtorials.dialphone.core.sendTextMessage
-import de.mtorials.dialphone.encyption.useEncryption
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.runBlocking
 
@@ -23,22 +21,22 @@ fun main() {
         }
         val phone = DialPhone(ADDR) {
             asUser("superman", "test", true)
-            addListeners(MessageListener(false) { event ->
-                event.run { println("${message.author.userId} : ${message.body}") }
-            })
+//            addListeners(MessageListener(false) { event ->
+//                event.run { println("${message.author.userId} : ${message.body}") }
+//            })
             addListeners(ListenerAdapter {
-                onRoomInvited { it.actions.join() }
+                onRoomInvited { it.room.join() }
             })
             //useEncryption()
             ktorLogLevel = LogLevel.ALL
         }
         val myListener = ListenerAdapter {
             onRoomInvited { event ->
-                event.actions.join()
-                event.room.sendTextMessage("Hey, I join everywhere!")
+                val room = event.room.join()
+                room.sendTextMessage("Hey, I join everywhere!")
             }
             onRoomMessageReceived { event ->
-                if (event.message.body == "ping") event answer "pong!"
+                if (event.message.content.body == "ping") event answer "pong!"
             }
         }
 //        val room = phone.createRoom("The Riders") {
