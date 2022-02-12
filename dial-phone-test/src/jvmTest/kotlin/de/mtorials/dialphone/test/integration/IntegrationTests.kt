@@ -14,26 +14,27 @@ class IntegrationTests {
 
     private val text = Helper.getRandomName(50)
 
-    lateinit var dialPhone: DialPhone
+    lateinit var user1: DialPhone
+    lateinit var user2: DialPhone
 
     @Before
     fun `register and login as user`() {
         runBlocking {
-            DialPhone(HOMESERVER_URL) {
-                asUser(TEST_USER, TEST_PWD, true)
+            user1 = DialPhone(Configs.HOMESERVER_URL) {
+                asUser(Configs.TEST_USER, Configs.TEST_PWD, true)
+            }
+            user2 = DialPhone(Configs.HOMESERVER_URL) {
+                asUser(Configs.USER2_USER, Configs.USER2_PWD, true)
             }
             // TODO remove rate limit in synapse
             delay(1000)
-            dialPhone = DialPhone(HOMESERVER_URL) {
-                asUser(TEST_USER, TEST_PWD)
-            }
         }
     }
 
     @Test
     fun `check guest access`() {
         runBlocking {
-            DialPhone(HOMESERVER_URL) {
+            DialPhone(Configs.HOMESERVER_URL) {
                 asGuest()
             }
         }
@@ -41,19 +42,19 @@ class IntegrationTests {
 
     @Test
     fun `create room`() {
-        val syncJob: Job = dialPhone.sync()
+        val syncJob: Job = user1.sync()
         runBlocking {
             println("started syncing!")
             delay(100)
             val name = Helper.getRandomName(10)
-            val room = dialPhone.createRoom(name) {
+            val room = user1.createRoom(name) {
                 topic = "This is a room topic"
                 makePublic()
             }
-            assertEquals(room.receive().name, name)
-            dialPhone.addListeners(ListenerAdapter {
+            assertEquals(room.name, name)
+            user1.addListeners(ListenerAdapter {
                 onRoomMessageReceived {
-                    assertEquals(it.message.body, text)
+                    assertEquals(it.message.content.body, text)
                     syncJob.cancelAndJoin()
                 }
             })
@@ -63,8 +64,6 @@ class IntegrationTests {
     }
 
     companion object {
-        const val HOMESERVER_URL = "http://localhost:8008"
-        const val TEST_USER = "helloasd"
-        const val TEST_PWD = "superduper"
+
     }
 }
