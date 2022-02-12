@@ -14,7 +14,7 @@ class InvitedRoomImpl(
     init {
         if (name != null) this.name = name
         else {
-            TODO("")
+            // TODO!
         }
     }
 

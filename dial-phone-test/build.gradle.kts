@@ -87,7 +87,7 @@ val createUserOnHomeserver: Task by tasks.creating(Exec::class) {
 // TESTING
 
 tasks.withType<Test> {
-    dependsOn(createUserOnHomeserver)
+    //dependsOn(createUserOnHomeserver)
 //    dependsOn(createUserOnHomeserver)
     useJUnit()
 //    testLogging {

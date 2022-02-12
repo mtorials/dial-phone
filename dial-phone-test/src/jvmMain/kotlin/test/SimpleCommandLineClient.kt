@@ -28,7 +28,7 @@ fun main() {
                 onRoomInvited { it.room.join() }
             })
             //useEncryption()
-            ktorLogLevel = LogLevel.ALL
+            ktorLogLevel = LogLevel.NONE
         }
         val myListener = ListenerAdapter {
             onRoomInvited { event ->
@@ -39,12 +39,12 @@ fun main() {
                 if (event.message.content.body == "ping") event answer "pong!"
             }
         }
-//        val room = phone.createRoom("The Riders") {
-//            makePublic()
-//            topic = "please come and ride with me"
-//        }
+        val room = phone.createRoom("The Riders") {
+            makePublic()
+            topic = "please come and ride with me"
+        }
 
-        println(phone.apiRequests.turnCredentials())
+        room.run { println("Created a room with the name $name and the member(s) ${members.map { it.displayName }.joinToString(", ")}.") }
 
         println("Created room, start syncing...")
         phone.sync()
