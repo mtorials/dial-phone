@@ -19,7 +19,7 @@ class JoinedRoomImpl(
 ) : JoinedRoom {
 
     override lateinit var name: String
-    override lateinit var members: MutableList<Member>
+    override var members: MutableList<Member> = mutableListOf()
     override var avatarUrl: String? = null
     override var joinRule : JoinRule = JoinRule.INVITE
 
@@ -33,17 +33,25 @@ class JoinedRoomImpl(
                 is MRoomName -> name = event.content.name
                 is MRoomJoinRules -> joinRule = event.content.joinRule
                 is MRoomAvatar -> avatarUrl = event.content.url
-                is MRoomMember -> if (event.content.membership == Membership.JOIN) members.add(
-                    MemberImpl(
-                        user = UserImpl(
-                            phone = phone,
-                            id = event.stateKey.userId(),
-                            avatarURL = event.content.avatarURL,
-                            displayName = event.content.displayName,
-                        ),
-                        room = this,
-                    )
-                )
+                // TODO check with ban etc.
+                is MRoomMember -> {
+                    when (event.content.membership) {
+                        Membership.JOIN -> members.add(
+                            MemberImpl(
+                                user = UserImpl(
+                                    phone = phone,
+                                    id = event.stateKey.userId(),
+                                    avatarURL = event.content.avatarURL,
+                                    displayName = event.content.displayName,
+                                ),
+                                room = this,
+                            )
+                        )
+                        Membership.LEAVE -> members.forEachIndexed { i, member ->
+                            if (member.id == event.sender) members.removeAt(i)
+                        }
+                    }
+                }
             }
         }
     }
