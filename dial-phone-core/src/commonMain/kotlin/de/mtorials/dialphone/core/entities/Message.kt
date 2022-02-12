@@ -7,7 +7,6 @@ import de.mtorials.dialphone.core.entities.room.JoinedRoom
 
 interface Message : Entity {
     override val id: EventId
-    val roomId: RoomId
     val content: MRoomMessage.MRoomMessageContent
     val room: JoinedRoom
     val messageType: MRoomMessage.MRoomMessageEventContentType

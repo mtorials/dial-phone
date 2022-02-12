@@ -238,8 +238,8 @@ class EncryptionManager(
      */
     private suspend fun downloadDeviceList(roomId: RoomId) : Map<UserId, Map<String, SignedDeviceKeys>> {
         val deviceList = client.queryKeys(KeyQueryRequest(
-            deviceKeys = phone.getJoinedRoomFutureById(roomId)?.receive()?.members?.associate {
-                it.userId to emptyList()
+            deviceKeys = phone.getJoinedRoomById(roomId)?.members?.associate {
+                it.id to emptyList()
             } ?: throw RoomKeyHandleException("Cant find room with provided it")
         ))
         // TODO a lot of checks

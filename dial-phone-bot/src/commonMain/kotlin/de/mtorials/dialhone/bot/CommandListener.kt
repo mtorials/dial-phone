@@ -3,6 +3,7 @@ package de.mtorials.dialhone.bot
 import de.mtorials.dialphone.core.EventCallback
 import de.mtorials.dialphone.core.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.core.listeners.ListenerAdapterImpl
+import io.ktor.http.cio.*
 
 class CommandListener constructor(
     private val prefix: String,
@@ -11,11 +12,11 @@ class CommandListener constructor(
 ) : ListenerAdapterImpl(false){
     override var callbackOnMessageReceived: EventCallback<MessageReceivedEvent> = call@{ event ->
         println(fallbackCommand)
-        if (!event.message.body.startsWith(prefix)) return@call
+        if (!event.message.content.body.startsWith(prefix)) return@call
         var found = false
-        val parameters = event.message.body.split(" ").toMutableList()
+        val parameters = event.message.content.body.split(" ").toMutableList()
         commands.forEach loop@{ command ->
-            if (!event.message.body.startsWith(prefix + command.invoke)) return@loop
+            if (!event.message.content.body.startsWith(prefix + command.invoke)) return@loop
             parameters.removeAt(0)
             command.execute(event, parameters.toTypedArray())
             found = true
