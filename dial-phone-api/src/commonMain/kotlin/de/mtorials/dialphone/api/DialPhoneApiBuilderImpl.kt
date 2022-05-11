@@ -111,7 +111,7 @@ open class DialPhoneApiBuilderImpl(
             token = guest.token
         }
         if (token == null) {
-            if (username == null || password == null) error("choose login method in builder")
+            if (username == null || password == null) error("choose a login method in builder")
             try {
                 val response = Login(homeserverUrl = homeserverUrl, httpClient = client).login(
                     username = username!!,
@@ -158,7 +158,8 @@ open class DialPhoneApiBuilderImpl(
             ownId = ownId ?: error("Got no id"),
             initCallback = {},
             coroutineScope = coroutineScope,
-            deviceId = deviceId
+            deviceId = deviceId,
+            format = format,
         ).also { it.addListeners(*listenerList.toTypedArray()) }
     }
 

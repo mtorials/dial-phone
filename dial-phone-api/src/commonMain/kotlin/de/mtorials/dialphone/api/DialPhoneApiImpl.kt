@@ -8,6 +8,7 @@ import de.mtorials.dialphone.api.listeners.ApiListener
 import de.mtorials.dialphone.api.model.mevents.EventContent
 import io.ktor.client.*
 import kotlinx.coroutines.*
+import kotlinx.serialization.json.Json
 
 open class DialPhoneApiImpl constructor(
     final override val token: String,
@@ -18,6 +19,7 @@ open class DialPhoneApiImpl constructor(
     protected val initCallback: suspend (DialPhoneApi) -> Unit,
     protected val coroutineScope: CoroutineScope,
     override val deviceId: String?,
+    val format: Json,
 ) : DialPhoneApi {
 
     override val apiRequests = APIRequests(

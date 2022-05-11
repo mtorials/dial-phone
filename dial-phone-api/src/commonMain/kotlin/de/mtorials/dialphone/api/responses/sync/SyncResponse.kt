@@ -4,6 +4,7 @@ import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import de.mtorials.dialphone.api.model.mevents.presence.MPresence
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 class SyncResponse(
@@ -30,7 +31,7 @@ class SyncResponse(
     )
     @Serializable
     class SyncPresence(
-        val events: List<MPresence>
+        val events: List<JsonObject>
     )
     @Serializable
     data class DevicesList(
@@ -39,6 +40,6 @@ class SyncResponse(
     )
     @Serializable
     data class ToDevice(
-        val events: List<MatrixEvent> = emptyList()
+        val events: List<JsonObject> = emptyList()
     )
 }

@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.api.listeners
 
 import de.mtorials.dialphone.api.DialPhoneApi
+import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import kotlin.reflect.KClass
 
@@ -24,10 +25,10 @@ abstract class CustomApiEventAdapter<T : MatrixEvent>(
      */
     abstract fun onMatrixEvent(event: T, roomId: String)
 
-    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneApi, isOld: Boolean) {
+    override fun onRoomEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhoneApi, isOld: Boolean) {
         if (type.isInstance(event)) onMatrixEvent(
             event as T,
-            roomId
+            roomId.toString()
         )
     }
 

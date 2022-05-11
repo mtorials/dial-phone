@@ -39,8 +39,8 @@ open class ListenerAdapterImpl(
         callbackOnRoomInvited = block
     }
 
-    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneImpl, isOld: Boolean) {
-        if (!isOld || receivePastEvents) onEvent(event, roomId.roomId(), phone)
+    override fun onRoomEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhoneImpl, isOld: Boolean) {
+        if (!isOld || receivePastEvents) onEvent(event, roomId, phone)
     }
 
     protected fun onEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhoneImpl) {

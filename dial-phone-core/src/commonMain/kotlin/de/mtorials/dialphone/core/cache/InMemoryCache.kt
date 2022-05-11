@@ -15,7 +15,9 @@ class InMemoryCache : PhoneCache {
         // TODO testing!
         override fun insertRoomStateEvent(roomId: RoomId, event: MatrixStateEvent) {
             states[roomId] = states[roomId]?.filter {
+                // filter out every event that is same type and state key before inserting
                 !(event::class.isInstance(it) && event.stateKey == it.stateKey)
+            // if null, create mutable list
             }?.toMutableList() ?: mutableListOf()
             states[roomId]?.add(event)
         }

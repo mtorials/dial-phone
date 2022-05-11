@@ -22,6 +22,6 @@ class MReaction(
     data class Content(
         @SerialName("msgtype")
         val msgType: MessageType = MessageType.TEXT,
-        val body: String
+        val body: String? = null,
     ) : MessageEventContent
 }

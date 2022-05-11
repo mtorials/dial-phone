@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.encyption
 
 import de.mtorials.dialphone.api.DialPhoneApi
+import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
@@ -15,9 +16,9 @@ class EncryptionListener(
     private val encryptionManager: EncryptionManager,
 ) : GenericListener<DialPhoneApi> {
 
-    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneApi, isOld: Boolean) {
+    override fun onRoomEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhoneApi, isOld: Boolean) {
         if (event !is MRoomEncryption) return
-        encryptionManager.markRoomEncrypted(roomId.roomId())
+        encryptionManager.markRoomEncrypted(roomId)
     }
 
     override fun onToDeviceEvent(event: MatrixEvent, phone: DialPhoneApi, isOld: Boolean) {
