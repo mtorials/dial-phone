@@ -1,17 +1,22 @@
 package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.exceptions.SyncException
+import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
+import de.mtorials.dialphone.api.model.mevents.MatrixRoomEvent
 import de.mtorials.dialphone.api.responses.sync.SyncResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.decodeFromJsonElement
 
 class Synchronizer(
-    private val phone: DialPhoneApi,
+    private val phone: DialPhoneApiImpl,
     private val client: HttpClient,
     private val fullState: Boolean = false,
     private val initCallback: suspend (DialPhoneApi) -> Unit,
@@ -54,34 +59,44 @@ class Synchronizer(
         }
     }
 
-    private fun CoroutineScope.toRoomListeners(event: MatrixEvent, roomId: String) {
+    private fun CoroutineScope.toRoomListeners(event: JsonObject, roomId: String) {
         listeners.forEach {
             try {
                 launch {
-                    val e = beforeRoomEvent(event) ?: event
-                    it.onRoomEvent(e, roomId, phone, initialSync)
+                    val e : MatrixEvent = phone.format.decodeFromJsonElement(event)
+                    val eventAfter = beforeRoomEvent(e)
+                    it.onRoomEvent(eventAfter, RoomId(roomId), phone, initialSync)
+                }
+            }
+            catch (e: RuntimeException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun CoroutineScope.toDeviceListeners(event: JsonObject) {
+        listeners.forEach {
+            try {
+                launch {
+                    val e : MatrixEvent = phone.format.decodeFromJsonElement(event)
+                    it.onToDeviceEvent(e, phone, initialSync)
                 }
             }
             catch (e: RuntimeException) { e.printStackTrace() }
         }
     }
 
-    private fun CoroutineScope.toDeviceListeners(event: MatrixEvent) {
+    private fun CoroutineScope.toPresenceListener(event: JsonObject) {
         listeners.forEach {
-            try { launch { it.onToDeviceEvent(event, phone, initialSync) } }
-            catch (e: RuntimeException) { e.printStackTrace() }
-        }
-    }
-
-    private fun CoroutineScope.toPresenceListener(event: MatrixEvent) {
-        listeners.forEach {
-            try { launch { it.onPresenceEvent(event, phone, initialSync) } }
+            val e : MatrixEvent = phone.format.decodeFromJsonElement(event)
+            try { launch { it.onPresenceEvent(e, phone, initialSync) } }
             catch (e: RuntimeException) { e.printStackTrace() }
         }
     }
 
     private suspend fun getSyncResponse() : SyncResponse {
         try {
+//            val str: String = client.request {
             return client.request {
                 url(phone.homeserverUrl + DialPhoneApi.MATRIX_PATH + "sync")
                 method = HttpMethod.Get
@@ -92,6 +107,8 @@ class Synchronizer(
                 if (lastTimeBatch != null) parameter("since", lastTimeBatch.toString())
                 //this.run { println(this.build().toString()) }
             }
+//            println(str)
+//            return TODO()
         } catch (mappingException: SerializationException) {
             throw SyncException(mappingException, "Deserialization Exception while Syncing")
         } catch (e: Exception) {

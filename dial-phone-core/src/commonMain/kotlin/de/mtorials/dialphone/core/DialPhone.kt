@@ -14,7 +14,7 @@ interface DialPhone : DialPhoneApi {
     /**
      * @return Returns the entity futures of all rooms the user has joined
      */
-    suspend fun getJoinedRoomFutures() : List<JoinedRoom>
+    suspend fun getJoinedRooms() : List<JoinedRoom>
 
     /**
      * Returns null if no cache is used

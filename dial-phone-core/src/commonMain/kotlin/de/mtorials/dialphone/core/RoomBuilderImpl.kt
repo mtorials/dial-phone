@@ -13,7 +13,11 @@ class RoomBuilderImpl(private val name: String) : RoomBuilder {
     private val state: MutableList<MatrixStateEvent> = mutableListOf()
 
     override fun invite(vararg users: User) {
-        invites.addAll(users.map { it.id })
+        this.invite(*users.map { it.id }.toTypedArray())
+    }
+
+    override fun invite(vararg users: UserId) {
+        invites.addAll(users)
     }
 
     override var topic: String = ""

@@ -10,7 +10,7 @@ import kotlinx.serialization.json.JsonElement
 
 // TODO check serializer for Pair
 @SerialName("m.room.encrypted")
-@Serializable
+@Serializable()
 class MRoomEncrypted(
     override val sender: UserId,
     @SerialName("event_id")
@@ -28,6 +28,6 @@ class MRoomEncrypted(
         val sessionId: String? = null,
         @SerialName("device_id")
         val deviceId: String? = null,
-        val algorithm: MessageEncryptionAlgorithm
+        val algorithm: MessageEncryptionAlgorithm,
     ) : MessageEventContent
 }

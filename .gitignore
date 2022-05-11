@@ -12,3 +12,4 @@ config2.json
 .gradle
 */.gradle
 */build
+*/ChangeDisplayName.kt

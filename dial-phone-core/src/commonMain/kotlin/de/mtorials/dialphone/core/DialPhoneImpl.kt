@@ -20,6 +20,7 @@ import de.mtorials.dialphone.core.entities.room.JoinedRoom
 import de.mtorials.dialphone.core.entities.room.JoinedRoomImpl
 import io.ktor.client.*
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.serialization.json.Json
 
 class DialPhoneImpl internal constructor(
     token: String,
@@ -30,6 +31,7 @@ class DialPhoneImpl internal constructor(
     val cache: PhoneCache,
     coroutineScope: CoroutineScope,
     deviceId: String?,
+    format: Json,
 ) : DialPhone, DialPhoneApiImpl(
     token = token,
     homeserverUrl = homeserverUrl,
@@ -38,10 +40,12 @@ class DialPhoneImpl internal constructor(
     initCallback = initCallback,
     coroutineScope = coroutineScope,
     deviceId = deviceId,
+    format = format,
 ) {
 
     override val synchronizer = Synchronizer(
-        this, client,
+        this,
+        client,
         initCallback = initCallback,
     )
 
@@ -58,7 +62,7 @@ class DialPhoneImpl internal constructor(
         listener.forEach { synchronizer.addListener(it as GenericListener<DialPhoneApi>) }
     }
 
-    override suspend fun getJoinedRoomFutures(): List<JoinedRoom> {
+    override suspend fun getJoinedRooms(): List<JoinedRoom> {
         return cache.roomCache.joinedRoomIds.map { id ->
             JoinedRoomImpl(this, id, cache.roomCache.getRoomStateEvents(id))
         }
@@ -87,7 +91,7 @@ class DialPhoneImpl internal constructor(
         )
 
     override suspend fun getJoinedRoomById(id: RoomId) : JoinedRoom? {
-        val filtered = getJoinedRoomFutures().filter{ id == it.id }
+        val filtered = getJoinedRooms().filter{ id == it.id }
         if (filtered.isEmpty()) {
             val requested = apiRequests.getJoinedRooms().roomIds.filter { id == it }
             if (requested.isEmpty()) return null

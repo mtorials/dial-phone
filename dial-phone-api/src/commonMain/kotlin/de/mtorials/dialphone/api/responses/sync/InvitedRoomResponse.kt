@@ -3,6 +3,8 @@ package de.mtorials.dialphone.api.responses.sync
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 class InvitedRoomResponse(
@@ -11,6 +13,6 @@ class InvitedRoomResponse(
 ) {
     @Serializable
     class InviteState(
-        val events: List<MatrixEvent>
+        val events: List<JsonObject>
     )
 }

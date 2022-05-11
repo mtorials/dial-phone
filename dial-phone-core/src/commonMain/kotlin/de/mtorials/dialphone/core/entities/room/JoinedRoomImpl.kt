@@ -2,6 +2,7 @@ package de.mtorials.dialphone.core.entities.room
 
 import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.ids.userId
 import de.mtorials.dialphone.api.model.enums.JoinRule
 import de.mtorials.dialphone.api.model.enums.Membership
@@ -66,6 +67,10 @@ class JoinedRoomImpl(
 
     override suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: String): EventId {
         return phone.apiRequests.sendStateEvent(eventType, content, id.toString(), stateKey)
+    }
+
+    override suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: UserId): EventId {
+        return sendStateEvent(content, eventType, stateKey.toString())
     }
 
     override suspend fun leave() = phone.apiRequests.leaveRoomWithId(id)

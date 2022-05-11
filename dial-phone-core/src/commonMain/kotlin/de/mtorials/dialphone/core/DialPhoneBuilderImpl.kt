@@ -1,10 +1,9 @@
 package de.mtorials.dialphone.core
 
-import de.mtorials.dialphone.api.APIRequests
 import de.mtorials.dialphone.api.DialPhoneApiBuilderImpl
-import de.mtorials.dialphone.api.EventHook
 import de.mtorials.dialphone.core.cache.InMemoryCache
 import de.mtorials.dialphone.core.cache.PhoneCache
+import de.mtorials.dialphone.core.cache.RoomCacheListener
 import de.mtorials.dialphone.core.cache.UserCacheListener
 
 class DialPhoneBuilderImpl(
@@ -26,6 +25,7 @@ class DialPhoneBuilderImpl(
     suspend fun buildDialPhone(block: DialPhoneBuilderImpl.() -> Unit) : DialPhoneImpl {
         block()
         this.configure()
+        val c = cache ?: InMemoryCache()
         return DialPhoneImpl(
             token = this.token!!,
             homeserverUrl = homeserverUrl,
@@ -35,12 +35,16 @@ class DialPhoneBuilderImpl(
             deviceId = deviceId,
             initCallback = {},
             coroutineScope = coroutineScope,
-            cache = cache ?: InMemoryCache(),
+            cache = c,
+            format = format,
         ).also {
             it.addListeners(*listenerList.toTypedArray())
-            if (cache != null) this.addListeners(UserCacheListener(
-                cache!!,
+            it.addListeners(UserCacheListener(
+                c,
                 it,
+            ))
+            it.addListeners(RoomCacheListener(
+                c.roomCache
             ))
             afterInitialization(it)
         }
