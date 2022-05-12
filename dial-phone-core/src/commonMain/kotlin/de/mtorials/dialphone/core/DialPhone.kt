@@ -5,6 +5,8 @@ import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.api.ids.RoomAlias
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.UserId
+import de.mtorials.dialphone.api.responses.DiscoveredRoomResponse
+import de.mtorials.dialphone.core.entities.room.DiscoveredRoom
 import de.mtorials.dialphone.core.entities.room.InvitedRoom
 import de.mtorials.dialphone.core.entities.room.JoinedRoom
 
@@ -17,10 +19,9 @@ interface DialPhone : DialPhoneApi {
     suspend fun getJoinedRooms() : List<JoinedRoom>
 
     /**
-     * Returns null if no cache is used
      * @return Returns the room actions for all invited rooms
      */
-    suspend fun getInvitedRoomActions() : List<InvitedRoom>?
+    suspend fun getInvitedRoomActions() : List<InvitedRoom>
 
     /**
      * @param id The id of the user you want to get
@@ -56,7 +57,7 @@ interface DialPhone : DialPhoneApi {
      * @return Returns a list of Pairs containing first the room action which can be used to join the room.
      * @return Returns the actual information as seconds
      */
-    suspend fun discoverRooms() : List<InvitedRoom>
+    suspend fun discoverRooms() : List<DiscoveredRoom>
 
     /**
      * @return Returns the user dial-phone is logged in with

@@ -1,30 +1,24 @@
 package de.mtorials.dialphone.core.entities.room
 
 import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomName
 import de.mtorials.dialphone.core.DialPhoneImpl
 
 class InvitedRoomImpl internal constructor(
     override val phone: DialPhoneImpl,
     override val id: RoomId,
-    name: String? = null,
 ) : InvitedRoom {
 
-    override var name: String? = null
+    override val name: String?
+        get() = phone.cache.state.getRoomStateEvents(id).filterIsInstance<MRoomName>().getOrNull(0)?.content?.name
 
-    init {
-        if (name != null) this.name = name
-        else {
-            // TODO!
-        }
-    }
 
     override suspend fun join() : JoinedRoom {
         phone.apiRequests.joinRoomWithId(id)
-        // TODO use better error
-        return phone.getJoinedRoomById(id) ?: error("Can not find joined room.")
+        return JoinedRoomImpl(
+            phone = phone,
+            id = id,
+        )
     }
 
-    override suspend fun forceUpdate() {
-        TODO("Not yet implemented")
-    }
 }

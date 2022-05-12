@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class RoomDiscovery (
     @SerialName("chunk")
-    val rooms: List<DiscoveredRoom>,
+    val rooms: List<DiscoveredRoomResponse>,
     @SerialName("total_room_count_estimate")
     val totalRoomCountEstimated: Int
 )

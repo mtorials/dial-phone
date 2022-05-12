@@ -3,8 +3,7 @@ package de.mtorials.dialphone.core
 import de.mtorials.dialphone.api.DialPhoneApiBuilderImpl
 import de.mtorials.dialphone.core.cache.InMemoryCache
 import de.mtorials.dialphone.core.cache.PhoneCache
-import de.mtorials.dialphone.core.cache.RoomCacheListener
-import de.mtorials.dialphone.core.cache.UserCacheListener
+import de.mtorials.dialphone.core.cache.StateCacheListener
 
 class DialPhoneBuilderImpl(
     homeserverUrl: String,
@@ -30,8 +29,7 @@ class DialPhoneBuilderImpl(
             token = this.token!!,
             homeserverUrl = homeserverUrl,
             client = client,
-            // TODO use better errors
-            ownId = ownId ?: error("Got no di"),
+            ownId = ownId ?: error("Got no id"),
             deviceId = deviceId,
             initCallback = {},
             coroutineScope = coroutineScope,
@@ -40,12 +38,8 @@ class DialPhoneBuilderImpl(
             logLevel = dialPhoneLogLevel,
         ).also {
             it.addListeners(*listenerList.toTypedArray())
-            it.addListeners(UserCacheListener(
-                c,
-                it,
-            ))
-            it.addListeners(RoomCacheListener(
-                c.roomCache
+            it.addListeners(StateCacheListener(
+                c.state
             ))
             afterInitialization(it)
         }

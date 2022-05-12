@@ -1,9 +1,10 @@
 package de.mtorials.dialphone.core.cache
 
 import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.model.enums.Membership
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 
-interface RoomCache {
+interface StateCache {
 
     /**
      * @return the cached state events for a given room
@@ -16,9 +17,6 @@ interface RoomCache {
      */
     fun insertRoomStateEvent(roomId: RoomId, event: MatrixStateEvent)
 
-    var joinedRoomIds: MutableList<RoomId>
-    var invitedRoomIds: MutableList<RoomId>
-    var knockedRoomIds: MutableList<RoomId>
-    var leftRoomIds: MutableList<RoomId>
-    var bannedRoomIds: MutableList<RoomId>
+    val roomIds: Map<Membership, Collection<RoomId>>
+    suspend fun insertRoomId(membership: Membership, roomId: RoomId)
 }
