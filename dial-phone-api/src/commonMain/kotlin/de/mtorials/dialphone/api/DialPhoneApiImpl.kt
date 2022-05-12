@@ -5,6 +5,7 @@ import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.listeners.ApiListener
+import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.api.model.mevents.EventContent
 import io.ktor.client.*
 import kotlinx.coroutines.*
@@ -20,6 +21,7 @@ open class DialPhoneApiImpl constructor(
     protected val coroutineScope: CoroutineScope,
     override val deviceId: String?,
     val format: Json,
+    val logLevel: DialPhoneLogLevel,
 ) : DialPhoneApi {
 
     override val apiRequests = APIRequests(
@@ -34,7 +36,7 @@ open class DialPhoneApiImpl constructor(
 
     override val profile = Profile(this)
 
-    protected open val synchronizer = Synchronizer(this, client, initCallback = initCallback)
+    protected open val synchronizer = Synchronizer(this, client, initCallback = initCallback, logLevel = logLevel)
 
     override fun addListeners(vararg listener: GenericListener<*>) {
         listener.forEach {

@@ -3,6 +3,7 @@ package de.mtorials.dialphone.api
 import de.mtorials.dialphone.api.exceptions.SyncException
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.api.responses.sync.SyncResponse
@@ -20,6 +21,7 @@ class Synchronizer(
     private val fullState: Boolean = false,
     private val initCallback: suspend (DialPhoneApi) -> Unit,
     private val syncCallback: (SyncResponse) -> Unit = {},
+    private val logLevel: DialPhoneLogLevel,
 ) {
 
     var beforeRoomEvent: (MatrixEvent) -> MatrixEvent = { it }
@@ -77,7 +79,7 @@ class Synchronizer(
                     val eventAfter = beforeRoomEvent(e)
                     it.callback(eventAfter, RoomId(roomId))
                 } catch (e: RuntimeException) {
-                    e.printStackTrace()
+                    if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()
                 }
             }
         }
@@ -90,7 +92,7 @@ class Synchronizer(
                     val e: MatrixEvent = phone.format.decodeFromJsonElement(event)
                     it.onToDeviceEvent(e, phone, initialSync)
                 } catch (e: RuntimeException) {
-                    e.printStackTrace()
+                    if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()
                 }
             }
         }
@@ -103,7 +105,9 @@ class Synchronizer(
                     val e : MatrixEvent = phone.format.decodeFromJsonElement(event)
                     it.onPresenceEvent(e, phone, initialSync)
                 }
-                catch (e: RuntimeException) { e.printStackTrace() }
+                catch (e: RuntimeException) {
+                    if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()
+                }
             }
         }
     }
