@@ -7,4 +7,6 @@ import de.mtorials.dialphone.core.entities.room.JoinedRoom
  */
 interface Member : User {
     val room: JoinedRoom
+    val avatarURL: String?
+    val displayName: String?
 }

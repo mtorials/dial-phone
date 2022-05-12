@@ -37,6 +37,7 @@ class DialPhoneBuilderImpl(
             coroutineScope = coroutineScope,
             cache = c,
             format = format,
+            logLevel = dialPhoneLogLevel,
         ).also {
             it.addListeners(*listenerList.toTypedArray())
             it.addListeners(UserCacheListener(

@@ -19,7 +19,7 @@ interface JoinedRoom : Entity {
     val name: String?
     val members: List<Member>
     val avatarUrl: String?
-    val joinRule: JoinRule
+    val joinRule: JoinRule?
 
     /**
      * All matrix state events corresponding to this room

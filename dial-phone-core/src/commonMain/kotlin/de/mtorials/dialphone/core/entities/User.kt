@@ -11,6 +11,4 @@ interface User : Entity {
      */
     // val name: String?
     override val id: UserId
-    val avatarURL: String?
-    val displayName: String?
 }

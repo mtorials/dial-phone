@@ -7,6 +7,7 @@ import de.mtorials.dialphone.api.ids.RoomAlias
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
@@ -32,6 +33,7 @@ class DialPhoneImpl internal constructor(
     coroutineScope: CoroutineScope,
     deviceId: String?,
     format: Json,
+    logLevel: DialPhoneLogLevel,
 ) : DialPhone, DialPhoneApiImpl(
     token = token,
     homeserverUrl = homeserverUrl,
@@ -41,12 +43,14 @@ class DialPhoneImpl internal constructor(
     coroutineScope = coroutineScope,
     deviceId = deviceId,
     format = format,
+    logLevel = logLevel,
 ) {
 
     override val synchronizer = Synchronizer(
         this,
         client,
         initCallback = initCallback,
+        logLevel = logLevel,
     )
 
     fun beforeMessageEventPublish(block: suspend (RoomId, String, EventContent) -> Pair<String, EventContent>) {

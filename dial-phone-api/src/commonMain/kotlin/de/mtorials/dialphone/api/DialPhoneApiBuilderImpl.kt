@@ -4,6 +4,7 @@ import de.mtorials.dialphone.api.authentication.Login
 import de.mtorials.dialphone.api.authentication.Registrar
 import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.api.serialization.EventContentSerialization
 import de.mtorials.dialphone.api.serialization.EventSerialization
 import io.ktor.client.*
@@ -26,6 +27,7 @@ open class DialPhoneApiBuilderImpl(
 ) : DialPhoneApiBuilder {
 
     override var ktorLogLevel = LogLevel.NONE
+    override var dialPhoneLogLevel: DialPhoneLogLevel = DialPhoneLogLevel.ERROR
 
     var token: String? = null
     var ownId: UserId? = null
@@ -160,6 +162,7 @@ open class DialPhoneApiBuilderImpl(
             coroutineScope = coroutineScope,
             deviceId = deviceId,
             format = format,
+            logLevel = dialPhoneLogLevel,
         ).also {
             it.addListeners(*listenerList.toTypedArray())
         }

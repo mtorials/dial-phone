@@ -6,6 +6,10 @@ class MemberImpl internal constructor(
     user: User,
     override val room: JoinedRoom,
 ) : Member, User by user {
+    override val avatarURL: String?
+        get() = room.members.filter { it.id == id }.getOrNull(0)?.avatarURL
+    override val displayName: String?
+        get() = room.members.filter { it.id == id }.getOrNull(0)?.displayName
 
     override suspend fun forceUpdate() {
         TODO("")
