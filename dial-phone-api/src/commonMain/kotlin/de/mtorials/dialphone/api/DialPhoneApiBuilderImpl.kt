@@ -160,7 +160,9 @@ open class DialPhoneApiBuilderImpl(
             coroutineScope = coroutineScope,
             deviceId = deviceId,
             format = format,
-        ).also { it.addListeners(*listenerList.toTypedArray()) }
+        ).also {
+            it.addListeners(*listenerList.toTypedArray())
+        }
     }
 
 //    class BotBuilderImpl : DialPhoneApiBuilder.BotBuilder {

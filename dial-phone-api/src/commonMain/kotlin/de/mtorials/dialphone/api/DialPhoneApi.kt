@@ -65,6 +65,6 @@ interface DialPhoneApi {
             block: DialPhoneApiBuilder.() -> Unit
         ) : DialPhoneApi = DialPhoneApiBuilderImpl(
             homeserverUrl = homeserverUrl
-        ).buildDialPhoneApi(block)
+        ).buildDialPhoneApi(block).also { it.initialSync() }
     }
 }

@@ -60,7 +60,7 @@ interface DialPhone : DialPhoneApi {
         suspend operator fun invoke(homeserverUrl: String, block: DialPhoneBuilder.() -> Unit) : DialPhone {
             return DialPhoneBuilderImpl(
                 homeserverUrl = homeserverUrl
-            ).buildDialPhone(block)
+            ).buildDialPhone(block).also { it.initialSync() }
         }
     }
 }
