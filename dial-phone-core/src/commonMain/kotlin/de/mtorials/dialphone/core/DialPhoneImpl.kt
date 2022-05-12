@@ -8,19 +8,16 @@ import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
+import de.mtorials.dialphone.api.model.enums.Membership
 import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
-import de.mtorials.dialphone.api.responses.UserWithoutIDResponse
+import de.mtorials.dialphone.api.responses.DiscoveredRoomResponse
 import de.mtorials.dialphone.core.cache.PhoneCache
 import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entities.UserImpl
-import de.mtorials.dialphone.core.entities.room.InvitedRoom
-import de.mtorials.dialphone.core.entities.room.InvitedRoomImpl
-import de.mtorials.dialphone.core.entities.room.JoinedRoom
-import de.mtorials.dialphone.core.entities.room.JoinedRoomImpl
+import de.mtorials.dialphone.core.entities.room.*
 import io.ktor.client.*
-import io.ktor.http.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.Json
 
@@ -68,12 +65,18 @@ class DialPhoneImpl internal constructor(
     }
 
     override suspend fun getJoinedRooms(): List<JoinedRoom> {
-        return cache.roomCache.joinedRoomIds.map { id ->
+        return cache.state.roomIds[Membership.JOIN]?.map { id ->
             JoinedRoomImpl(this, id)
-        }
+        } ?: emptyList()
     }
 
-    override suspend fun getInvitedRoomActions(): List<InvitedRoom>? = null
+    override suspend fun getInvitedRoomActions(): List<InvitedRoom> = cache.state.roomIds[Membership.INVITE]?.map {id ->
+        InvitedRoomImpl(
+            this,
+            id
+        )
+    } ?: emptyList()
+
 
     override suspend fun getUserById(id: UserId) : User? {
         // Check cache
@@ -105,12 +108,12 @@ class DialPhoneImpl internal constructor(
             .run { JoinedRoomImpl(this@DialPhoneImpl, this.id) }
 
 
-    override suspend fun discoverRooms(): List<InvitedRoom> {
-        return apiRequests.discoverRooms().rooms.map {
-            InvitedRoomImpl(
+    override suspend fun discoverRooms(): List<DiscoveredRoom> {
+        return apiRequests.discoverRooms().rooms.map { r ->
+            DiscoveredRoomImpl(
                 this,
-                it.id,
-                it.name,
+                r.id,
+                r,
             )
         }
     }
@@ -119,7 +122,7 @@ class DialPhoneImpl internal constructor(
     override suspend fun getMe(): User = getUserById(this.ownId) ?: error("Can not find own user")
 
     private suspend fun getStateEvents(id: RoomId) : List<MatrixStateEvent> {
-        val cached = cache.roomCache.getRoomStateEvents(id)
+        val cached = cache.state.getRoomStateEvents(id)
         if (cached.isNotEmpty()) return cached
         return apiRequests.getRoomsState(id)
     }

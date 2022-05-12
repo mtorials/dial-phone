@@ -11,7 +11,4 @@ class MemberImpl internal constructor(
     override val displayName: String?
         get() = room.members.filter { it.id == id }.getOrNull(0)?.displayName
 
-    override suspend fun forceUpdate() {
-        TODO("")
-    }
 }

@@ -9,7 +9,4 @@ class UserImpl internal constructor(
     override val id: UserId,
 ) : User {
     //override val name: String? = MatrixID.fromString(id).value
-    override suspend fun forceUpdate() {
-        TODO("Not yet implemented")
-    }
 }

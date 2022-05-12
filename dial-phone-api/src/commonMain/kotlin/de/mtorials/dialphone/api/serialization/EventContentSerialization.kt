@@ -11,7 +11,6 @@ object EventContentSerialization {
     val serializersModule = SerializersModule {
         polymorphic(EventContent::class) {
             subclass(MRoomKey.MRoomKeyContent::class)
-            // TODO do it for all
 
             // MRoomMessageContent
             subclass(MRoomMessage.EmptyContent::class)

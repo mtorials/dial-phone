@@ -40,9 +40,6 @@ open class DialPhoneApiBuilderImpl(
     var coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
     private var isGuestBool = false
-    // TODO remove bot stuff
-    // protected var commandListener: CommandListener? = null
-    // private var bot: DialPhoneApiBuilder.BotBuilder? = null
 
     lateinit var format: Json
     lateinit var client: HttpClient
@@ -96,7 +93,6 @@ open class DialPhoneApiBuilderImpl(
             encodeDefaults = true
             explicitNulls = false
             serializersModule =
-                    // TODO check if I broke smth
                 EventSerialization.serializersModule + EventContentSerialization.serializersModule + customSerializer
         }
         client = HttpClient {

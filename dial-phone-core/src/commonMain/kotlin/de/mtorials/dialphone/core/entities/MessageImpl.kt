@@ -18,7 +18,4 @@ class MessageImpl internal constructor(
         phone.apiRequests.redactEventWithIdInRoom(roomId = room.id, id = id)
     }
 
-    override suspend fun forceUpdate() {
-        TODO("Not yet implemented")
-    }
 }

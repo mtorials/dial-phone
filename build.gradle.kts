@@ -30,8 +30,6 @@ allprojects {
         maven("https://maven.pkg.github.com/Dominaezzz/matrix-kt") {
             credentials {
                 username = System.getenv("GH_USER")
-                // TODO remove
-                println(System.getenv("GH_USER"))
                 password = System.getenv("GH_TOKEN")
             }
         }

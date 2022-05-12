@@ -22,7 +22,7 @@ class JoinedRoomImpl internal constructor(
         get() = getStateEvent<MRoomName>()?.content?.name
 
     override val members: List<Member>
-        get() = phone.cache.roomCache.getRoomStateEvents(roomId = id).filterIsInstance<MRoomMember>()
+        get() = phone.cache.state.getRoomStateEvents(roomId = id).filterIsInstance<MRoomMember>()
             .filter { it.content.membership == Membership.JOIN }
             .map { event ->
                 MemberImpl(
@@ -40,47 +40,12 @@ class JoinedRoomImpl internal constructor(
     override val joinRule : JoinRule?
         get() = getStateEvent<MRoomJoinRules>()?.content?.joinRule
 
-//    init {
-//        updateProps(stateEvents)
-//    }
-
     override val stateEvents: List<MatrixStateEvent>
-        get() = phone.cache.roomCache.getRoomStateEvents(roomId = id)
+        get() = phone.cache.state.getRoomStateEvents(roomId = id)
 
     private inline fun <reified T : MatrixStateEvent> getStateEvent() : T? {
-        return phone.cache.roomCache.getRoomStateEvents(roomId = id).filterIsInstance<T>().getOrNull(0)
+        return phone.cache.state.getRoomStateEvents(roomId = id).filterIsInstance<T>().getOrNull(0)
     }
-//    private fun updateProps(state: List<MatrixStateEvent>) {
-//        for (event in state) {
-//            when (event) {
-//                is MRoomName -> {
-////                    println(event.content.name)
-//                    name = event.content.name
-//                }
-//                is MRoomJoinRules -> joinRule = event.content.joinRule
-//                is MRoomAvatar -> avatarUrl = event.content.url
-//                // TODO check with ban etc.
-//                is MRoomMember -> {
-//                    when (event.content.membership) {
-//                        Membership.JOIN -> members.add(
-//                            MemberImpl(
-//                                user = UserImpl(
-//                                    phone = phone,
-//                                    id = event.stateKey.userId(),
-//                                    avatarURL = event.content.avatarURL,
-//                                    displayName = event.content.displayName,
-//                                ),
-//                                room = this,
-//                            )
-//                        )
-//                        Membership.LEAVE -> members.removeAll { member ->
-//                            member.id == event.sender
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     override suspend fun sendMessageEvent(content: MessageEventContent, eventType: String) : EventId {
         return phone.sendMessageEvent(
@@ -99,9 +64,5 @@ class JoinedRoomImpl internal constructor(
     }
 
     override suspend fun leave() = phone.apiRequests.leaveRoomWithId(id)
-
-    override suspend fun forceUpdate() {
-//        updateProps(phone.apiRequests.getRoomsState(id))
-    }
 
 }

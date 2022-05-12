@@ -8,7 +8,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
-// TODO check serializer for Pair
 @SerialName("m.room.encrypted")
 @Serializable()
 class MRoomEncrypted(

@@ -1,16 +1,15 @@
 package de.mtorials.dialphone.core.cache
 
 import de.mtorials.dialphone.api.ids.RoomId
-import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.model.enums.Membership
-import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomJoinRules
-import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomMember
-import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomName
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
-import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class InMemoryCache : PhoneCache {
-    override val roomCache = object : RoomCache {
+    override val state = object : StateCache {
+
+        private val mutex = Mutex()
 
         private val states: MutableMap<RoomId, MutableList<MatrixStateEvent>> = mutableMapOf()
 
@@ -27,34 +26,16 @@ class InMemoryCache : PhoneCache {
             states[roomId] = state
         }
 
-        override var joinedRoomIds: MutableList<RoomId> = mutableListOf()
-        override var invitedRoomIds: MutableList<RoomId> = mutableListOf()
-        override var knockedRoomIds: MutableList<RoomId> = mutableListOf()
-        override var leftRoomIds: MutableList<RoomId> = mutableListOf()
-        override var bannedRoomIds: MutableList<RoomId> = mutableListOf()
+        override val roomIds: Map<Membership, MutableList<RoomId>> = Membership.values().associateWith { mutableListOf() }
 
-        private fun removeRoomIdEverywhere(roomId: RoomId) {
-            joinedRoomIds.remove(roomId);
-            invitedRoomIds.remove(roomId);
-            knockedRoomIds.remove(roomId);
-            leftRoomIds.remove(roomId);
+        override suspend fun insertRoomId(membership: Membership, roomId: RoomId) {
+            mutex.withLock {
+                roomIds.values.forEach { it.remove(roomId) }
+                roomIds[membership]?.add(roomId)
+            }
         }
+
     }
 
-    // TODO check
-    // Is it allows to have different user data in different rooms?
-    override val userCache = object : UserCache {
-
-        val eventsByUserId: MutableMap<UserId, MRoomMember> = mutableMapOf()
-
-        override fun getMemberEventForUserId(userId: UserId): MRoomMember? {
-            return eventsByUserId[userId]
-        }
-
-        override fun cacheMemberEvent(userId: UserId, event: MRoomMember) {
-            eventsByUserId[userId] = event
-        }
-    }
-
-    override val messageCache: MessageCache? = null
+    override val timeline: MessageCache? = null
 }
