@@ -64,7 +64,7 @@ class DialPhoneImpl internal constructor(
 
     override suspend fun getJoinedRooms(): List<JoinedRoom> {
         return cache.roomCache.joinedRoomIds.map { id ->
-            JoinedRoomImpl(this, id, cache.roomCache.getRoomStateEvents(id))
+            JoinedRoomImpl(this, id)
         }
     }
 
@@ -91,18 +91,13 @@ class DialPhoneImpl internal constructor(
         )
 
     override suspend fun getJoinedRoomById(id: RoomId) : JoinedRoom? {
-        val filtered = getJoinedRooms().filter{ id == it.id }
-        if (filtered.isEmpty()) {
-            val requested = apiRequests.getJoinedRooms().roomIds.filter { id == it }
-            if (requested.isEmpty()) return null
-            return requested[0].run { JoinedRoomImpl(this@DialPhoneImpl, this, getStateEvents(this)) }
-        }
-        return filtered[0]
+        return getJoinedRooms().filter{ id == it.id }[0]
     }
 
+    // TODO state is not up to date, because of round trip
     override suspend fun createRoom(name: String, block: RoomBuilder.() -> Unit): JoinedRoom =
         apiRequests.createRoom(RoomBuilderImpl(name).apply(block).build())
-            .run { JoinedRoomImpl(this@DialPhoneImpl, this.id, getStateEvents(id)) }
+            .run { JoinedRoomImpl(this@DialPhoneImpl, this.id) }
 
 
     override suspend fun discoverRooms(): List<InvitedRoom> {

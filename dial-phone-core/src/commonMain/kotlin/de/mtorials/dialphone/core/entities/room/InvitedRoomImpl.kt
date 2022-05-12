@@ -3,13 +3,13 @@ package de.mtorials.dialphone.core.entities.room
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.core.DialPhoneImpl
 
-class InvitedRoomImpl(
+class InvitedRoomImpl internal constructor(
     override val phone: DialPhoneImpl,
     override val id: RoomId,
     name: String? = null,
 ) : InvitedRoom {
 
-    override lateinit var name: String
+    override var name: String? = null
 
     init {
         if (name != null) this.name = name

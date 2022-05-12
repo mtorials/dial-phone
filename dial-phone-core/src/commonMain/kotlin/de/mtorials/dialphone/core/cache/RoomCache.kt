@@ -20,4 +20,5 @@ interface RoomCache {
     var invitedRoomIds: MutableList<RoomId>
     var knockedRoomIds: MutableList<RoomId>
     var leftRoomIds: MutableList<RoomId>
+    var bannedRoomIds: MutableList<RoomId>
 }

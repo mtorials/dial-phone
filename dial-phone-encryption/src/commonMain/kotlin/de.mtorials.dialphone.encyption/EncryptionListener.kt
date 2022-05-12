@@ -11,12 +11,13 @@ import de.mtorials.dialphone.api.model.mevents.todevice.MRoomKey
 import de.mtorials.dialphone.encyption.exceptions.MalformedEncryptedEvent
 import de.mtorials.dialphone.encyption.exceptions.UnexpectedEncryptionAlgorithmException
 import de.mtorials.dialphone.api.ids.roomId
+import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 
 class EncryptionListener(
     private val encryptionManager: EncryptionManager,
 ) : GenericListener<DialPhoneApi> {
 
-    override fun onRoomEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhoneApi, isOld: Boolean) {
+    override fun onJoinedRoomStateEvent(event: MatrixStateEvent, roomId: RoomId, phone: DialPhoneApi, isOld: Boolean) {
         if (event !is MRoomEncryption) return
         encryptionManager.markRoomEncrypted(roomId)
     }

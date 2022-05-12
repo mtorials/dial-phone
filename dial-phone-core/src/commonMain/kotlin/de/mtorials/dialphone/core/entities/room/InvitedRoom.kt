@@ -5,7 +5,7 @@ import de.mtorials.dialphone.core.entities.Entity
 
 interface InvitedRoom : Entity {
     override val id: RoomId
-    val name: String
+    val name: String?
 
     /**
      * Join the room you are invited in
