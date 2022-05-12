@@ -35,10 +35,17 @@ interface DialPhone : DialPhoneApi {
     suspend fun getInvitedRoomByAlias(alias: RoomAlias) : InvitedRoom
 
     /**
-     * @param id The id of the room you want to get
-     * @return Returns the room future. If not found: null
+     * @param id The id of the room you want to receive
+     * @return Returns the room future. If not found returns null
      */
     suspend fun getJoinedRoomById(id: RoomId) : JoinedRoom?
+
+    /**
+     * @param name The name of the room you want to receive
+     * @return Returns the room future. If not found returns null.
+     * If multiple rooms match the name, an arbitrary one is returned
+     */
+    suspend fun getJoinedRoomByName(name: String, ignoreCase: Boolean = true) : JoinedRoom?
 
     /**
      * Create a room
@@ -52,7 +59,7 @@ interface DialPhone : DialPhoneApi {
     suspend fun discoverRooms() : List<InvitedRoom>
 
     /**
-     * Returns the user dial-phone is logged in with
+     * @return Returns the user dial-phone is logged in with
      */
     suspend fun getMe() : User
 
