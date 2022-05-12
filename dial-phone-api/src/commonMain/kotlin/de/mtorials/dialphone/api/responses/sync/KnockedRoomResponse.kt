@@ -3,6 +3,7 @@ package de.mtorials.dialphone.api.responses.sync
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class KnockedRoomResponse(
@@ -11,6 +12,6 @@ data class KnockedRoomResponse(
 ) {
     @Serializable
     data class KnockState(
-        val events: List<MatrixStateEvent> = listOf(),
+        val events: List<JsonObject> = listOf(),
     )
 }
