@@ -32,7 +32,7 @@ val changeConfig : ChangeConfig = Json.decodeFromString(File("config.json").read
             }[0].sendStateEvent(MRoomMember.Content(
                 Membership.JOIN,
                 null,
-                displayName = "the testcase",
+                displayName = "keine sorge ben, manchmal klappt mein code...",
             ), "m.room.member")
         }
     }

@@ -13,10 +13,9 @@ import de.mtorials.dialphone.core.entities.Member
 import de.mtorials.dialphone.core.entities.MemberImpl
 import de.mtorials.dialphone.core.entities.UserImpl
 
-class JoinedRoomImpl(
+class JoinedRoomImpl internal constructor(
     override val phone: DialPhoneImpl,
     override val id: RoomId,
-    override val stateEvents: List<MatrixStateEvent>,
 ) : JoinedRoom {
 
     override var name: String? = null
@@ -27,6 +26,9 @@ class JoinedRoomImpl(
     init {
         updateProps(stateEvents)
     }
+
+    override val stateEvents: List<MatrixStateEvent>
+        get() = phone.cache.roomCache.getRoomStateEvents(roomId = id)
 
     private fun updateProps(state: List<MatrixStateEvent>) {
         for (event in state) {

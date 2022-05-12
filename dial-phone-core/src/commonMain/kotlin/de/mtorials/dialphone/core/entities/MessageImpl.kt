@@ -5,7 +5,7 @@ import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.entities.room.JoinedRoom
 
-class MessageImpl(
+class MessageImpl internal constructor(
     override val phone: DialPhone,
     override val id: EventId,
     override val room: JoinedRoom,
