@@ -27,12 +27,10 @@ val changeConfig : ChangeConfig = Json.decodeFromString(File("config.json").read
             println("Hello")
 //            delay(5000)
             println(phone.getJoinedRooms().map { it.name })
-//            phone.getJoinedRooms().filter { room ->
-//                room.name?.lowercase(Locale.getDefault())?.startsWith("temp trium") ?: false
-//            }[0].sendStateEvent(MRoomMember.Content(
-//                Membership.JOIN,
-//                null,
-//                displayName = "keine sorge ben, manchmal klappt mein code...",
-//            ), "m.room.member")
+            phone.getJoinedRoomByName("temp Trium Machina")?.sendStateEvent(MRoomMember.Content(
+                Membership.JOIN,
+                null,
+                displayName = "mt",
+            ), "m.room.member")
         }
     }

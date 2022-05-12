@@ -20,6 +20,7 @@ import de.mtorials.dialphone.core.entities.room.InvitedRoomImpl
 import de.mtorials.dialphone.core.entities.room.JoinedRoom
 import de.mtorials.dialphone.core.entities.room.JoinedRoomImpl
 import io.ktor.client.*
+import io.ktor.http.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.Json
 
@@ -77,13 +78,8 @@ class DialPhoneImpl internal constructor(
     override suspend fun getUserById(id: UserId) : User? {
         // Check cache
 //        if (cache?.userCache?.containsKey(id.toString()) == true) return cache.users[id.toString()]
-
-        // TODO impl cache
-        val u : UserWithoutIDResponse = apiRequests.getUserById(id) ?: return null
         return UserImpl(
             id = id,
-            displayName = u.displayName,
-            avatarURL = u.avatarURL,
             phone = this
         )
     }
@@ -95,7 +91,12 @@ class DialPhoneImpl internal constructor(
         )
 
     override suspend fun getJoinedRoomById(id: RoomId) : JoinedRoom? {
-        return getJoinedRooms().filter{ id == it.id }[0]
+        return getJoinedRooms().filter{ id == it.id }.getOrNull(0)
+    }
+
+    override suspend fun getJoinedRoomByName(name: String, ignoreCase: Boolean): JoinedRoom? {
+        if (ignoreCase) return getJoinedRooms().filter { it.name?.lowercase() == name.lowercase() }.getOrNull(0)
+        return getJoinedRooms().filter { it.name == name }.getOrNull(0)
     }
 
     // TODO state is not up to date, because of round trip
