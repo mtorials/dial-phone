@@ -50,11 +50,26 @@ class Synchronizer(
                 roomEvents.state?.events?.forEach {
                     toListener(it, roomID) { e, id -> onJoinedRoomStateEvent(e as MatrixStateEvent, id, phone, initialSync) }
                 }
+                roomEvents.ephemeral?.events?.forEach {
+                    toListener(it, roomID) { e, id -> onJoinedRoomEphemeralEvent(e as MatrixStateEvent, id, phone, initialSync) }
+                }
             }
             // Invited
             res.rooms?.invite?.forEach { (roomID, roomEvents) ->
                 roomEvents.inviteState.events.forEach {
                     toListener(it, roomID) { e, id -> onInvitedRoomStateEvent(e as MatrixStateEvent, id, phone, initialSync) }
+                }
+            }
+            // Knocked
+            res.rooms?.knock?.forEach { (roomID, roomEvents) ->
+                roomEvents.knockState.events.forEach {
+                    toListener(it, roomID) { e, id -> onKnockedRoomStateEvent(e as MatrixStateEvent, id, phone, initialSync) }
+                }
+            }
+            // left
+            res.rooms?.leave?.forEach { (roomID, roomEvents) ->
+                roomEvents.state?.events?.forEach {
+                    toListener(it, roomID) { e, id -> onLeftRoomStateEvent(e as MatrixStateEvent, id, phone, initialSync) }
                 }
             }
             // To device
