@@ -46,13 +46,13 @@ class Synchronizer(
                 roomEvents.state?.events?.forEach { toRoomListeners(it, roomID) }
             }
             // Invited
-            res.rooms?.invite?.forEach { (roomID, roomEvents) ->
-                roomEvents.inviteState.events.forEach { toRoomListeners(it, roomID) }
-            }
+//            res.rooms?.invite?.forEach { (roomID, roomEvents) ->
+//                roomEvents.inviteState.events.forEach { toRoomListeners(it, roomID) }
+//            }
             // To device
-            res.toDevice?.events?.forEach { toDeviceListeners(it) }
+//            res.toDevice?.events?.forEach { toDeviceListeners(it) }
             // Presence
-            res.presence?.events?.forEach { toPresenceListener(it) }
+//            res.presence?.events?.forEach { toPresenceListener(it) }
             if (initialSync) initCallback(phone)
             initialSync = false
             syncCallback(res)
@@ -61,36 +61,40 @@ class Synchronizer(
 
     private fun CoroutineScope.toRoomListeners(event: JsonObject, roomId: String) {
         listeners.forEach {
-            try {
-                launch {
-                    val e : MatrixEvent = phone.format.decodeFromJsonElement(event)
+            launch {
+                try {
+                    val e: MatrixEvent = phone.format.decodeFromJsonElement(event)
                     val eventAfter = beforeRoomEvent(e)
                     it.onRoomEvent(eventAfter, RoomId(roomId), phone, initialSync)
+                } catch (e: RuntimeException) {
+                    e.printStackTrace()
                 }
-            }
-            catch (e: RuntimeException) {
-                e.printStackTrace()
             }
         }
     }
 
     private fun CoroutineScope.toDeviceListeners(event: JsonObject) {
         listeners.forEach {
-            try {
-                launch {
-                    val e : MatrixEvent = phone.format.decodeFromJsonElement(event)
+            launch {
+                try {
+                    val e: MatrixEvent = phone.format.decodeFromJsonElement(event)
                     it.onToDeviceEvent(e, phone, initialSync)
+                } catch (e: RuntimeException) {
+                    e.printStackTrace()
                 }
             }
-            catch (e: RuntimeException) { e.printStackTrace() }
         }
     }
 
     private fun CoroutineScope.toPresenceListener(event: JsonObject) {
         listeners.forEach {
-            val e : MatrixEvent = phone.format.decodeFromJsonElement(event)
-            try { launch { it.onPresenceEvent(e, phone, initialSync) } }
-            catch (e: RuntimeException) { e.printStackTrace() }
+            launch {
+                try {
+                    val e : MatrixEvent = phone.format.decodeFromJsonElement(event)
+                    it.onPresenceEvent(e, phone, initialSync)
+                }
+                catch (e: RuntimeException) { e.printStackTrace() }
+            }
         }
     }
 

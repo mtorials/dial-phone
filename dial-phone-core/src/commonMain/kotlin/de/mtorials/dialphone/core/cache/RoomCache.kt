@@ -16,8 +16,8 @@ interface RoomCache {
      */
     fun insertRoomStateEvent(roomId: RoomId, event: MatrixStateEvent)
 
-    var joinedRoomIds: Collection<RoomId>
-    var invitedRoomIds: Collection<RoomId>
-    var knockedRoomIds: Collection<RoomId>
-    var leftRoomIds: Collection<RoomId>
+    var joinedRoomIds: MutableList<RoomId>
+    var invitedRoomIds: MutableList<RoomId>
+    var knockedRoomIds: MutableList<RoomId>
+    var leftRoomIds: MutableList<RoomId>
 }

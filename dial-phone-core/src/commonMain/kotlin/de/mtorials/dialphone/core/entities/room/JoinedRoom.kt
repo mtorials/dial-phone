@@ -16,7 +16,7 @@ import de.mtorials.dialphone.core.entities.Message
  */
 interface JoinedRoom : Entity {
     override val id: RoomId
-    val name: String
+    val name: String?
     val members: List<Member>
     val avatarUrl: String?
     val joinRule: JoinRule

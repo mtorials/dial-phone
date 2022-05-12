@@ -19,7 +19,7 @@ class JoinedRoomImpl(
     override val stateEvents: List<MatrixStateEvent>,
 ) : JoinedRoom {
 
-    override lateinit var name: String
+    override var name: String? = null
     override var members: MutableList<Member> = mutableListOf()
     override var avatarUrl: String? = null
     override var joinRule : JoinRule = JoinRule.INVITE
@@ -31,7 +31,10 @@ class JoinedRoomImpl(
     private fun updateProps(state: List<MatrixStateEvent>) {
         for (event in state) {
             when (event) {
-                is MRoomName -> name = event.content.name
+                is MRoomName -> {
+//                    println(event.content.name)
+                    name = event.content.name
+                }
                 is MRoomJoinRules -> joinRule = event.content.joinRule
                 is MRoomAvatar -> avatarUrl = event.content.url
                 // TODO check with ban etc.
@@ -48,8 +51,8 @@ class JoinedRoomImpl(
                                 room = this,
                             )
                         )
-                        Membership.LEAVE -> members.forEachIndexed { i, member ->
-                            if (member.id == event.sender) members.removeAt(i)
+                        Membership.LEAVE -> members.removeAll { member ->
+                            member.id == event.sender
                         }
                     }
                 }
