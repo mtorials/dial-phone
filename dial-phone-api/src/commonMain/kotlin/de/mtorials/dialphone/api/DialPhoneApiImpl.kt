@@ -45,4 +45,7 @@ open class DialPhoneApiImpl constructor(
 
     override fun sync(): Job = synchronizer.sync(coroutineScope)
 
+    suspend fun initialSync() {
+        synchronizer.sync(coroutineScope, true).join()
+    }
 }

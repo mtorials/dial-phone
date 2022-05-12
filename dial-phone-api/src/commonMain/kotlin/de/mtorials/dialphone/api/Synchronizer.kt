@@ -31,12 +31,13 @@ class Synchronizer(
 
     fun addListener(listener: GenericListener<DialPhoneApi>) = listeners.add(listener)
 
-    // TODO add knocked and left
+    // TODO add knocked and left (banned?)
     // TODO tidy up
     fun sync(
-        coroutineScope: CoroutineScope
+        coroutineScope: CoroutineScope,
+        once: Boolean = false,
     ) = coroutineScope.launch {
-        while(isActive) {
+        do {
             val res : SyncResponse = getSyncResponse()
             lastTimeBatch = res.nextBatch
             // Joined
@@ -61,7 +62,7 @@ class Synchronizer(
             if (initialSync) initCallback(phone)
             initialSync = false
             syncCallback(res)
-        }
+        } while(isActive && !once)
     }
 
     private fun CoroutineScope.toListener(
