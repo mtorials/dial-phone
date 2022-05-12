@@ -50,9 +50,9 @@ open class ListenerAdapterImpl(
         if (!isOld || receivePastEvents) onEvent(event, roomId, phone)
     }
 
-    protected fun onEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhoneImpl) {
+    protected suspend fun onEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhoneImpl) {
         when(event) {
-            is MRoomMessage -> coroutineScope.launch {
+            is MRoomMessage -> {
                 val room = phone.getJoinedRoomById(roomId) ?: error("Can not find joined room")
                 callbackOnMessageReceived(
                     MessageReceivedEvent(
@@ -71,7 +71,7 @@ open class ListenerAdapterImpl(
                 )
             }
             is MRoomMember -> when (event.content.membership) {
-                Membership.INVITE -> if (event.stateKey == phone.ownId.toString()) coroutineScope.launch {
+                Membership.INVITE -> if (event.stateKey == phone.ownId.toString()) {
                     callbackOnRoomInvited(
                         RoomInviteEvent(
                             phone = phone,

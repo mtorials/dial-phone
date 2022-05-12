@@ -20,6 +20,7 @@ kotlin {
                 // MODULES
                 implementation(project(":dial-phone-core"))
                 implementation(project(":dial-phone-api"))
+                implementation(project(":dial-phone-bot"))
                 implementation(project(":dial-phone-encryption"))
 
                 implementation(kotlin("test-common"))

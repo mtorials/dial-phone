@@ -63,7 +63,7 @@ class EncryptionManager(
         // TODO check the signature
         val theirOneTimeKey = res.oneTimeKeys[userId]?.get(theirDeviceId)?.jsonObject?.entries?.first()?.value
             ?.jsonObject?.get("key")?.jsonPrimitive?.content
-                ?: throw RuntimeException("can get one time key")
+                ?: throw RuntimeException("can't get one time key")
         val olmSession = Session.createOutboundSession(
             account = account,
             theirIdentityKey = theirIdentityKey,

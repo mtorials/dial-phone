@@ -11,7 +11,6 @@ class CommandListener constructor(
     private val fallbackCommand: Command?
 ) : ListenerAdapterImpl(false){
     override var callbackOnMessageReceived: EventCallback<MessageReceivedEvent> = call@{ event ->
-        println(fallbackCommand)
         if (!event.message.content.body.startsWith(prefix)) return@call
         var found = false
         val parameters = event.message.content.body.split(" ").toMutableList()
