@@ -59,13 +59,13 @@ To send the event you have to instantiate the Content class inside the actual ev
 Only matrix events can be sent this way.
 
 ```kotlin
-myRoomFuture.sendMessageEvent(MRoomMessage.Content("Hi!"))
+room.sendMessageEvent(MRoomMessage.Content("Hi!"))
 ```
 
 You can also use the extension functions to send specific events like for example:
 
 ```kotlin
-myRoomFuture.sendTextMessage("Hi!")
+room.sendTextMessage("Hi!")
 ```
 
 In this specific case both examples are equivalent.
@@ -82,6 +82,7 @@ Use the `@ContentEventType` annotation to specify the according event type of th
 An example of a room message event that carries a positional data (x,y,z coordinates):
 ```kotlin
 @Serializable
+@SerialName(PositionEvent.EVENT_TYPE)
 class PositionEvent(
     override val sender: String,
     @SerialName("event_id")
@@ -94,6 +95,12 @@ class PositionEvent(
         val y: Int,
         val z: Int
     ) : MessageEventContent
+    
+    override fun getTypeName() = EVENT_TYPE
+    
+    companion object {
+        const val EVENT_TYPE = "de.mtorials.test.myevent"
+    }
 }
 ```
 

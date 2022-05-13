@@ -72,27 +72,43 @@ val phone = DialPhone("<HOMESERVER_URL>") { // this: DialPhoneBuilder
 }
 
 ```
+After initializing the `DialPhone` object one sync request is made to update the state of the sdk.
 
-To receive events you have to start syncing.
+To receive new events you have to start syncing.
+
+If you want to block your method after this use you can call the join() on the returned coroutine job.
 
 ```kotlin
-phone.sync()
+val syncJob = phone.sync()
+syncJob.join();
+```
+
+## IDs
+
+Ids have wrapper classes for extra type safety:
+
+```kotlin
+val userId = UserId("@mtorials:mtorials.de")
 ```
 
 ## Entities
 
-To get a room you first have to get the corresponding entity future object.
+There are several types of room entity, depending on the join state.
+
 ```kotlin
-val myRoomFuture : RoomFuture = phone.getJoinedRoomFutureById("!YIqYutrrBUdGDombnI:mtorials.de")
+val myRoom: JoinedRoom = phone.getJoinedRoomById("!YIqYutrrBUdGDombnI:mtorials.de")
     ?: error("Room Not Found!")
 ```
-You can perform actions on the entity future. To get the entity data you have to receive it first:
+
+You can perform actions on these entities and get data, like getting the name or sending a message:
+
 ```kotlin
-myRoomFuture.sendMessage("Hi!")
-val myRoom : Room = myRoomFuture.receive()
-println(myRoom.name)
+myRoom.sendTextMessage("Hello World!")
+// Log all members of the room in the console
+println(myRoom.members.map { it.displayName ?: it.id })
 ```
-All events, entity futures and entities also have a `phone` property to access the `DialPhone` object.
+
+All events and entities also have a `phone` property to access the `DialPhone` object.
 
 ### Reacting to an event
 
@@ -139,9 +155,9 @@ val room = dialPhone.createRoom(name) {
 This example listens for an invite event and joins the room.
 
 ```kotlin
-class InviteListener : ListenerAdapter() {
-    override suspend fun onRoomInvite(event: RoomInviteEvent) {
-        event.invitedRoomActions.join()
+val inviteListener = ListenerAdapter {
+    onRoomInvited { event ->
+        event.room.join()
     }
 }
 ```
@@ -159,12 +175,3 @@ You can of course also just open an issue.
 
 Everyone is welcome to contribute.
 See the [CONTRIBUTING.md](https://github.com/mtorials/dial-phone/blob/master/CONTRIBUTING.md) for more information.
-
-# TODO
-
-- complete room management
-- support for all Matrix events
-- DialPhone events for the most used native Matrix events
-- lazy loading
-- group/community management
-
