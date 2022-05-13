@@ -43,7 +43,8 @@ fun main() {
             onRoomMessageReceived { event ->
                 if (event.message.content.body == "ping") event answer "pong to ${event.room.name}!"
             }
-        }
+        }.also { phone.addListeners(it) }
+
         val room = phone.createRoom("The Riders") {
             makePublic()
             topic = "please come and ride with me"

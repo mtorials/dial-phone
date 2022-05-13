@@ -17,6 +17,7 @@ import de.mtorials.dialphone.core.DialPhoneImpl
 import de.mtorials.dialphone.core.dialevents.MemberTypingEvent
 import de.mtorials.dialphone.core.entities.MemberImpl
 import de.mtorials.dialphone.core.entities.MessageImpl
+import de.mtorials.dialphone.core.entities.UserImpl
 import de.mtorials.dialphone.core.entities.room.InvitedRoom
 import de.mtorials.dialphone.core.entities.room.InvitedRoomImpl
 import de.mtorials.dialphone.core.entities.room.JoinedRoomImpl
@@ -98,7 +99,10 @@ open class ListenerAdapterImpl(
                                 phone = phone,
                                 id = roomId,
                             ),
-                            sender = phone.getUserById(event.sender) ?: error("Can not find user"),
+                            sender = UserImpl(
+                                phone,
+                                event.sender,
+                            ),
                             content = event.content,
                         )
                     )
