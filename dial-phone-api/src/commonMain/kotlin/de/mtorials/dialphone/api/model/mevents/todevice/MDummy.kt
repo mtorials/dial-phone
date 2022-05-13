@@ -7,11 +7,18 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("m.dummy")
+@SerialName(MDummy.EVENT_TYPE)
 data class MDummy(
     override val content: MDummyContent,
 ) : MatrixEvent {
     override val sender: UserId? = null
+
+    override fun getTypeName(): String = EVENT_TYPE
+
+    companion object {
+        const val EVENT_TYPE = "m.dummy"
+    }
+
     @Serializable
     class MDummyContent : EventContent
 }

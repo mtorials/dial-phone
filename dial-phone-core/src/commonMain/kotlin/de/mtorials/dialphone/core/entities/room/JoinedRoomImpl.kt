@@ -19,10 +19,10 @@ class JoinedRoomImpl internal constructor(
 ) : JoinedRoom {
 
     override val name: String?
-        get() = getStateEvent<MRoomName>()?.content?.name
+        get() = phone.cache.state.getRoomStateEvents<MRoomName>(id, MRoomName.EVENT_TYPE).getOrNull(0)?.content?.name
 
     override val members: List<Member>
-        get() = phone.cache.state.getRoomStateEvents(roomId = id).filterIsInstance<MRoomMember>()
+        get() = phone.cache.state.getRoomStateEvents<MRoomMember>(roomId = id, type = MRoomMember.EVENT_TYPE)
             .filter { it.content.membership == Membership.JOIN }
             .map { event ->
                 MemberImpl(
@@ -35,17 +35,13 @@ class JoinedRoomImpl internal constructor(
             }
 
     override val avatarUrl: String?
-        get() = getStateEvent<MRoomAvatar>()?.content?.url
+        get() = phone.cache.state.getRoomStateEvents<MRoomAvatar>(id, MRoomAvatar.EVENT_TYPE).getOrNull(0)?.content?.url
 
     override val joinRule : JoinRule?
-        get() = getStateEvent<MRoomJoinRules>()?.content?.joinRule
+        get() = phone.cache.state.getRoomStateEvents<MRoomJoinRules>(id, MRoomJoinRules.EVENT_TYPE).getOrNull(0)?.content?.joinRule
 
     override val stateEvents: List<MatrixStateEvent>
         get() = phone.cache.state.getRoomStateEvents(roomId = id)
-
-    private inline fun <reified T : MatrixStateEvent> getStateEvent() : T? {
-        return phone.cache.state.getRoomStateEvents(roomId = id).filterIsInstance<T>().getOrNull(0)
-    }
 
     override suspend fun sendMessageEvent(content: MessageEventContent, eventType: String) : EventId {
         return phone.sendMessageEvent(

@@ -10,4 +10,6 @@ class DefaultEvent(
 ) : MatrixEvent {
     @Serializable
     class DefaultContent : EventContent
+
+    override fun getTypeName(): String = ""
 }

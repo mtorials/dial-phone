@@ -8,7 +8,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("m.call.candidates")
+@SerialName(MCallCandidates.EVENT_TYPE)
 data class MCallCandidates(
     override val sender: UserId,
     override val id: EventId,
@@ -28,4 +28,10 @@ data class MCallCandidates(
         val sdpMLineIndex: Int,
         val sdpMid: String,
     )
+
+    override fun getTypeName(): String = EVENT_TYPE
+
+    companion object {
+        const val EVENT_TYPE = "m.call.candidates"
+    }
 }

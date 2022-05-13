@@ -2,10 +2,11 @@ package de.mtorials.dialphone.api.model.mevents.roomstate
 
 import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.api.ids.UserId
+import io.ktor.util.reflect.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@SerialName("m.room.avatar")
+@SerialName(MRoomAvatar.EVENT_TYPE)
 @Serializable
 class MRoomAvatar(
     override val sender: UserId,
@@ -23,4 +24,9 @@ class MRoomAvatar(
     data class Content(
         val url: String
     ) : StateEventContent
+
+    override fun getTypeName(): String = EVENT_TYPE
+    companion object {
+        const val EVENT_TYPE = "m.room.avatar"
+    }
 }

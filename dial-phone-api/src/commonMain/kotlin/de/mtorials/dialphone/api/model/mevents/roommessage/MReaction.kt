@@ -9,8 +9,9 @@ import kotlinx.serialization.Serializable
 /**
  * Can not find documentation of this event in specification
  * Is used by the riot client for emotes
+ * Maybe not anymore? see m.sticker
  */
-@SerialName("m.reaction")
+@SerialName(MReaction.EVENT_TYPE)
 @Serializable
 class MReaction(
     override val sender: UserId,
@@ -24,4 +25,10 @@ class MReaction(
         val msgType: MessageType = MessageType.TEXT,
         val body: String? = null,
     ) : MessageEventContent
+
+    override fun getTypeName(): String = EVENT_TYPE
+
+    companion object {
+        const val EVENT_TYPE = "m.reaction"
+    }
 }

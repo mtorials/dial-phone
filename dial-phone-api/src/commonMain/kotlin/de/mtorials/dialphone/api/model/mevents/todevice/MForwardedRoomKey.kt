@@ -6,7 +6,7 @@ import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@SerialName("m.forwarded_room_key")
+@SerialName(MForwardedRoomKey.EVENT_TYPE)
 @Serializable
 class MForwardedRoomKey(
     override val content: MForwardedRoomKeyContent,
@@ -29,4 +29,10 @@ class MForwardedRoomKey(
         val sessionKey: String,
         val withheld: Map<String, String>? = null,
     ) : EventContent
+
+    override fun getTypeName(): String = EVENT_TYPE
+
+    companion object {
+        const val EVENT_TYPE = "m.forwarded_room_key"
+    }
 }

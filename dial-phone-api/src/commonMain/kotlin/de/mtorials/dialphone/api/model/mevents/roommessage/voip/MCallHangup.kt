@@ -9,7 +9,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("m.call.hangup")
+@SerialName(MCallHangup.EVENT_TYPE)
 data class MCallHangup(
     override val sender: UserId,
     override val id: EventId,
@@ -22,4 +22,10 @@ data class MCallHangup(
         val callId: String,
         val version: Int,
     ) : MessageEventContent
+
+    override fun getTypeName(): String = EVENT_TYPE
+
+    companion object {
+        const val EVENT_TYPE = "m.call.hangup"
+    }
 }

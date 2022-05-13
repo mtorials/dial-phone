@@ -3,8 +3,12 @@ package de.mtorials.dialphone.core.cache
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.model.enums.Membership
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
+import io.ktor.util.reflect.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.serialization.serializer
+import kotlin.reflect.KClass
+import kotlin.reflect.KType
 
 class InMemoryStateCache : StateCache {
 
@@ -13,6 +17,9 @@ class InMemoryStateCache : StateCache {
     private val states: MutableMap<RoomId, MutableList<MatrixStateEvent>> = mutableMapOf()
 
     override fun getRoomStateEvents(roomId: RoomId): List<MatrixStateEvent> = states[roomId] ?: emptyList()
+
+    override fun <T : MatrixStateEvent> getRoomStateEvents(roomId: RoomId, type: String): List<T> =
+        getRoomStateEvents(roomId).filter { it.getTypeName() == type } as List<T>
 
     // TODO check if concurrent modification
     override fun insertRoomStateEvent(roomId: RoomId, event: MatrixStateEvent) {

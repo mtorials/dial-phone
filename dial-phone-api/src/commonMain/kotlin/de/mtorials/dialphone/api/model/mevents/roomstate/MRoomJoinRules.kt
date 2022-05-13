@@ -6,7 +6,7 @@ import de.mtorials.dialphone.api.model.enums.JoinRule
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@SerialName("m.room.join_rules")
+@SerialName(MRoomJoinRules.EVENT_TYPE)
 @Serializable
 class MRoomJoinRules(
     override val sender: UserId,
@@ -23,4 +23,10 @@ class MRoomJoinRules(
         @SerialName("join_rule")
         val joinRule: JoinRule
     ) : StateEventContent
+
+    override fun getTypeName(): String = EVENT_TYPE
+
+    companion object {
+        const val EVENT_TYPE = "m.room.join_rules"
+    }
 }

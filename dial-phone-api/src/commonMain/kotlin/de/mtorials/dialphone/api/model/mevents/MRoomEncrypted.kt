@@ -8,7 +8,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
-@SerialName("m.room.encrypted")
+@SerialName(MRoomEncrypted.EVENT_TYPE)
 @Serializable()
 class MRoomEncrypted(
     override val sender: UserId,
@@ -29,4 +29,10 @@ class MRoomEncrypted(
         val deviceId: String? = null,
         val algorithm: MessageEncryptionAlgorithm,
     ) : MessageEventContent
+
+    override fun getTypeName(): String = EVENT_TYPE
+
+    companion object {
+        const val EVENT_TYPE = "m.room.encrypted"
+    }
 }

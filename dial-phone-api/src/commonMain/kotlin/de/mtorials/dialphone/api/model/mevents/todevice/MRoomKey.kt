@@ -8,7 +8,7 @@ import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@SerialName("m.room_key")
+@SerialName(MRoomKey.EVENT_TYPE)
 @Serializable
 data class MRoomKey(
     override val content: MRoomKeyContent,
@@ -24,4 +24,10 @@ data class MRoomKey(
         @SerialName("session_key")
         val sessionKey: String,
     ) : EventContent
+
+    override fun getTypeName(): String = EVENT_TYPE
+
+    companion object {
+        const val EVENT_TYPE = "m.room_key"
+    }
 }

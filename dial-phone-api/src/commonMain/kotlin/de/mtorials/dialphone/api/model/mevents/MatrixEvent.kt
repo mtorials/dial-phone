@@ -8,4 +8,6 @@ import de.mtorials.dialphone.api.ids.UserId
 interface MatrixEvent {
     val sender: UserId?
     val content: EventContent
+
+    fun getTypeName() : String
 }

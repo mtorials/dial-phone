@@ -8,6 +8,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(MTyping.EVENT_TYPE)
 data class MTyping(
     override val content: MTypingContent,
     @SerialName("room_id")
@@ -21,7 +22,9 @@ data class MTyping(
         val userIds: List<UserId>,
     ) : EventContent
 
+    override fun getTypeName(): String = EVENT_TYPE
+
     companion object {
-        const val TYPE = "m.typing"
+        const val EVENT_TYPE = "m.call.candidates"
     }
 }

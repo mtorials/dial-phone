@@ -5,7 +5,7 @@ import de.mtorials.dialphone.api.ids.UserId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@SerialName("m.room.name")
+@SerialName(MRoomName.EVENT_TYPE)
 @Serializable
 class MRoomName(
     override val sender: UserId,
@@ -21,4 +21,10 @@ class MRoomName(
     data class Content(
         val name: String
     ) : StateEventContent
+
+    override fun getTypeName(): String = EVENT_TYPE
+
+    companion object {
+        const val EVENT_TYPE = "m.room.name"
+    }
 }

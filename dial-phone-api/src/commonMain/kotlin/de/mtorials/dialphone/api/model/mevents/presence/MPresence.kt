@@ -6,7 +6,7 @@ import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@SerialName("m.presence")
+@SerialName(MPresence.EVENT_TYPE)
 @Serializable
 class MPresence(
         override val sender: UserId,
@@ -20,4 +20,10 @@ class MPresence(
         @SerialName("currently_active")
         val currentlyActive: Boolean? = null
     ) : EventContent
+
+    override fun getTypeName(): String = EVENT_TYPE
+
+    companion object {
+        const val EVENT_TYPE = "m.presence"
+    }
 }

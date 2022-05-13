@@ -6,7 +6,7 @@ import de.mtorials.dialphone.api.model.enums.RoomEncryptionAlgorithm
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@SerialName("m.room.encryption")
+@SerialName(MRoomEncryption.EVENT_TYPE)
 @Serializable
 class MRoomEncryption(
     override val sender: UserId,
@@ -26,4 +26,9 @@ class MRoomEncryption(
         @SerialName("rotation_period_msgs")
         val rotationPeriodMessages: Int? = null,
     ) : StateEventContent
+
+    override fun getTypeName(): String = EVENT_TYPE
+    companion object {
+        const val EVENT_TYPE = "m.room.encryption"
+    }
 }

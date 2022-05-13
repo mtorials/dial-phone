@@ -17,4 +17,6 @@ class DefaultStateEvent(
 ) : MatrixStateEvent {
     @Serializable
     class DefaultStateEventContent: StateEventContent
+
+    override fun getTypeName(): String = ""
 }

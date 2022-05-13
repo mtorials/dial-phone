@@ -9,7 +9,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("m.room_key_request")
+@SerialName(MRoomKeyRequest.EVENT_TYPE)
 data class MRoomKeyRequest(
     override val content: MRoomKeyRequestContent,
 ) : MatrixEvent {
@@ -23,4 +23,10 @@ data class MRoomKeyRequest(
         @SerialName("requesting_device_id")
         val requestingDeviceId: String,
     ) : EventContent
+
+    override fun getTypeName(): String = EVENT_TYPE
+
+    companion object {
+        const val EVENT_TYPE = "m.room_key_request"
+    }
 }
