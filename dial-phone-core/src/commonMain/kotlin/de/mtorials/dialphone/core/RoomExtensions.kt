@@ -1,68 +1,65 @@
 package de.mtorials.dialphone.core
 
-import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomName
-import de.mtorials.dialphone.core.actions.RoomActions
-import de.mtorials.dialphone.core.entityfutures.MessageFuture
-import de.mtorials.dialphone.api.ids.eventId
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import de.mtorials.dialphone.core.entities.MemberImpl
+import de.mtorials.dialphone.core.entities.Message
+import de.mtorials.dialphone.core.entities.MessageImpl
+import de.mtorials.dialphone.core.entities.room.JoinedRoom
 
 /**
  * Write a message to the room
  */
-suspend infix fun RoomActions.write(message: String) = this@write.sendTextMessage(message)
+suspend infix fun JoinedRoom.write(message: String) = this@write.sendTextMessage(message)
 
 /**
  * rename the room
  */
-suspend infix fun RoomActions.rename(name: String) = setName(name)
+suspend infix fun JoinedRoom.rename(name: String) = setName(name)
 
-/**
- * Send a message and get back a message future to for example redact the message
- */
-suspend fun RoomActions.sendAndGet(message: String) =
-    MessageFuture(
-        this@sendAndGet.sendTextMessage(message),
-        this@sendAndGet.id,
-        this@sendAndGet.phone
-    )
 
 /**
  * Send a Text message
  */
-suspend fun RoomActions.sendTextMessage(content: String) : EventId = this.sendMessageEvent(
-    content = MRoomMessage.TextContent(
-        body = content
-    ),
-    eventType = "m.room.message"
-)
+suspend fun JoinedRoom.sendMRoomMessageEvent(content: MRoomMessage.MRoomMessageContent) : Message {
+    val id = this.sendMessageEvent(
+        content = content,
+        eventType = "m.room.message"
+    )
+    return MessageImpl(
+        phone = this.phone,
+        id = id,
+        room = this,
+        author = MemberImpl(phone.getMe(), this),
+        messageType = MRoomMessage.MRoomMessageEventContentType.M_TEXT,
+        content = content,
+    )
+}
+
+suspend fun JoinedRoom.sendTextMessage(content: String) = sendMRoomMessageEvent(MRoomMessage.TextContent(body = content))
 
 /**
  * Send a HTML message
  */
-suspend fun RoomActions.sendHtmlMessage(content: String, nonFormattedContent: String? = null) : EventId = this.sendMessageEvent(
+suspend fun JoinedRoom.sendHtmlMessage(content: String, nonFormattedContent: String? = null) = this.sendMRoomMessageEvent(
     content = MRoomMessage.TextContent(
         body = nonFormattedContent ?: content,
         format = MRoomMessage.htmlFormat,
         formattedBody = content,
-    ),
-    eventType = "m.room.message"
+    )
 )
 
 /**
  * Send an image
  */
-suspend fun RoomActions.sendImageWithUrl(url: String, title: String? = null) : EventId = this.sendMessageEvent(
+suspend fun JoinedRoom.sendImageWithUrl(url: String, title: String? = null) = this.sendMRoomMessageEvent(
     content = MRoomMessage.ImageContent(
         body = title ?: "image send with dial-phone",
         url = url
-    ),
-    eventType = "m.room.message"
+    )
 )
 
 /**
  * Change the name of the room
  */
-suspend fun RoomActions.setName(name: String) = this@setName.sendStateEvent(MRoomName.Content(name = name), "m.room.name")
+suspend fun JoinedRoom.setName(name: String) = this@setName.sendStateEvent(MRoomName.Content(name = name), "m.room.name")

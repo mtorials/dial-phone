@@ -1,9 +1,8 @@
 package de.mtorials.dialphone.api.responses.sync
 
-import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import de.mtorials.dialphone.api.model.mevents.presence.MPresence
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 class SyncResponse(
@@ -16,7 +15,7 @@ class SyncResponse(
     @SerialName("device_one_time_keys_count")
     val deviceOneTimeKeysCount: Map<String, Int>? = null,
     @SerialName("devices_list")
-    val devicesList: DevicesList? = null,
+    val deviceList: DevicesList? = null,
     @SerialName("account_data")
     val accountData: AccountData? = null,
 ) {
@@ -30,7 +29,7 @@ class SyncResponse(
     )
     @Serializable
     class SyncPresence(
-        val events: List<MPresence>
+        val events: List<JsonObject>
     )
     @Serializable
     data class DevicesList(
@@ -39,6 +38,6 @@ class SyncResponse(
     )
     @Serializable
     data class ToDevice(
-        val events: List<MatrixEvent> = emptyList()
+        val events: List<JsonObject> = emptyList()
     )
 }

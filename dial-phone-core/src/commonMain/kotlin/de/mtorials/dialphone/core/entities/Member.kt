@@ -1,11 +1,12 @@
 package de.mtorials.dialphone.core.entities
 
-import de.mtorials.dialphone.core.entityfutures.UserFuture
-import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.core.entities.room.JoinedRoom
 
 /**
  * Represents a user in a room
  */
-interface Member : UserFuture {
-    val roomId: RoomId
+interface Member : User {
+    val room: JoinedRoom
+    val avatarURL: String?
+    val displayName: String?
 }

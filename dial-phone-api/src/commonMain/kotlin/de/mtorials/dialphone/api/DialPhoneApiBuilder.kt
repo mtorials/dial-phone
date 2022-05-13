@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.modules.SerializersModule
@@ -52,4 +53,9 @@ interface DialPhoneApiBuilder {
      * Set the ktor log level
      */
     var ktorLogLevel: LogLevel
+
+    /**
+     * dial-phone log level
+     */
+    var dialPhoneLogLevel: DialPhoneLogLevel
 }

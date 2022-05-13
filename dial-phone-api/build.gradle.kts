@@ -9,9 +9,8 @@ kotlin {
             kotlinOptions.jvmTarget = "1.8"
         }
     }
-    js {
+    js(org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType.BOTH)
 
-    }
     val ktorVersion: String by rootProject.extra
     val kotlinxCoroutinesVersion: String by rootProject.extra
     val kotlinxSerializationVersion: String by rootProject.extra

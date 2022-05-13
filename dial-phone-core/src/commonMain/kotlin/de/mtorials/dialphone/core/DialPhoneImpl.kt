@@ -7,19 +7,19 @@ import de.mtorials.dialphone.api.ids.RoomAlias
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
+import de.mtorials.dialphone.api.model.enums.Membership
 import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
-import de.mtorials.dialphone.api.responses.DiscoveredRoom
-import de.mtorials.dialphone.api.responses.UserWithoutIDResponse
-import de.mtorials.dialphone.core.actions.InvitedRoomActions
-import de.mtorials.dialphone.core.actions.InvitedRoomActionsImpl
+import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
+import de.mtorials.dialphone.api.responses.DiscoveredRoomResponse
 import de.mtorials.dialphone.core.cache.PhoneCache
 import de.mtorials.dialphone.core.entities.User
 import de.mtorials.dialphone.core.entities.UserImpl
-import de.mtorials.dialphone.core.entityfutures.RoomFuture
-import de.mtorials.dialphone.core.entityfutures.RoomFutureImpl
+import de.mtorials.dialphone.core.entities.room.*
 import io.ktor.client.*
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.serialization.json.Json
 
 class DialPhoneImpl internal constructor(
     token: String,
@@ -27,9 +27,11 @@ class DialPhoneImpl internal constructor(
     ownId: UserId,
     client: HttpClient,
     initCallback: suspend (DialPhoneApi) -> Unit,
-    val cache: PhoneCache?,
+    val cache: PhoneCache,
     coroutineScope: CoroutineScope,
     deviceId: String?,
+    format: Json,
+    logLevel: DialPhoneLogLevel,
 ) : DialPhone, DialPhoneApiImpl(
     token = token,
     homeserverUrl = homeserverUrl,
@@ -38,11 +40,15 @@ class DialPhoneImpl internal constructor(
     initCallback = initCallback,
     coroutineScope = coroutineScope,
     deviceId = deviceId,
+    format = format,
+    logLevel = logLevel,
 ) {
 
     override val synchronizer = Synchronizer(
-        this, client,
+        this,
+        client,
         initCallback = initCallback,
+        logLevel = logLevel,
     )
 
     fun beforeMessageEventPublish(block: suspend (RoomId, String, EventContent) -> Pair<String, EventContent>) {
@@ -58,47 +64,66 @@ class DialPhoneImpl internal constructor(
         listener.forEach { synchronizer.addListener(it as GenericListener<DialPhoneApi>) }
     }
 
-    override suspend fun getJoinedRoomFutures(): List<RoomFuture> = apiRequests.getJoinedRooms().roomIds.map {
-        RoomFutureImpl(it,this)
+    override suspend fun getJoinedRooms(): List<JoinedRoom> {
+        return cache.state.roomIds[Membership.JOIN]?.map { id ->
+            JoinedRoomImpl(this, id)
+        } ?: emptyList()
     }
 
-    override suspend fun getInvitedRoomActions(): List<InvitedRoomActions>? = null
+    override suspend fun getInvitedRoomActions(): List<InvitedRoom> = cache.state.roomIds[Membership.INVITE]?.map {id ->
+        InvitedRoomImpl(
+            this,
+            id
+        )
+    } ?: emptyList()
+
 
     override suspend fun getUserById(id: UserId) : User? {
         // Check cache
-        if (cache?.users?.containsKey(id.toString()) == true) return cache.users[id.toString()]
-
-        val u : UserWithoutIDResponse = apiRequests.getUserById(id.toString()) ?: return null
+//        if (cache?.userCache?.containsKey(id.toString()) == true) return cache.users[id.toString()]
         return UserImpl(
             id = id,
-            displayName = u.displayName,
-            avatarURL = u.avatarURL,
             phone = this
         )
     }
 
-    override suspend fun getRoomByAlias(alias: RoomAlias): InvitedRoomActions =
-        InvitedRoomActionsImpl(
+    override suspend fun getInvitedRoomByAlias(alias: RoomAlias): InvitedRoom =
+        InvitedRoomImpl(
             this,
             apiRequests.getRoomIdForAlias(alias.toString()).roomId
         )
 
-    override suspend fun getJoinedRoomFutureById(id: RoomId) : RoomFuture? =
-        when (getJoinedRoomFutures().map { it.id }.contains(id)) {
-            true -> RoomFutureImpl(id, this)
-            false -> null
-        }
+    override suspend fun getJoinedRoomById(id: RoomId) : JoinedRoom? {
+        return getJoinedRooms().filter{ id == it.id }.getOrNull(0)
+    }
 
-    override suspend fun createRoom(name: String, block: RoomBuilder.() -> Unit): RoomFuture =
+    override suspend fun getJoinedRoomByName(name: String, ignoreCase: Boolean): JoinedRoom? {
+        if (ignoreCase) return getJoinedRooms().filter { it.name?.lowercase() == name.lowercase() }.getOrNull(0)
+        return getJoinedRooms().filter { it.name == name }.getOrNull(0)
+    }
+
+    // TODO state is not up to date, because of round trip
+    override suspend fun createRoom(name: String, block: RoomBuilder.() -> Unit): JoinedRoom =
         apiRequests.createRoom(RoomBuilderImpl(name).apply(block).build())
-            .run { RoomFutureImpl(this.id, this@DialPhoneImpl) }
+            .run { JoinedRoomImpl(this@DialPhoneImpl, this.id) }
 
 
-    override suspend fun discoverRooms(): List<Pair<InvitedRoomActions, DiscoveredRoom>> {
-        return apiRequests.discoverRooms().rooms.map { Pair(
-            InvitedRoomActionsImpl(
+    override suspend fun discoverRooms(): List<DiscoveredRoom> {
+        return apiRequests.discoverRooms().rooms.map { r ->
+            DiscoveredRoomImpl(
                 this,
-                it.id
-            ), it) }
+                r.id,
+                r,
+            )
+        }
+    }
+
+    // TODO better error handling
+    override suspend fun getMe(): User = getUserById(this.ownId) ?: error("Can not find own user")
+
+    private suspend fun getStateEvents(id: RoomId) : List<MatrixStateEvent> {
+        val cached = cache.state.getRoomStateEvents(id)
+        if (cached.isNotEmpty()) return cached
+        return apiRequests.getRoomsState(id)
     }
 }

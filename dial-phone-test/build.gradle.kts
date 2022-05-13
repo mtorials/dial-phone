@@ -20,6 +20,7 @@ kotlin {
                 // MODULES
                 implementation(project(":dial-phone-core"))
                 implementation(project(":dial-phone-api"))
+                implementation(project(":dial-phone-bot"))
                 implementation(project(":dial-phone-encryption"))
 
                 implementation(kotlin("test-common"))
@@ -28,6 +29,8 @@ kotlin {
                 //implementation("org.eclipse.jetty:jetty-client:11.0.0")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
 
@@ -87,7 +90,7 @@ val createUserOnHomeserver: Task by tasks.creating(Exec::class) {
 // TESTING
 
 tasks.withType<Test> {
-    dependsOn(createUserOnHomeserver)
+    //dependsOn(createUserOnHomeserver)
 //    dependsOn(createUserOnHomeserver)
     useJUnit()
 //    testLogging {

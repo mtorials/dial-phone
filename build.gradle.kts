@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "de.mtorials"
-version = "0.2.0"
+version = "0.2.1"
 
 allprojects {
     repositories {
@@ -30,8 +30,6 @@ allprojects {
         maven("https://maven.pkg.github.com/Dominaezzz/matrix-kt") {
             credentials {
                 username = System.getenv("GH_USER")
-                // TODO remove
-                println(System.getenv("GH_USER"))
                 password = System.getenv("GH_TOKEN")
             }
         }

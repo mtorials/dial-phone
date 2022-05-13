@@ -4,9 +4,7 @@ import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.dialevents.answer
 import de.mtorials.dialphone.core.listeners.ListenerAdapter
-import de.mtorials.dialphone.core.listeners.MessageListener
 import de.mtorials.dialphone.core.sendTextMessage
-import de.mtorials.dialphone.encyption.useEncryption
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.runBlocking
 
@@ -23,37 +21,43 @@ fun main() {
         }
         val phone = DialPhone(ADDR) {
             asUser("superman", "test", true)
-            addListeners(MessageListener(false) { event ->
-                event.run { println("${message.author.userId} : ${message.body}") }
-            })
+//            addListeners(MessageListener(false) { event ->
+//                event.run { println("${message.author.userId} : ${message.body}") }
+//            })
             addListeners(ListenerAdapter {
-                onRoomInvited { it.actions.join() }
+                onRoomInvited { event -> event.room.join() }
             })
             //useEncryption()
-            ktorLogLevel = LogLevel.ALL
+            ktorLogLevel = LogLevel.NONE
         }
-        val myListener = ListenerAdapter {
-            onRoomInvited { event ->
-                event.actions.join()
-                event.room.sendTextMessage("Hey, I join everywhere!")
-            }
-            onRoomMessageReceived { event ->
-                if (event.message.body == "ping") event answer "pong!"
-            }
-        }
-//        val room = phone.createRoom("The Riders") {
-//            makePublic()
-//            topic = "please come and ride with me"
+//        phone.getJoinedRoomFutures().forEachIndexed { index, joinedRoom ->
+//            println("$index : ${joinedRoom.name}")
+//            joinedRoom.run { println("The room with name $name and id $id") }
 //        }
 
-        println(phone.apiRequests.turnCredentials())
+        val myListener = ListenerAdapter {
+            onRoomInvited { event ->
+                val room = event.room.join()
+                room.sendTextMessage("Hey, I join everywhere!")
+            }
+            onRoomMessageReceived { event ->
+                if (event.message.content.body == "ping") event answer "pong to ${event.room.name}!"
+            }
+        }.also { phone.addListeners(it) }
+
+        val room = phone.createRoom("The Riders") {
+            makePublic()
+            topic = "please come and ride with me"
+        }
+
+        room.run { println("Created a room with the name $name and the member(s) ${members.map { it.displayName }.joinToString(", ")}.") }
 
         println("Created room, start syncing...")
         phone.sync()
         while(true) {
             val msg = readln()
             if (msg == "exit") break
-            if (msg == "!ping") phone.getJoinedRoomFutures().forEach {
+            if (msg == "!ping") phone.getJoinedRooms().forEach {
                 it.sendTextMessage("ping!")
             }
 //            else room.sendTextMessage(msg)

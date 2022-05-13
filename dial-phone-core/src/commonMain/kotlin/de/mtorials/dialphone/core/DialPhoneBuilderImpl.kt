@@ -1,11 +1,9 @@
 package de.mtorials.dialphone.core
 
-import de.mtorials.dialphone.api.APIRequests
 import de.mtorials.dialphone.api.DialPhoneApiBuilderImpl
-import de.mtorials.dialphone.api.EventHook
 import de.mtorials.dialphone.core.cache.InMemoryCache
 import de.mtorials.dialphone.core.cache.PhoneCache
-import de.mtorials.dialphone.core.cache.UserCacheListener
+import de.mtorials.dialphone.core.cache.StateCacheListener
 
 class DialPhoneBuilderImpl(
     homeserverUrl: String,
@@ -26,21 +24,22 @@ class DialPhoneBuilderImpl(
     suspend fun buildDialPhone(block: DialPhoneBuilderImpl.() -> Unit) : DialPhoneImpl {
         block()
         this.configure()
+        val c = cache ?: InMemoryCache()
         return DialPhoneImpl(
             token = this.token!!,
             homeserverUrl = homeserverUrl,
             client = client,
-            // TODO use better errors
-            ownId = ownId ?: error("Got no di"),
+            ownId = ownId ?: error("Got no id"),
             deviceId = deviceId,
             initCallback = {},
             coroutineScope = coroutineScope,
-            cache = cache,
+            cache = c,
+            format = format,
+            logLevel = dialPhoneLogLevel,
         ).also {
             it.addListeners(*listenerList.toTypedArray())
-            if (cache != null) this.addListeners(UserCacheListener(
-                cache!!,
-                it,
+            it.addListeners(StateCacheListener(
+                c.state
             ))
             afterInitialization(it)
         }

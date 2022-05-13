@@ -12,5 +12,7 @@ enum class JoinRule {
     @SerialName("invite")
     INVITE,
     @SerialName("private")
-    PRIVATE
+    PRIVATE,
+    @SerialName("restricted")
+    RESTRICTED,
 }

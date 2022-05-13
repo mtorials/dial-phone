@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.encyption
 
 import de.mtorials.dialphone.api.DialPhoneApi
+import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
@@ -10,17 +11,18 @@ import de.mtorials.dialphone.api.model.mevents.todevice.MRoomKey
 import de.mtorials.dialphone.encyption.exceptions.MalformedEncryptedEvent
 import de.mtorials.dialphone.encyption.exceptions.UnexpectedEncryptionAlgorithmException
 import de.mtorials.dialphone.api.ids.roomId
+import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 
 class EncryptionListener(
     private val encryptionManager: EncryptionManager,
 ) : GenericListener<DialPhoneApi> {
 
-    override fun onRoomEvent(event: MatrixEvent, roomId: String, phone: DialPhoneApi, isOld: Boolean) {
+    override suspend fun onJoinedRoomStateEvent(event: MatrixStateEvent, roomId: RoomId, phone: DialPhoneApi, isOld: Boolean) {
         if (event !is MRoomEncryption) return
-        encryptionManager.markRoomEncrypted(roomId.roomId())
+        encryptionManager.markRoomEncrypted(roomId)
     }
 
-    override fun onToDeviceEvent(event: MatrixEvent, phone: DialPhoneApi, isOld: Boolean) {
+    override suspend fun onToDeviceEvent(event: MatrixEvent, phone: DialPhoneApi, isOld: Boolean) {
         if (event !is MRoomEncrypted) return
         if (event.content.algorithm != MessageEncryptionAlgorithm.OLM_V1_CURVE25519_AES_SHA1)
             throw UnexpectedEncryptionAlgorithmException("to-device")

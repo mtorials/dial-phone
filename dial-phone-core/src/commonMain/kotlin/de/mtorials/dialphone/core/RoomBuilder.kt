@@ -1,15 +1,16 @@
 package de.mtorials.dialphone.core
 
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
-import de.mtorials.dialphone.api.requests.RoomCreateRequest
-import de.mtorials.dialphone.core.entityfutures.UserFuture
+import de.mtorials.dialphone.core.entities.User
 
 interface RoomBuilder {
 
     /**
      * Users to invite
      */
-    fun invite(vararg users: UserFuture)
+    fun invite(vararg users: User)
+    fun invite(vararg users: UserId)
 
     /**
      * The topic of the room. default is empty

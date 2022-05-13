@@ -17,11 +17,11 @@ class MRoomMessage(
 ) : MatrixMessageEvent {
 
     interface MRoomMessageContent : MessageEventContent {
-        val msgType: String
+        val msgType: MRoomMessageEventContentType
         val body: String
     }
 
-    @SerialName("m.text")
+    @SerialName(TEXT)
     @Serializable
     data class TextContent(
         override val body: String,
@@ -30,13 +30,16 @@ class MRoomMessage(
         val formattedBody: String? = null,
     ) : MRoomMessageContent {
         @SerialName("msgtype")
-        override val msgType: String = "m.text"
+        override val msgType = MRoomMessageEventContentType.M_TEXT
     }
 
     @Serializable
-    data class EmptyContent(override val body: String = "", override val msgType: String = "") : MRoomMessageContent
+    data class EmptyContent(
+        override val body: String = "",
+        override val msgType: MRoomMessageEventContentType = MRoomMessageEventContentType.EMPTY
+    ) : MRoomMessageContent
 
-    @SerialName("m.image")
+    @SerialName(IMAGE)
     @Serializable
     data class ImageContent(
         override val body: String,
@@ -44,10 +47,23 @@ class MRoomMessage(
         val file: String? = null,
     ) : MRoomMessageContent {
         @SerialName("msgtype")
-        override val msgType: String = "m.image"
+        override val msgType = MRoomMessageEventContentType.M_IMAGE
+    }
+
+    @Serializable
+    enum class MRoomMessageEventContentType {
+        @SerialName(IMAGE)
+        M_IMAGE,
+        @SerialName(TEXT)
+        M_TEXT,
+        @SerialName(NONE)
+        EMPTY
     }
 
     companion object {
+        const val IMAGE = "m.image"
+        const val TEXT = "m.text"
+        const val NONE = ""
         const val htmlFormat = "org.matrix.custom.html"
     }
 }

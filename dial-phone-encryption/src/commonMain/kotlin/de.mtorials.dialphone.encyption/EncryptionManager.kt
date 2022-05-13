@@ -63,7 +63,7 @@ class EncryptionManager(
         // TODO check the signature
         val theirOneTimeKey = res.oneTimeKeys[userId]?.get(theirDeviceId)?.jsonObject?.entries?.first()?.value
             ?.jsonObject?.get("key")?.jsonPrimitive?.content
-                ?: throw RuntimeException("can get one time key")
+                ?: throw RuntimeException("can't get one time key")
         val olmSession = Session.createOutboundSession(
             account = account,
             theirIdentityKey = theirIdentityKey,
@@ -238,8 +238,8 @@ class EncryptionManager(
      */
     private suspend fun downloadDeviceList(roomId: RoomId) : Map<UserId, Map<String, SignedDeviceKeys>> {
         val deviceList = client.queryKeys(KeyQueryRequest(
-            deviceKeys = phone.getJoinedRoomFutureById(roomId)?.receive()?.members?.associate {
-                it.userId to emptyList()
+            deviceKeys = phone.getJoinedRoomById(roomId)?.members?.associate {
+                it.id to emptyList()
             } ?: throw RoomKeyHandleException("Cant find room with provided it")
         ))
         // TODO a lot of checks

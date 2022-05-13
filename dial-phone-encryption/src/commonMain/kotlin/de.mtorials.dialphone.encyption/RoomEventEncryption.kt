@@ -5,6 +5,7 @@ import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm.*
 import de.mtorials.dialphone.api.model.mevents.EventContent
+import de.mtorials.dialphone.encyption.exceptions.MalformedEncryptedEvent
 import de.mtorials.dialphone.encyption.exceptions.UnexpectedEncryptionAlgorithmException
 
 class RoomEventEncryption(
@@ -15,6 +16,7 @@ class RoomEventEncryption(
         return when (event.content.algorithm) {
             OLM_V1_CURVE25519_AES_SHA1 -> throw UnexpectedEncryptionAlgorithmException(eventType = "room message event")
             MEGOLM_V1_AES_SHA2 -> manager.decryptMegolm(event)
+            null -> throw MalformedEncryptedEvent(event)
         }
     }
 

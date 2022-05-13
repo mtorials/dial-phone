@@ -4,6 +4,7 @@ import de.mtorials.dialphone.api.authentication.Login
 import de.mtorials.dialphone.api.authentication.Registrar
 import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.listeners.GenericListener
+import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.api.serialization.EventContentSerialization
 import de.mtorials.dialphone.api.serialization.EventSerialization
 import io.ktor.client.*
@@ -26,6 +27,7 @@ open class DialPhoneApiBuilderImpl(
 ) : DialPhoneApiBuilder {
 
     override var ktorLogLevel = LogLevel.NONE
+    override var dialPhoneLogLevel: DialPhoneLogLevel = DialPhoneLogLevel.ERROR
 
     var token: String? = null
     var ownId: UserId? = null
@@ -38,9 +40,6 @@ open class DialPhoneApiBuilderImpl(
     var coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
     private var isGuestBool = false
-    // TODO remove bot stuff
-    // protected var commandListener: CommandListener? = null
-    // private var bot: DialPhoneApiBuilder.BotBuilder? = null
 
     lateinit var format: Json
     lateinit var client: HttpClient
@@ -94,7 +93,6 @@ open class DialPhoneApiBuilderImpl(
             encodeDefaults = true
             explicitNulls = false
             serializersModule =
-                    // TODO check if I broke smth
                 EventSerialization.serializersModule + EventContentSerialization.serializersModule + customSerializer
         }
         client = HttpClient {
@@ -111,7 +109,7 @@ open class DialPhoneApiBuilderImpl(
             token = guest.token
         }
         if (token == null) {
-            if (username == null || password == null) error("choose login method in builder")
+            if (username == null || password == null) error("choose a login method in builder")
             try {
                 val response = Login(homeserverUrl = homeserverUrl, httpClient = client).login(
                     username = username!!,
@@ -158,8 +156,12 @@ open class DialPhoneApiBuilderImpl(
             ownId = ownId ?: error("Got no id"),
             initCallback = {},
             coroutineScope = coroutineScope,
-            deviceId = deviceId
-        ).also { it.addListeners(*listenerList.toTypedArray()) }
+            deviceId = deviceId,
+            format = format,
+            logLevel = dialPhoneLogLevel,
+        ).also {
+            it.addListeners(*listenerList.toTypedArray())
+        }
     }
 
 //    class BotBuilderImpl : DialPhoneApiBuilder.BotBuilder {

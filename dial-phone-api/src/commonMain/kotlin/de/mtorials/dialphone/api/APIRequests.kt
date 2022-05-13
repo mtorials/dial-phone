@@ -2,6 +2,7 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.responses.*
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 import io.ktor.client.HttpClient
@@ -33,15 +34,15 @@ class APIRequests(
     suspend fun discoverRooms() : RoomDiscovery = request(Get, "publicRooms")
     suspend fun getJoinedRooms() : JoinedRooms = request(Get, "joined_rooms")
     suspend fun getMe() : UserResponse = request(Get, "account/whoami")
-    suspend fun getRoomsState(id: String) : List<MatrixStateEvent> =
+    suspend fun getRoomsState(id: RoomId) : List<MatrixStateEvent> =
         request(Get, "rooms/${id}/state")
-    suspend fun getUserById(id: String) : UserWithoutIDResponse? = request(Get, "profile/${id}")
+    suspend fun getUserById(id: UserId) : UserWithoutIDResponse? = request(Get, "profile/${id}")
     suspend fun getEventByIdAndRoomId(id: String, roomId: String) : MatrixEvent =
         request(Get, "rooms/${encode(roomId)}/event/${encode(id)}")
-    suspend fun joinRoomWithId(id: String) : RoomResponse =
+    suspend fun joinRoomWithId(id: RoomId) : RoomResponse =
         request(Post, "rooms/${encode(id)}/join")
-    suspend fun leaveRoomWithId(id: String) =
-        request<Any>(HttpMethod.Post, "rooms/${encode(id)}/leave")
+    suspend fun leaveRoomWithId(id: RoomId) : Unit =
+        request(Post, "rooms/${encode(id)}/leave")
     suspend fun getRoomIdForAlias(alias: String) : AliasExchangeResponse =
         request(Get, "directory/room/${encode(alias)}")
     suspend fun createRoom(request: RoomCreateRequest) : RoomResponse =
@@ -75,7 +76,7 @@ class APIRequests(
             bodyValue = content
         ).id
     }
-    suspend fun redactEventWithIdInRoom(roomId: String, id: String, reason: String? = null) : EventResponse =
+    suspend fun redactEventWithIdInRoom(roomId: RoomId, id: EventId, reason: String? = null) : EventResponse =
         request(httpMethod = HttpMethod.Put, path = "rooms/${encode(roomId)}/redact/${encode(id)}/${random.nextInt()}", bodyValue = ReasonResponse(reason))
 
     //Profile
