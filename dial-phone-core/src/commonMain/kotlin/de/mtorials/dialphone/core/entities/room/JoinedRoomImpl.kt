@@ -6,6 +6,7 @@ import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.ids.userId
 import de.mtorials.dialphone.api.model.enums.JoinRule
 import de.mtorials.dialphone.api.model.enums.Membership
+import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
 import de.mtorials.dialphone.api.model.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.api.model.mevents.roomstate.*
 import de.mtorials.dialphone.core.DialPhoneImpl
@@ -39,6 +40,9 @@ class JoinedRoomImpl internal constructor(
 
     override val joinRule : JoinRule?
         get() = phone.cache.state.getRoomStateEvents<MRoomJoinRules>(id, MRoomJoinRules.EVENT_TYPE).getOrNull(0)?.content?.joinRule
+
+    override val encrypted: Boolean
+        get() = phone.cache.state.getRoomStateEvents<MRoomEncryption>(id, MRoomEncryption.EVENT_TYPE).isNotEmpty()
 
     override val stateEvents: List<MatrixStateEvent>
         get() = phone.cache.state.getRoomStateEvents(roomId = id)
