@@ -7,7 +7,7 @@ import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 
 interface GenericListener<T : DialPhoneApi> {
     suspend fun onJoinedRoomStateEvent(event: MatrixStateEvent, roomId: RoomId, phone: T, isOld: Boolean) = Unit
-    suspend fun onJoinedRoomMessageEvent(event: MatrixEvent, roomId: RoomId, phone: T, isOld: Boolean) = Unit
+    suspend fun onJoinedRoomTimelineEvent(event: MatrixEvent, roomId: RoomId, phone: T, isOld: Boolean) = Unit
     suspend fun onJoinedRoomEphemeralEvent(event: MatrixEvent, roomId: RoomId, phone: T, isOld: Boolean) = Unit
     suspend fun onInvitedRoomStateEvent(event: MatrixStateEvent, roomId: RoomId, phone: T, isOld: Boolean) = Unit
     suspend fun onKnockedRoomStateEvent(event: MatrixStateEvent, roomId: RoomId, phone: T, isOld: Boolean) = Unit

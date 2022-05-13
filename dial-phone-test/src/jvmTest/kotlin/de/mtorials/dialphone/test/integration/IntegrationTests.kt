@@ -4,6 +4,7 @@ import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.listeners.ListenerAdapter
 import de.mtorials.dialphone.core.sendTextMessage
 import de.mtorials.dialphone.test.Helper
+import io.ktor.client.features.logging.*
 import kotlinx.coroutines.*
 import org.junit.Before
 import kotlin.test.Test
@@ -34,8 +35,10 @@ class IntegrationTests {
     @Test
     fun `check guest access`() {
         runBlocking {
+            delay(2000)
             DialPhone(Configs.HOMESERVER_URL) {
                 asGuest()
+                ktorLogLevel = LogLevel.ALL
             }
         }
     }

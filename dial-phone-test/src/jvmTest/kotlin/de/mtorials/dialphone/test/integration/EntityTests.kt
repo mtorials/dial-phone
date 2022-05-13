@@ -22,16 +22,16 @@ class EntityTests {
         runBlocking {
             user1 = DialPhone(Configs.HOMESERVER_URL) {
                 asUser(Configs.TEST_USER, Configs.TEST_PWD, true)
-                addListeners(object : ApiListener {
-                    override suspend fun onJoinedRoomStateEvent(
-                        event: MatrixStateEvent,
-                        roomId: RoomId,
-                        phone: DialPhoneApi,
-                        isOld: Boolean
-                    ) {
-                        println(event)
-                    }
-                })
+//                addListeners(object : ApiListener {
+//                    override suspend fun onJoinedRoomStateEvent(
+//                        event: MatrixStateEvent,
+//                        roomId: RoomId,
+//                        phone: DialPhoneApi,
+//                        isOld: Boolean
+//                    ) {
+//                        println(event)
+//                    }
+//                })
             }
             delay(1000)
             user2 = DialPhone(Configs.HOMESERVER_URL) {
@@ -43,8 +43,8 @@ class EntityTests {
                     }
                 })
             }
-//            user2.sync()
-//            user1.sync()
+            user2.sync()
+            user1.sync()
             // TODO remove rate limit in synapse
             delay(1000)
         }

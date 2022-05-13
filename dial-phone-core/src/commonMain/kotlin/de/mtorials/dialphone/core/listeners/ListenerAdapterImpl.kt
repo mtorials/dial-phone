@@ -45,7 +45,7 @@ open class ListenerAdapterImpl(
         callbackOnRoomInvited = block
     }
 
-    override suspend fun onJoinedRoomMessageEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhoneImpl, isOld: Boolean) {
+    override suspend fun onJoinedRoomTimelineEvent(event: MatrixEvent, roomId: RoomId, phone: DialPhoneImpl, isOld: Boolean) {
         if (!isOld || receivePastEvents) onEvent(event, roomId, phone)
     }
     override suspend fun onJoinedRoomStateEvent(event: MatrixStateEvent, roomId: RoomId, phone: DialPhoneImpl, isOld: Boolean) {

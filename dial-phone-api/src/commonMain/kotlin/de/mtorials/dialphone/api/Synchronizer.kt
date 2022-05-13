@@ -45,7 +45,7 @@ class Synchronizer(
             // Joined
             res.rooms?.join?.forEach { (roomID, roomEvents) ->
                 roomEvents.timeline.events.forEach {
-                    toListener(it, roomID) { e, id -> onJoinedRoomMessageEvent(e, id, phone, initialSync) }
+                    toListener(it, roomID) { e, id -> onJoinedRoomTimelineEvent(e, id, phone, initialSync) }
                 }
                 roomEvents.state?.events?.forEach {
                     toListener(it, roomID) { e, id -> onJoinedRoomStateEvent(e as MatrixStateEvent, id, phone, initialSync) }
