@@ -7,12 +7,11 @@ import de.mtorials.dialphone.api.ids.userId
 import de.mtorials.dialphone.api.model.enums.JoinRule
 import de.mtorials.dialphone.api.model.enums.Membership
 import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
+import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.api.model.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.api.model.mevents.roomstate.*
 import de.mtorials.dialphone.core.DialPhoneImpl
-import de.mtorials.dialphone.core.entities.Member
-import de.mtorials.dialphone.core.entities.MemberImpl
-import de.mtorials.dialphone.core.entities.UserImpl
+import de.mtorials.dialphone.core.entities.*
 
 class JoinedRoomImpl internal constructor(
     override val phone: DialPhoneImpl,
@@ -32,6 +31,7 @@ class JoinedRoomImpl internal constructor(
                         id = event.stateKey.userId(),
                     ),
                     room = this,
+                    phone,
                 )
             }
 
@@ -61,6 +61,21 @@ class JoinedRoomImpl internal constructor(
 
     override suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: UserId): EventId {
         return sendStateEvent(content, eventType, stateKey.toString())
+    }
+
+    override suspend fun sendMRoomMessageEvent(content: MRoomMessage.MRoomMessageContent) : Message {
+        val id = this.sendMessageEvent(
+            content = content,
+            eventType = "m.room.message"
+        )
+        return MessageImpl(
+            phone = this.phone,
+            id = id,
+            room = this,
+            author = MemberImpl(phone.getMe(), this, phone),
+            messageType = MRoomMessage.MRoomMessageEventContentType.M_TEXT,
+            content = content,
+        )
     }
 
     override suspend fun leave() = phone.apiRequests.leaveRoomWithId(id)

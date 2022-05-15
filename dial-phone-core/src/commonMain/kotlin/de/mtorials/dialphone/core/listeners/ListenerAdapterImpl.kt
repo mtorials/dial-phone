@@ -83,7 +83,11 @@ open class ListenerAdapterImpl(
                             phone,
                             id = event.id,
                             room = room,
-                            author = MemberImpl(phone.getUserById(event.sender) ?: error("Can not find user"), room),
+                            author = MemberImpl(
+                                user = phone.getUserById(event.sender) ?: error("Can not find user"),
+                                room = room as JoinedRoomImpl,
+                                phone = phone,
+                            ),
                             messageType = event.content.msgType,
                             content = event.content,
                         )

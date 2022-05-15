@@ -17,25 +17,6 @@ suspend infix fun JoinedRoom.write(message: String) = this@write.sendTextMessage
  */
 suspend infix fun JoinedRoom.rename(name: String) = setName(name)
 
-
-/**
- * Send a Text message
- */
-suspend fun JoinedRoom.sendMRoomMessageEvent(content: MRoomMessage.MRoomMessageContent) : Message {
-    val id = this.sendMessageEvent(
-        content = content,
-        eventType = "m.room.message"
-    )
-    return MessageImpl(
-        phone = this.phone,
-        id = id,
-        room = this,
-        author = MemberImpl(phone.getMe(), this),
-        messageType = MRoomMessage.MRoomMessageEventContentType.M_TEXT,
-        content = content,
-    )
-}
-
 suspend fun JoinedRoom.sendTextMessage(content: String) = sendMRoomMessageEvent(MRoomMessage.TextContent(body = content))
 
 /**
@@ -62,4 +43,6 @@ suspend fun JoinedRoom.sendImageWithUrl(url: String, title: String? = null) = th
 /**
  * Change the name of the room
  */
-suspend fun JoinedRoom.setName(name: String) = this@setName.sendStateEvent(MRoomName.Content(name = name), "m.room.name")
+suspend fun JoinedRoom.setName(name: String) = this@setName.sendStateEvent(MRoomName.Content(
+    name = name
+), "m.room.name")

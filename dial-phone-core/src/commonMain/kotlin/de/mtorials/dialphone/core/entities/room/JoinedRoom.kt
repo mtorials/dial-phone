@@ -4,6 +4,7 @@ import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.model.enums.JoinRule
+import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.api.model.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.api.model.mevents.roomstate.StateEventContent
@@ -52,6 +53,11 @@ interface JoinedRoom : Entity {
      * @return The event Id
      */
     suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: UserId = phone.ownId) : EventId
+
+    /**
+     * Send a message
+     */
+    suspend fun sendMRoomMessageEvent(content: MRoomMessage.MRoomMessageContent) : Message
 
     /**
      * Leave the room
