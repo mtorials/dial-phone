@@ -13,7 +13,8 @@ Supported platforms are jvm and js, but testing is mostly done on the jvm.
 See my [dial-bot](https://github.com/mtorials/dialbot) repository for a reference bot implementation.
 (outdated currently)
 
-Basic e2ee is implemented, but very experimental and only works on the jvm.
+Basic e2ee is implemented, but very experimental, not secure, and it only works on the jvm. **The encryption module
+is exclusively licensed under the terms of the [AGPL v3](agpl.txt) and not the Apache 2.0 license.**
 
 ## Installation
 
@@ -38,7 +39,7 @@ Always check for a newer version!
 // build.gradle.kts
 implementation("de.mtorials.dail-phone:dial-phone-api:0.2.0")
 implementation("de.mtorials.dail-phone:dial-phone-core:0.2.0")
-// If you want to use encryption (jvm only)
+// If you want to use encryption (jvm only and AGPL license!!!)
 implementation("de.mtorials.dail-phone:dial-phone-encryption:0.2.0")
 // If you want to use bot features, not well-supported at the moment
 implementation("de.mtorials.dail-phone:dial-phone-bot:0.2.0")
@@ -164,7 +165,8 @@ val inviteListener = ListenerAdapter {
 # Dependencies
 
 All packages depend on kotlinx.coroutines and kotlinx.serialization.
-The core package depends on the kotlin olm bindings by Dominaezzz [matrix-kt](https://github.com/Dominaezzz/matrix-kt).
+
+The encryption package depends on the kotlin olm bindings by benculy's [trixnity](https://gitlab.com/benkuly/trixnity).
 
 # Contact
 

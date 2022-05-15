@@ -39,7 +39,7 @@ val changeName = Command("cname", "change my display name in this room", "cname 
         null,
         displayName = it[0],
     ), "m.room.member")
-    this answer "Hat das geklappt?"
+    this answer "Did this work?"
 }
 
 
@@ -48,6 +48,7 @@ fun main() {
         val phone = DialPhone(MATRIX_SERVER) {
             withToken(changeConfig.token)
             addListeners(CommandListener("!", listOf(ping, changeName), ping))
+            useEncryption()
 //                useEncryption()
         }
 //            val job = phone.sync()
@@ -55,13 +56,13 @@ fun main() {
         println("Hello")
 //            delay(5000)
         println(phone.getJoinedRooms().map { it.name })
-        val trium = phone.getJoinedRoomById(RoomId("!ZxGwuWTrOPAJsqplVU:mtorials.de"))?: error("404")
+        val trium = phone.getJoinedRoomByName("temp trium machina") ?: error("404")
 //            trium.sendStateEvent(MRoomMember.Content(
 //                Membership.JOIN,
 //                null,
 //                displayName = "mt",
 //            ), "m.room.member")
-        trium.sendTextMessage("Buh! probiert mal ein !ping und ein !cname!")
+        trium.sendTextMessage("try !cname and !ping")
         phone.sync().join()
     }
 }
