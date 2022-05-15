@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.api.authentication
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.SerialName
@@ -13,11 +14,11 @@ class Login(
     suspend fun login(username: String, password: String) : PasswordLoginResponse = httpClient.post {
         url(homeserverUrl + LOGIN_ENDPOINT)
         contentType(ContentType.Application.Json)
-        body = PasswordLoginRequest(
+        setBody(PasswordLoginRequest(
             identifier = MatrixUserIdIdentifier(username),
             password = password,
-        )
-    }
+        ))
+    }.body()
 
     @Serializable
     class PasswordLoginRequest(

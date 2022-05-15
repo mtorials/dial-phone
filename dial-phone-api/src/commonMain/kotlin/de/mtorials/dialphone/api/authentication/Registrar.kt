@@ -2,6 +2,7 @@ package de.mtorials.dialphone.api.authentication
 
 import de.mtorials.dialphone.api.serialization.EmptySerializable
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.SerialName
@@ -16,8 +17,8 @@ class Registrar(
             url(homeserverUrl + registrationEndpoint)
             parameter("kind", "guest")
             contentType(ContentType.Application.Json)
-            body = EmptySerializable()
-        }
+            setBody(EmptySerializable())
+        }.body()
     }
 
     suspend fun registerUser(homeserverUrl: String, password: String, username: String) : UserRegResponse {
@@ -31,13 +32,13 @@ class Registrar(
             url(homeserverUrl + registrationEndpoint)
             parameter("kind", kind)
             contentType(ContentType.Application.Json)
-            body = RegisterRequest(
+            setBody(RegisterRequest(
                 password,
                 username,
                 // TODO login type!
                 auth = mapOf("session" to initialResponse.session, "type" to "m.login.dummy")
-            )
-        }
+            ))
+        }.body()
     }
 
     @Serializable

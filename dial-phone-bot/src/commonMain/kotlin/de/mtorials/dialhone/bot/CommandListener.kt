@@ -3,7 +3,6 @@ package de.mtorials.dialhone.bot
 import de.mtorials.dialphone.core.EventCallback
 import de.mtorials.dialphone.core.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.core.listeners.ListenerAdapterImpl
-import io.ktor.http.cio.*
 
 class CommandListener constructor(
     private val prefix: String,

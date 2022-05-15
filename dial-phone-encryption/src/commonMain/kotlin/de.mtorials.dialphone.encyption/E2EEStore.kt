@@ -1,13 +1,13 @@
 package de.mtorials.dialphone.encyption
 
 import de.mtorials.dialphone.api.ids.RoomId
-import io.github.matrixkt.olm.InboundGroupSession
-import io.github.matrixkt.olm.OutboundGroupSession
-import io.github.matrixkt.olm.Session
+import net.folivo.trixnity.olm.OlmInboundGroupSession
+import net.folivo.trixnity.olm.OlmOutboundGroupSession
+import net.folivo.trixnity.olm.OlmSession
 
 interface E2EEStore {
-    val olmSessionsBySenderKey: MutableMap<String, Session>
-    val inboundSessionsBySessionId: MutableMap<String, InboundGroupSession>
-    val outboundSessionByRoomId: MutableMap<RoomId, OutboundGroupSession>
+    val olmSessionsBySenderKey: MutableMap<String, OlmSession>
+    val inboundSessionsBySessionId: MutableMap<String, OlmInboundGroupSession>
+    val outboundSessionByRoomId: MutableMap<RoomId, OlmOutboundGroupSession>
     val encryptedRooms: MutableList<RoomId>
 }

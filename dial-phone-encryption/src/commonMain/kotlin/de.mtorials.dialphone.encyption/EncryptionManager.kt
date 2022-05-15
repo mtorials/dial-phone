@@ -16,9 +16,9 @@ import de.mtorials.dialphone.encyption.exceptions.OlmSessionNotFound
 import de.mtorials.dialphone.encyption.exceptions.RoomKeyHandleException
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.UserId
-import io.github.matrixkt.olm.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
+import net.folivo.trixnity.olm.*
 import kotlin.random.Random
 
 // TODO abstract the account management
@@ -31,30 +31,30 @@ class EncryptionManager(
     private val ownId: UserId,
     private val phone: DialPhone,
     private val dialPhoneJson: Json,
+    private val account: OlmAccount,
 ) {
-
-    private val account = Account()
-    private val keys = account.identityKeys
 
     /**
      * OLM
      */
 
-    private fun getOlmSession(senderKey: String) : Session? {
+    private val keys = account.identityKeys
+
+    private fun getOlmSession(senderKey: String) : OlmSession? {
         return store.olmSessionsBySenderKey[senderKey]
     }
 
-    private fun getPreKeySession(senderKey: String, body: String) : Session {
-        val oldSession: Session? = getOlmSession(senderKey)
+    private suspend fun getPreKeySession(senderKey: String, body: String) : OlmSession {
+        val oldSession: OlmSession? = getOlmSession(senderKey)
         if (oldSession != null) return oldSession
         // TODO matches inbound session
-        val newSession = Session.createInboundSessionFrom(account, senderKey, body)
+        val newSession = OlmSession.createInboundFrom(account, senderKey, body)
         account.removeOneTimeKeys(newSession)
         store.olmSessionsBySenderKey[senderKey] = newSession
         return newSession
     }
 
-    private suspend fun startOlmSession(userId: UserId, theirDeviceId: String, theirIdentityKey: String) : Session {
+    private suspend fun startOlmSession(userId: UserId, theirDeviceId: String, theirIdentityKey: String) : OlmSession {
         val res = client.claimKeys(KeyClaimRequest(
             mapOf(userId to mapOf(
                 theirDeviceId to SIGNED_CURVE25519
@@ -64,7 +64,7 @@ class EncryptionManager(
         val theirOneTimeKey = res.oneTimeKeys[userId]?.get(theirDeviceId)?.jsonObject?.entries?.first()?.value
             ?.jsonObject?.get("key")?.jsonPrimitive?.content
                 ?: throw RuntimeException("can't get one time key")
-        val olmSession = Session.createOutboundSession(
+        val olmSession = OlmSession.createOutbound(
             account = account,
             theirIdentityKey = theirIdentityKey,
             theirOneTimeKey = theirOneTimeKey
@@ -74,7 +74,7 @@ class EncryptionManager(
         return olmSession
     }
 
-    fun decryptOlm(event: MRoomEncrypted) : MatrixEvent {
+    suspend fun decryptOlm(event: MRoomEncrypted) : MatrixEvent {
         val ct = event.content.cipherText
         if (ct !is JsonObject) throw MalformedEncryptedEvent(event)
         var type: Int? = null
@@ -85,8 +85,8 @@ class EncryptionManager(
             type = (el as JsonObject)["type"]?.jsonPrimitive?.int ?: throw MalformedEncryptedEvent(event)
             body = el["body"]?.jsonPrimitive?.content ?: throw MalformedEncryptedEvent(event)
         }
-        if (type == null || body == null || senderDeviceKey == null) throw MalformedEncryptedEvent(event)
-        val session: Session = when (type) {
+        if (type == null || body == null) throw MalformedEncryptedEvent(event)
+        val session: OlmSession = when (type) {
             0 -> getPreKeySession(
                 senderKey = event.content.senderKey ?: throw MalformedEncryptedEvent(event),
                 body = body!!
@@ -95,11 +95,10 @@ class EncryptionManager(
                 senderKey = event.content.senderKey ?: throw MalformedEncryptedEvent(event),
             ) ?: throw OlmSessionNotFound(event)
         }
-        // Really type and body?
         val plainText = session.decrypt(
-            Message.invoke(
+            OlmMessage(
                 cipherText = body!!,
-                type = type!!.toLong(),
+                type = OlmMessage.OlmMessageType.of(type!!)
             )
         )
         // TODO check sender, recipient, keys, recipient keys
@@ -130,14 +129,14 @@ class EncryptionManager(
         )
         val plainTextPayload = dialPhoneJson.encodeToString(payload)
         // TODO use secure random?
-        val encryptedText = session.encrypt(plainTextPayload, Random)
+        val encryptedText = session.encrypt(plainTextPayload)
         val content = MRoomEncrypted.MRoomEncryptedContent(
             senderKey = keys.curve25519,
             algorithm = MessageEncryptionAlgorithm.OLM_V1_CURVE25519_AES_SHA1,
             cipherText = buildJsonObject {
                 // TODO should be theirCruveKey, tring if working with ED
                 put(theirCurveKey, buildJsonObject {
-                    put("type", encryptedText.type)
+                    put("type", encryptedText.type.value)
                     put("body", encryptedText.cipherText)
                 })
             }
@@ -150,11 +149,11 @@ class EncryptionManager(
      */
 
     // necessary when sending encrypted event without established session
-    private suspend fun startMegolmSession(roomId: RoomId) : OutboundGroupSession {
+    private suspend fun startMegolmSession(roomId: RoomId) : OlmOutboundGroupSession {
         // TODO call olm_init_outbound_group_session, and store the details of the outbound session for future use.
-        val outbound = OutboundGroupSession()
+        val outbound = OlmOutboundGroupSession.create()
         store.outboundSessionByRoomId[roomId] = outbound
-        val inbound = InboundGroupSession(outbound.sessionKey)
+        val inbound = OlmInboundGroupSession.create(outbound.sessionKey)
         store.inboundSessionsBySessionId[outbound.sessionId] = inbound
         val devices = downloadDeviceList(roomId = roomId)
         val userToDeviceToEncrypted : MutableMap<UserId, MutableMap<String, JsonElement>> = mutableMapOf()
@@ -223,12 +222,12 @@ class EncryptionManager(
      * HELPER
      */
 
-    fun handleKeyEvent(event: MRoomKey, senderKey: String) {
+    suspend fun handleKeyEvent(event: MRoomKey, senderKey: String) {
         val roomId = event.content.roomId
         val sessionId = event.content.sessionId
         // TODO check if session is known
         // TODO store session
-        val session = InboundGroupSession(event.content.sessionKey)
+        val session = OlmInboundGroupSession.create(event.content.sessionKey)
         store.inboundSessionsBySessionId[sessionId] = session
         //downloadDeviceList(roomId.roomId())
     }
@@ -272,13 +271,13 @@ class EncryptionManager(
             oneTimeKeys = createOnTimeKeyMap()
         )
         client.uploadKeys(request)
-        account.markOneTimeKeysAsPublished()
+        account.markKeysAsPublished()
     }
 
     // TODO signing of the keys!
     private fun createOnTimeKeyMap() : Map<String, JsonElement> {
         // TODO use secure random?
-        account.generateOneTimeKeys(10, random = Random)
+        account.generateOneTimeKeys(10)
         val curve = account.oneTimeKeys.curve25519
         val keyMap : Map<String, JsonElement> = curve.map { (id, key) ->
             //keyMap["$CURVE25519:$id"] = key

@@ -2,6 +2,7 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.ids.MatrixID
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.date.*
@@ -29,8 +30,8 @@ abstract class MatrixClient(
             header("Authorization", "Bearer $token")
             header("Content-Type", "application/json")
             parameters.forEach { parameter(it.first, it.second) }
-            if (bodyValue != null) body = bodyValue
-        }
+            if (bodyValue != null) setBody(bodyValue)
+        }.body()
     }
 
     // Useless hopefully

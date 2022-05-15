@@ -8,10 +8,10 @@ import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.api.serialization.EventContentSerialization
 import de.mtorials.dialphone.api.serialization.EventSerialization
 import io.ktor.client.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
-import io.ktor.client.features.logging.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -96,8 +96,8 @@ open class DialPhoneApiBuilderImpl(
                 EventSerialization.serializersModule + EventContentSerialization.serializersModule + customSerializer
         }
         client = HttpClient {
-            install(JsonFeature) {
-                serializer = KotlinxSerializer(format)
+            install(ContentNegotiation) {
+                json(format)
             }
             install(Logging) {
                 logger = Logger.DEFAULT
@@ -145,7 +145,7 @@ open class DialPhoneApiBuilderImpl(
 //        if (commandListener != null) listenerList.add(commandListener!!)
     }
 
-    open suspend fun buildDialPhoneApi(block: DialPhoneApiBuilder.() -> Unit) : DialPhoneApiImpl {
+    open suspend fun buildDialPhoneApi(block: suspend DialPhoneApiBuilder.() -> Unit) : DialPhoneApiImpl {
         block()
         configure()
         // TODO necessary here?

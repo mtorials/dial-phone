@@ -23,5 +23,5 @@ interface DialPhoneBuilder : DialPhoneApiBuilder {
     /**
      * To inject code into the build processes, for modularity reasons
      */
-    fun afterInitialization(block: DialPhoneBuilderImpl.(DialPhoneImpl) -> Unit)
+    suspend fun afterInitialization(block: suspend DialPhoneBuilderImpl.(DialPhoneImpl) -> Unit)
 }

@@ -22,6 +22,16 @@ class EncryptionListener(
         encryptionManager.markRoomEncrypted(roomId)
     }
 
+    override suspend fun onJoinedRoomTimelineEvent(
+        event: MatrixEvent,
+        roomId: RoomId,
+        phone: DialPhoneApi,
+        isOld: Boolean
+    ) {
+        if (event !is MRoomEncryption) return
+        encryptionManager.markRoomEncrypted(roomId)
+    }
+
     override suspend fun onToDeviceEvent(event: MatrixEvent, phone: DialPhoneApi, isOld: Boolean) {
         if (event !is MRoomEncrypted) return
         if (event.content.algorithm != MessageEncryptionAlgorithm.OLM_V1_CURVE25519_AES_SHA1)

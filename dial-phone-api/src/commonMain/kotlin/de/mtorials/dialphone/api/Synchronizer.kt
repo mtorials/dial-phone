@@ -8,6 +8,7 @@ import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.api.responses.sync.SyncResponse
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
@@ -139,7 +140,7 @@ class Synchronizer(
                 parameter("full_state", fullState.toString())
                 if (lastTimeBatch != null) parameter("since", lastTimeBatch.toString())
                 //this.run { println(this.build().toString()) }
-            }
+            }.body()
 //            println(str)
 //            return TODO()
         } catch (mappingException: SerializationException) {
