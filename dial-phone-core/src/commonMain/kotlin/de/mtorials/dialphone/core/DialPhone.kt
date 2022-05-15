@@ -65,7 +65,7 @@ interface DialPhone : DialPhoneApi {
     suspend fun getMe() : User
 
     companion object {
-        suspend operator fun invoke(homeserverUrl: String, block: DialPhoneBuilder.() -> Unit) : DialPhone {
+        suspend operator fun invoke(homeserverUrl: String, block: suspend DialPhoneBuilder.() -> Unit) : DialPhone {
             return DialPhoneBuilderImpl(
                 homeserverUrl = homeserverUrl
             ).buildDialPhone(block).also { it.initialSync() }

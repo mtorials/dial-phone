@@ -5,7 +5,7 @@ import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.dialevents.answer
 import de.mtorials.dialphone.core.listeners.ListenerAdapter
 import de.mtorials.dialphone.core.sendTextMessage
-import io.ktor.client.features.logging.*
+import io.ktor.client.plugins.logging.*
 import kotlinx.coroutines.runBlocking
 
 const val LOCAL_ADDR = "http://localhost:80"

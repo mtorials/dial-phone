@@ -28,6 +28,11 @@ interface RoomBuilder {
     fun makePublic()
 
     /**
+     * Makes the room encrypted
+     */
+    fun encrypt()
+
+    /**
      * Initialize room with special state events
      */
     fun initialStateEvents(vararg events: MatrixStateEvent)

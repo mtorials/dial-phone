@@ -10,13 +10,13 @@ class DialPhoneBuilderImpl(
 ) {
     override var stateCache: StateCache? = null
     override var timelineCache: TimelineCache? = null
-    private var afterInitialization: DialPhoneBuilderImpl.(DialPhoneImpl) -> Unit = {}
+    private var afterInitialization: suspend DialPhoneBuilderImpl.(DialPhoneImpl) -> Unit = {}
 
-    override fun afterInitialization(block: DialPhoneBuilderImpl.(DialPhoneImpl) -> Unit) {
+    override suspend fun afterInitialization(block: suspend DialPhoneBuilderImpl.(DialPhoneImpl) -> Unit) {
        afterInitialization = block
     }
 
-    suspend fun buildDialPhone(block: DialPhoneBuilderImpl.() -> Unit) : DialPhoneImpl {
+    suspend fun buildDialPhone(block: suspend DialPhoneBuilderImpl.() -> Unit) : DialPhoneImpl {
         block()
         this.configure()
         val c = object : PhoneCache {

@@ -3,7 +3,8 @@ package de.mtorials.dialphone.api.authentication
 import de.mtorials.dialphone.api.authentication.responses.AuthApiResponse
 import de.mtorials.dialphone.api.serialization.EmptySerializable
 import io.ktor.client.*
-import io.ktor.client.features.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 
@@ -17,8 +18,8 @@ class InteractiveAuthApi(
         contentType(ContentType.Application.Json)
         parameter("kind", kind)
         expectSuccess = false
-        body = EmptySerializable()
-    }
+        setBody(EmptySerializable())
+    }.body()
 
 //    suspend fun loginPassword(username: String, password: String) {
 //        initialCall(DUMMY_AUTH_ENDPOINT)

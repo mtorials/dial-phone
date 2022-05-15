@@ -20,6 +20,7 @@ interface JoinedRoom : Entity {
     val members: List<Member>
     val avatarUrl: String?
     val joinRule: JoinRule?
+    val encrypted: Boolean
 
     /**
      * All matrix state events corresponding to this room
