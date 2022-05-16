@@ -12,7 +12,7 @@ fun main() = runBlocking {
     var activeRoom: JoinedRoom? = null
 
     val phone = DialPhone(MATRIX_SERVER) {
-        withToken(changeConfig.token)
+        asUser("name", "password")
         addListeners(ListenerAdapter {
             onRoomMessageReceived listener@{
                 if (activeRoom?.id != it.room.id) return@listener
@@ -23,14 +23,14 @@ fun main() = runBlocking {
 
     while(true) {
         val input = readLine() ?: continue
-        var list = phone.getJoinedRooms()
-        when {
-            input == "!rooms" -> phone.getJoinedRooms().also { list = it }.forEachIndexed { index, joinedRoom ->
-                println("$index ${joinedRoom.name}")
-            }
-            input.startsWith("!room") -> input.split(" ")[1].also { index ->
-                activeRoom = list[index.toInt()]
-                println("---- ${activeRoom?.name} ----")
+        when (input) {
+            "!rooms" -> phone.getJoinedRooms().run {
+                forEachIndexed { index, joinedRoom ->
+                    println("$index: ${joinedRoom.name}")
+                }
+                println("Select room by number: ")
+                activeRoom = this[readLine()?.toInt() ?: return@run]
+                println("---- Selected room is ${activeRoom?.name} ----")
             }
             else -> activeRoom?.sendTextMessage(input)
         }

@@ -69,7 +69,7 @@ val phone = DialPhone("<HOMESERVER_URL>") { // this: DialPhoneBuilder
         ExampleListener(),
         SecondExampleListener()
     )
-    useEncryption() // To enable E2EE (very early)
+    useEncryption() // To enable E2EE (experimental)
 }
 
 ```
@@ -82,6 +82,40 @@ If you want to block your method after this use you can call the join() on the r
 ```kotlin
 val syncJob = phone.sync()
 syncJob.join();
+```
+
+### A simple command line client
+
+```kotlin
+fun main() = runBlocking {
+
+    var activeRoom: JoinedRoom? = null
+
+    val phone = DialPhone(MATRIX_SERVER) {
+        asUser("name", "password")
+        addListeners(ListenerAdapter {
+            onRoomMessageReceived listener@{
+                if (activeRoom?.id != it.room.id) return@listener
+                it.run { println("${room.name} :: ${message.author.displayName ?: message.author.id} :: ${message.content.body}") }
+            }
+        })
+    }.apply { sync() }
+
+    while(true) {
+        val input = readLine() ?: continue
+        when (input) {
+            "!rooms" -> phone.getJoinedRooms().run {
+                forEachIndexed { index, joinedRoom ->
+                    println("$index: ${joinedRoom.name}")
+                }
+                println("Select room by number: ")
+                activeRoom = this[readLine()?.toInt() ?: return@run]
+                println("---- Selected room is ${activeRoom?.name} ----")
+            }
+            else -> activeRoom?.sendTextMessage(input)
+        }
+    }
+}
 ```
 
 ## IDs

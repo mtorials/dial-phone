@@ -69,7 +69,7 @@ subprojects {
 extra.apply {
     set("ktorVersion", "2.0.1")
     set("kotlinxCoroutinesVersion", "1.6.0")
-    set("kotlinxSerializationVersion", "1.3.2")
+    set("kotlinxSerializationVersion", "1.3.3")
 }
 
 val name = "dial-phone"
