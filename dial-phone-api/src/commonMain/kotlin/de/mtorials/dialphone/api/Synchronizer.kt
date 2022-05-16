@@ -42,6 +42,7 @@ class Synchronizer(
     ) = coroutineScope.launch {
         do {
             val res : SyncResponse = getSyncResponse()
+            if (logLevel.level >= DialPhoneLogLevel.TRACE.level) println("[Synchronizer] Got sync response")
             lastTimeBatch = res.nextBatch
             // Joined
             res.rooms?.join?.forEach { (roomID, roomEvents) ->
@@ -52,7 +53,7 @@ class Synchronizer(
                     toListener(it, roomID) { e, id -> onJoinedRoomStateEvent(e as MatrixStateEvent, id, phone, initialSync) }
                 }
                 roomEvents.ephemeral?.events?.forEach {
-                    toListener(it, roomID) { e, id -> onJoinedRoomEphemeralEvent(e as MatrixStateEvent, id, phone, initialSync) }
+                    toListener(it, roomID) { e, id -> onJoinedRoomEphemeralEvent(e, id, phone, initialSync) }
                 }
             }
             // Invited
