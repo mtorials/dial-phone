@@ -25,11 +25,11 @@ class E2EETest {
         runBlocking {
             user1 = DialPhone(Configs.HOMESERVER_URL) {
                 asUser(Configs.TEST_USER, Configs.TEST_PWD, true)
-                useEncryption()
+                useEncryption("../stores/one")
             }
             user2 = DialPhone(Configs.HOMESERVER_URL) {
                 asUser(Configs.USER2_USER, Configs.USER2_PWD, true)
-                useEncryption()
+                useEncryption("../stores/two")
                 addListeners(ListenerAdapter {
                     onRoomInvited { it.room.join() }
                 })
