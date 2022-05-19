@@ -1,6 +1,6 @@
 package de.mtorials.dialphone.encyption.exceptions
 
-import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
+import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomEncrypted
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

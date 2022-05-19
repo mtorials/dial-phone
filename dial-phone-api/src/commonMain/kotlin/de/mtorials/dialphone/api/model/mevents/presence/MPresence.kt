@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class MPresence(
         override val sender: UserId,
-        override val content: PresenceContent
+        override val content: PresenceContent,
 ) : MatrixEvent {
     @Serializable
     data class PresenceContent(

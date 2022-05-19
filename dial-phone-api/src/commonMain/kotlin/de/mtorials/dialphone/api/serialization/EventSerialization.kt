@@ -2,7 +2,7 @@ package de.mtorials.dialphone.api.serialization
 
 import de.mtorials.dialphone.api.model.mevents.DefaultEvent
 import de.mtorials.dialphone.api.model.mevents.roommessage.MReaction
-import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
+import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomEncrypted
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.presence.MPresence
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage

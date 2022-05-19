@@ -3,7 +3,6 @@ package de.mtorials.dialphone.core
 import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.model.enums.RoomEncryptionAlgorithm
 import de.mtorials.dialphone.api.model.enums.RoomVisibility
-import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
 import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomEncryption
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.api.requests.RoomCreateRequest
@@ -36,7 +35,8 @@ class RoomBuilderImpl(private val name: String) : RoomBuilder {
             stateKey = "",
             content = MRoomEncryption.Content(
                 algorithm = RoomEncryptionAlgorithm.MEGOLM_V1_AES_SHA2,
-            )
+            ),
+            originServerTs = 0,
         ))
     }
 

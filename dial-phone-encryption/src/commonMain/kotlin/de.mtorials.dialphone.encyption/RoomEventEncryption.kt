@@ -2,12 +2,10 @@ package de.mtorials.dialphone.encyption
 
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
-import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
+import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomEncrypted
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm.*
 import de.mtorials.dialphone.api.model.mevents.EventContent
-import de.mtorials.dialphone.core.DialPhoneImpl
 import de.mtorials.dialphone.core.entities.room.JoinedRoom
-import de.mtorials.dialphone.core.entities.room.JoinedRoomImpl
 import de.mtorials.dialphone.encyption.exceptions.MalformedEncryptedEvent
 import de.mtorials.dialphone.encyption.exceptions.UnexpectedEncryptionAlgorithmException
 

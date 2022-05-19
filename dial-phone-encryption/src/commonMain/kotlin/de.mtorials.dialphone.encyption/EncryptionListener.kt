@@ -1,17 +1,7 @@
 package de.mtorials.dialphone.encyption
 
 import de.mtorials.dialphone.api.DialPhoneApi
-import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.listeners.GenericListener
-import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm
-import de.mtorials.dialphone.api.model.mevents.MatrixEvent
-import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
-import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomEncryption
-import de.mtorials.dialphone.api.model.mevents.todevice.MRoomKey
-import de.mtorials.dialphone.encyption.exceptions.MalformedEncryptedEvent
-import de.mtorials.dialphone.encyption.exceptions.UnexpectedEncryptionAlgorithmException
-import de.mtorials.dialphone.api.ids.roomId
-import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
 import de.mtorials.dialphone.api.responses.sync.SyncResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

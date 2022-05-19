@@ -14,6 +14,8 @@ data class MCallInvite(
     override val sender: UserId,
     override val id: EventId,
     override val content: MCallInviteContent,
+    @SerialName("origin_server_ts")
+    override val originServerTs: Int,
 ) : MatrixMessageEvent {
     @Serializable
     data class MCallInviteContent(
