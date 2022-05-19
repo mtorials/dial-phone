@@ -35,7 +35,17 @@ kotlin {
 
 //                implementation("io.github.matrixkt:olm:0.1.8")
                 implementation(trixnity("olm"))
+
+
+            }
+        }
+        val jvmMain by getting {
+            dependencies {
+                implementation("net.java.dev.jna:jna:5.7.0")
             }
         }
     }
 }
+
+
+

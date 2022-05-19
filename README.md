@@ -37,12 +37,12 @@ Always check for a newer version!
 
 ```kotlin
 // build.gradle.kts
-implementation("de.mtorials.dail-phone:dial-phone-api:0.2.0")
-implementation("de.mtorials.dail-phone:dial-phone-core:0.2.0")
+implementation("de.mtorials.dail-phone:dial-phone-api:0.3.0")
+implementation("de.mtorials.dail-phone:dial-phone-core:0.3.0")
 // If you want to use encryption (jvm only and AGPL license!!!)
-implementation("de.mtorials.dail-phone:dial-phone-encryption:0.2.0")
+implementation("de.mtorials.dail-phone:dial-phone-encryption:0.3.0")
 // If you want to use bot features, not well-supported at the moment
-implementation("de.mtorials.dail-phone:dial-phone-bot:0.2.0")
+implementation("de.mtorials.dail-phone:dial-phone-bot:0.3.0")
 // A ktor client of your choice, here okhttp
 // please check for a newer version!
 implementation("io.ktor:ktor-client-okhttp:1.5.0")
