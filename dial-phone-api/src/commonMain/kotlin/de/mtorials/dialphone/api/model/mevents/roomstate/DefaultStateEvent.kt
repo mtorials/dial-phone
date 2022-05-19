@@ -15,7 +15,7 @@ class DefaultStateEvent(
     override val id: EventId? = null,
     override val content: DefaultStateEventContent,
     @SerialName("origin_server_ts")
-    override val originServerTs: Int,
+    override val originServerTs: Long? = null,
 ) : MatrixStateEvent {
     @Serializable
     class DefaultStateEventContent: StateEventContent

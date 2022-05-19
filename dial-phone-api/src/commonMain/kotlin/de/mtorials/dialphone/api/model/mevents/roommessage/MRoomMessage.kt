@@ -15,7 +15,7 @@ class MRoomMessage(
     @Serializable(with = MessageEventContentSerializer::class)
     override val content: MRoomMessageContent,
     @SerialName("origin_server_ts")
-    override val originServerTs: Int,
+    override val originServerTs: Long? = null,
 ) : MatrixMessageEvent {
 
     interface MRoomMessageContent : MessageEventContent {

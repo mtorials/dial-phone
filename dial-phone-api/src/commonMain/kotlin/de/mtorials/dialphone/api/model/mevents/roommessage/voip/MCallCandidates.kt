@@ -14,7 +14,7 @@ data class MCallCandidates(
     override val id: EventId,
     override val content: MCallCandidatesContent,
     @SerialName("origin_server_ts")
-    override val originServerTs: Int,
+    override val originServerTs: Long? = null,
 ) : MatrixMessageEvent {
     @Serializable
     data class MCallCandidatesContent(

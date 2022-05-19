@@ -17,7 +17,7 @@ class MRoomEncrypted(
     val id: EventId? = null,
     override val content: MRoomEncryptedContent,
     @SerialName("origin_server_ts")
-    override val originServerTs: Int,
+    override val originServerTs: Long? = null,
 ) : MatrixRoomEvent {
     @Serializable
     data class MRoomEncryptedContent(

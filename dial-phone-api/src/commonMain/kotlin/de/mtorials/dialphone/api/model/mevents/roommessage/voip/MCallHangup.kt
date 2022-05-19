@@ -15,7 +15,7 @@ data class MCallHangup(
     override val id: EventId,
     override val content: MCallHangupContent,
     @SerialName("origin_server_ts")
-    override val originServerTs: Int,
+    override val originServerTs: Long? = null,
 ) : MatrixMessageEvent {
     @Serializable
     data class MCallHangupContent(

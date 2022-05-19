@@ -22,7 +22,7 @@ import java.util.*
 const val MATRIX_SERVER = "https://matrix.mtorials.de"
 
 @kotlinx.serialization.Serializable
-data class ChangeConfig(val token: String)
+data class ChangeConfig(val token: String, val username: String, val password: String)
 val changeConfig : ChangeConfig = Json.decodeFromString(File("config.json").readText())
 
 val ping = Command("ping", "ping the bot", "ping") {
@@ -48,7 +48,6 @@ fun main() {
         val phone = DialPhone(MATRIX_SERVER) {
             withToken(changeConfig.token)
             addListeners(CommandListener("!", listOf(ping, changeName), ping))
-            useEncryption()
 //                useEncryption()
         }
 //            val job = phone.sync()
