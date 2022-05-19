@@ -12,33 +12,20 @@ import de.mtorials.dialphone.encyption.exceptions.MalformedEncryptedEvent
 import de.mtorials.dialphone.encyption.exceptions.UnexpectedEncryptionAlgorithmException
 import de.mtorials.dialphone.api.ids.roomId
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
+import de.mtorials.dialphone.api.responses.sync.SyncResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class EncryptionListener(
     private val encryptionManager: EncryptionManager,
 ) : GenericListener<DialPhoneApi> {
 
-    override suspend fun onJoinedRoomStateEvent(event: MatrixStateEvent, roomId: RoomId, phone: DialPhoneApi, isOld: Boolean) {
-        if (event !is MRoomEncryption) return
-        encryptionManager.markRoomEncrypted(roomId)
-    }
-
-    override suspend fun onJoinedRoomTimelineEvent(
-        event: MatrixEvent,
-        roomId: RoomId,
-        phone: DialPhoneApi,
-        isOld: Boolean
-    ) {
-        if (event !is MRoomEncryption) return
-        encryptionManager.markRoomEncrypted(roomId)
-    }
-
-    override suspend fun onToDeviceEvent(event: MatrixEvent, phone: DialPhoneApi, isOld: Boolean) {
-        if (event !is MRoomEncrypted) return
-        if (event.content.algorithm != MessageEncryptionAlgorithm.OLM_V1_CURVE25519_AES_SHA1)
-            throw UnexpectedEncryptionAlgorithmException("to-device")
-        val senderKey = event.content.senderKey ?: throw MalformedEncryptedEvent(event)
-        val e = encryptionManager.decryptOlm(event)
-        if (e !is MRoomKey) return
-        encryptionManager.handleKeyEvent(e, senderKey)
+    override fun onSyncResponse(syncResponse: SyncResponse, coroutineScope: CoroutineScope) {
+        encryptionManager.handleEvent(
+            events = syncResponse.toDevice?.events ?: emptyList(),
+            syncResponse.deviceList,
+            keyCounts = syncResponse.deviceOneTimeKeysCount ?: emptyMap()
+        )
+        coroutineScope.launch { encryptionManager.update() }
     }
 }

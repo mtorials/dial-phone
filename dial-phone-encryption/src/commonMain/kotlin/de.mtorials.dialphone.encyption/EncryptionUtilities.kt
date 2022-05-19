@@ -11,7 +11,7 @@ object EncryptionUtilities {
     }
 }
 
-// TODO TESTING!
+// UNIT TESTS!
 class CanonicalSerializer : KSerializer<JsonElement> by JsonElement.serializer() {
     override fun serialize(encoder: Encoder, value: JsonElement) {
         val e = sortJsonElement(value)

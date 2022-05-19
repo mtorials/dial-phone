@@ -2,6 +2,7 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.exceptions.SyncException
 import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.roomId
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
@@ -25,7 +26,7 @@ class Synchronizer(
     private val logLevel: DialPhoneLogLevel,
 ) {
 
-    var beforeRoomEvent: (MatrixEvent) -> MatrixEvent = { it }
+    var beforeRoomEvent: (RoomId, MatrixEvent) -> MatrixEvent = { _, e -> e }
 
     private val listeners: MutableList<GenericListener<DialPhoneApi>> = mutableListOf()
 
@@ -44,6 +45,7 @@ class Synchronizer(
             val res : SyncResponse = getSyncResponse()
             if (logLevel.level >= DialPhoneLogLevel.TRACE.level) println("[Synchronizer] Got sync response")
             lastTimeBatch = res.nextBatch
+            listeners.forEach { it.onSyncResponse(res, coroutineScope) }
             // Joined
             res.rooms?.join?.forEach { (roomID, roomEvents) ->
                 roomEvents.timeline.events.forEach {
@@ -93,7 +95,7 @@ class Synchronizer(
             launch {
                 try {
                     val e: MatrixEvent = phone.format.decodeFromJsonElement(event)
-                    val eventAfter = beforeRoomEvent(e)
+                    val eventAfter = beforeRoomEvent(roomId.roomId(), e)
                     it.callback(eventAfter, RoomId(roomId))
                 } catch (e: RuntimeException) {
                     if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()

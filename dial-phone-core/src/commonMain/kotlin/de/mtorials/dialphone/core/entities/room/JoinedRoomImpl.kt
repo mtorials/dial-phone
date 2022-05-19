@@ -6,12 +6,15 @@ import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.ids.userId
 import de.mtorials.dialphone.api.model.enums.JoinRule
 import de.mtorials.dialphone.api.model.enums.Membership
+import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.api.model.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.api.model.mevents.roomstate.*
+import de.mtorials.dialphone.api.responses.EventResponse
 import de.mtorials.dialphone.core.DialPhoneImpl
 import de.mtorials.dialphone.core.entities.*
+import io.ktor.http.*
 
 class JoinedRoomImpl internal constructor(
     override val phone: DialPhoneImpl,
@@ -48,10 +51,11 @@ class JoinedRoomImpl internal constructor(
         get() = phone.cache.state.getRoomStateEvents(roomId = id)
 
     override suspend fun sendMessageEvent(content: MessageEventContent, eventType: String) : EventId {
+        val (type, cont) = phone.beforeMessageEventPublish(this, eventType, content)
         return phone.sendMessageEvent(
-            type = eventType,
+            type = type,
             roomId = id,
-            content = content
+            content = cont
         )
     }
 

@@ -51,11 +51,10 @@ class DialPhoneImpl internal constructor(
         logLevel = logLevel,
     )
 
-    fun beforeMessageEventPublish(block: suspend (RoomId, String, EventContent) -> Pair<String, EventContent>) {
-        apiRequests.beforeMessageEventPublish = block
-    }
+    var beforeMessageEventPublish: suspend (JoinedRoom, String, EventContent) -> Pair<String, EventContent>
+            = { _, s, eventContent ->  s to eventContent }
 
-    fun beforeRoomEventListener(block: (MatrixEvent) -> MatrixEvent) {
+    fun beforeRoomEventListener(block: (RoomId, MatrixEvent) -> MatrixEvent) {
         synchronizer.beforeRoomEvent = block
     }
 

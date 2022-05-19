@@ -4,6 +4,8 @@ import de.mtorials.dialphone.api.DialPhoneApi
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.roomstate.MatrixStateEvent
+import de.mtorials.dialphone.api.responses.sync.SyncResponse
+import kotlinx.coroutines.CoroutineScope
 
 interface GenericListener<T : DialPhoneApi> {
     suspend fun onJoinedRoomStateEvent(event: MatrixStateEvent, roomId: RoomId, phone: T, isOld: Boolean) = Unit
@@ -14,4 +16,9 @@ interface GenericListener<T : DialPhoneApi> {
     suspend fun onLeftRoomStateEvent(event: MatrixStateEvent, roomId: RoomId, phone: T, isOld: Boolean) = Unit
     suspend fun onToDeviceEvent(event: MatrixEvent, phone: T, isOld: Boolean) = Unit
     suspend fun onPresenceEvent(event: MatrixEvent, phone: T, isOld: Boolean) = Unit
+
+    /**
+     * For complete sync response
+     */
+    fun onSyncResponse(syncResponse: SyncResponse, coroutineScope: CoroutineScope) = Unit
 }

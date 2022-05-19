@@ -28,9 +28,6 @@ class APIRequests(
     client = client,
 ) {
 
-    var beforeMessageEventPublish: suspend (RoomId, String, EventContent) -> Pair<String, EventContent> =
-        { roomId, type, event -> Pair(type, event)}
-
     suspend fun discoverRooms() : RoomDiscovery = request(Get, "publicRooms")
     suspend fun getJoinedRooms() : JoinedRooms = request(Get, "joined_rooms")
     suspend fun getMe() : UserResponse = request(Get, "account/whoami")
@@ -56,11 +53,22 @@ class APIRequests(
         content: EventContent,
         roomID: RoomId
     ) : EventId {
-        val newEvent = beforeMessageEventPublish(roomID, eventType, content)
         return request<EventResponse>(
             httpMethod = HttpMethod.Put,
-            path = "rooms/${encode(roomID)}/send/${newEvent.first}/${random.nextInt()}",
-            bodyValue = newEvent.second,
+            path = "rooms/${encode(roomID)}/send/${eventType}/${random.nextInt()}",
+            bodyValue = content,
+        ).id
+    }
+
+    suspend fun sendMessageEvent(
+        eventType: String,
+        content: String,
+        roomID: RoomId
+    ) : EventId {
+        return request<EventResponse>(
+            httpMethod = HttpMethod.Put,
+            path = "rooms/${encode(roomID)}/send/${eventType}/${random.nextInt()}",
+            bodyValue = content,
         ).id
     }
 
