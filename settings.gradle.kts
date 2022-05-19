@@ -12,6 +12,7 @@ include(
     "dial-phone-core",
     "dial-phone-encryption",
     "dial-phone-bot",
-    "dial-phone-test"
+    "dial-phone-test",
+    "dial-phone-olm-machine"
 )
 

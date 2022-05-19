@@ -25,6 +25,7 @@ kotlin {
                 // MODULES
                 implementation(project(":dial-phone-api"))
                 implementation(project(":dial-phone-core"))
+                implementation(project(":dial-phone-olm-machine"))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
@@ -41,7 +42,6 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation("net.java.dev.jna:jna:5.7.0")
             }
         }
     }

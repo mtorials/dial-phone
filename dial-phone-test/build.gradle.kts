@@ -44,6 +44,7 @@ kotlin {
                 implementation(project(":dial-phone-core"))
                 implementation(project(":dial-phone-api"))
                 implementation(project(":dial-phone-encryption"))
+                implementation(project(":dial-phone-olm-machine"))
 
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))

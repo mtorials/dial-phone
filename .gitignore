@@ -13,3 +13,4 @@ config2.json
 */.gradle
 */build
 */ChangeDisplayName.kt
+matrix-sdk-crypto
