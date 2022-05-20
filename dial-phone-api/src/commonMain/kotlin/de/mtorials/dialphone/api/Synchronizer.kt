@@ -97,7 +97,7 @@ class Synchronizer(
                     val e: MatrixEvent = phone.format.decodeFromJsonElement(event)
                     val eventAfter = beforeRoomEvent(roomId.roomId(), e)
                     it.callback(eventAfter, RoomId(roomId))
-                } catch (e: RuntimeException) {
+                } catch (e: Exception) {
                     if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()
                 }
             }
@@ -110,7 +110,7 @@ class Synchronizer(
                 try {
                     val e: MatrixEvent = phone.format.decodeFromJsonElement(event)
                     it.onToDeviceEvent(e, phone, initialSync)
-                } catch (e: RuntimeException) {
+                } catch (e: Exception) {
                     if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()
                 }
             }
@@ -124,7 +124,7 @@ class Synchronizer(
                     val e : MatrixEvent = phone.format.decodeFromJsonElement(event)
                     it.onPresenceEvent(e, phone, initialSync)
                 }
-                catch (e: RuntimeException) {
+                catch (e: Exception) {
                     if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()
                 }
             }

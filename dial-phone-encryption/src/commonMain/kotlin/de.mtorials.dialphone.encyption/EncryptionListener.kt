@@ -11,11 +11,15 @@ class EncryptionListener(
 ) : GenericListener<DialPhoneApi> {
 
     override fun onSyncResponse(syncResponse: SyncResponse, coroutineScope: CoroutineScope) {
-        encryptionManager.handleEvent(
-            events = syncResponse.toDevice?.events ?: emptyList(),
-            syncResponse.deviceList,
-            keyCounts = syncResponse.deviceOneTimeKeysCount ?: emptyMap()
-        )
+        try {
+            encryptionManager.handleEvent(
+                events = syncResponse.toDevice?.events ?: emptyList(),
+                syncResponse.deviceList,
+                keyCounts = syncResponse.deviceOneTimeKeysCount ?: emptyMap()
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         coroutineScope.launch { encryptionManager.update() }
     }
 }

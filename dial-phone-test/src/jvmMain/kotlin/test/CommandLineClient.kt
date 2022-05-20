@@ -15,7 +15,7 @@ fun main() = runBlocking {
 
     val phone = DialPhone(MATRIX_SERVER) {
         asUser(changeConfig.username, changeConfig.password)
-        // useEncryption("./")
+        useEncryption("./")
         addListeners(ListenerAdapter {
             onRoomMessageReceived listener@{
                 if (activeRoom?.id != it.room.id) return@listener

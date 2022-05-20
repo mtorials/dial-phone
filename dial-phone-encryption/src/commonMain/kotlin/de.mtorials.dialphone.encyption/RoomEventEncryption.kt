@@ -6,6 +6,7 @@ import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomEncrypted
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm.*
 import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.core.entities.room.JoinedRoom
+import de.mtorials.dialphone.encyption.exceptions.EncryptionException
 import de.mtorials.dialphone.encyption.exceptions.MalformedEncryptedEvent
 import de.mtorials.dialphone.encyption.exceptions.UnexpectedEncryptionAlgorithmException
 
@@ -22,11 +23,16 @@ class RoomEventEncryption(
         }
     }
 
+    @Throws(EncryptionException::class)
     fun manageOutgoingMessageEvent(room: JoinedRoom, type: String, content: EventContent) : Pair<String, EventContent> {
         if (!room.encrypted) {
             return type to content
         }
-        val encryptedContent = manager.encryptEvent(room = room, content = content, type = type)
-        return Pair(MRoomEncrypted.EVENT_TYPE, encryptedContent)
+        try {
+            val encryptedContent = manager.encryptEvent(room = room, content = content, type = type)
+            return Pair(MRoomEncrypted.EVENT_TYPE, encryptedContent)
+        } catch (e: Exception) {
+            throw EncryptionException(cause = e, message = "Could not encrypt event.")
+        }
     }
 }
