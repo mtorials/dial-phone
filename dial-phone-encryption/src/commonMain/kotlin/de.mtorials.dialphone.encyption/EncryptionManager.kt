@@ -7,16 +7,17 @@ import de.mtorials.dialphone.api.requests.encryption.*
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.api.ids.roomId
 import de.mtorials.dialphone.api.ids.userId
+import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomEncrypted
 import de.mtorials.dialphone.api.requests.SendToDeviceRequest
 import de.mtorials.dialphone.api.responses.sync.SyncResponse
+import de.mtorials.dialphone.core.DialPhoneImpl
 import de.mtorials.dialphone.core.entities.room.JoinedRoom
 import de.mtorials.dialphone.olmmachine.bindings.DeviceLists
 import de.mtorials.dialphone.olmmachine.bindings.OlmMachineInterface
 import de.mtorials.dialphone.olmmachine.bindings.Request
 import de.mtorials.dialphone.olmmachine.bindings.RequestType
-import kotlinx.coroutines.sync.Mutex
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
@@ -27,57 +28,100 @@ class EncryptionManager(
     private val machine: OlmMachineInterface,
     private val client: E2EEClient,
     private val deviceId: String,
-    private val phone: DialPhone,
+    private val phone: DialPhoneImpl,
     private val json: Json,
 ) {
 
-    private val sessionLock = Mutex()
+//    private val sessionLock = Mutex()
 
-    fun decryptEvent(roomId: RoomId, event: MatrixEvent) : MatrixEvent {
-        return machine.decryptRoomEvent(json.encodeToString(event), roomId.toString()).run { json.decodeFromString(clearEvent) }
+    suspend fun decryptEvent(room: JoinedRoom, event: MatrixEvent) : MatrixEvent {
+        // TODO only if necessary
+        establishSessions(room)
+        // TODO check for the room key?
+        machine.requestRoomKey(json.encodeToString(event), room.id.toString()).run {
+            cancellation?.also { c -> handleRequest(c) }
+            handleRequest(keyRequest)
+        }
+        return machine.decryptRoomEvent(json.encodeToString(event), room.id.toString())
+            .run { json.decodeFromString(clearEvent) }
     }
 
     suspend fun encryptEvent(room: JoinedRoom, type: String, content: EventContent) : MRoomEncrypted.MRoomEncryptedContent {
-        var request: Request? = null
-        // TODO lock call
-        request = machine.getMissingSessions(room.members.map { it.id.toString() })
-        if (request != null) handleRequest(request)
-        machine.shareRoomKey(room.id.toString(), room.members.map { it.id.toString() }).forEach { request ->
-            handleRequest(request)
+        establishSessions(room)
+        machine.shareRoomKey(room.id.toString(), room.members.map { it.id.toString() }).forEach {
+            handleRequest(it)
         }
         return machine.encrypt(room.id.toString(), type, json.encodeToString(content))
 //            .also { println(it) }
             .run { json.decodeFromString(this) }
     }
 
-    fun handleEvent(events: List<JsonElement>, deviceChanges: SyncResponse.DevicesList?, keyCounts: Map<String, Int>) {
+    fun handleEvents(toDevice: SyncResponse.ToDevice?, deviceChanges: SyncResponse.DevicesList?, keyCounts: Map<String, Int>) {
+        toDevice?.events?.forEach {
+            logCrypt("Got to-device event by user/device ${it["sender"]} of type ${it["type"]}. ")
+        }
         machine.receiveSyncChanges(
-            events = json.encodeToString(events),
+            // TODO this is not an array?!? create an issue on matrirx-rust-sdk
+            events = toDevice?.run { json.encodeToString(this) } ?: "{}",
             deviceChanges = deviceChanges.run {
                 DeviceLists(this?.changed ?: emptyList(), this?.left ?: emptyList()) },
             keyCounts = keyCounts,
-            // TODO check if this should be null
             unusedFallbackKeys = null,
         )
     }
 
-    suspend fun update() = machine.outgoingRequests().forEach { handleRequest(it) }
+    suspend fun update() {
+        logCrypt("Making outgoing request...")
+        machine.outgoingRequests().forEach { handleRequest(it) }
+    }
 
-    suspend fun handleRequest(request: Request) {
+    private suspend fun establishSessions(room: JoinedRoom) {
+        machine.getMissingSessions(room.members.map { it.id.toString() })?.run {
+            handleRequest(this)
+        }
+    }
+
+    private suspend fun handleRequest(request: Request) {
         // TODO impl all
         when (request) {
-            is Request.KeysUpload -> client.uploadKeys(request.body)
-                .apply { machine.markRequestAsSent(request.requestId, RequestType.KEYS_UPLOAD, json.encodeToString(this)) }
-            is Request.KeysClaim -> client.claimKeys(KeyClaimRequest(request.oneTimeKeys.map { it.key.userId() to it.value }.toMap()))
-                .apply { machine.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, json.encodeToString(this)) }
-            is Request.KeysQuery -> client.queryKeys(KeyQueryRequest(request.users.associate { it.userId() to emptyList() }))
-                .apply { machine.markRequestAsSent(request.requestId, RequestType.KEYS_QUERY, json.encodeToString(this)) }
+            is Request.KeysUpload -> client.uploadKeys(request.body).apply {
+                machine.markRequestAsSent(request.requestId, RequestType.KEYS_UPLOAD, json.encodeToString(this))
+                logCrypt("Uploaded Keys. Now having $oneTimeKeyCount one time keys.")
+            }
+
+            is Request.KeysClaim -> client.claimKeys(
+                KeyClaimRequest(request.oneTimeKeys.map { it.key.userId() to it.value }.toMap())
+            ).apply {
+                machine.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, json.encodeToString(this))
+                logCrypt("Claimed keys for ${oneTimeKeys.map { it.key.toString() }}")
+            }
+
+            is Request.KeysQuery -> client.queryKeys(
+                KeyQueryRequest(request.users.associate { it.userId() to emptyList() })
+            ).apply {
+                machine.markRequestAsSent(request.requestId, RequestType.KEYS_QUERY, json.encodeToString(this))
+                logCrypt("Queried keys.")
+            }
+
             is Request.ToDevice -> client.sendEventToDevice(request.eventType, SendToDeviceRequest(
                 json.decodeFromString(request.body)
-            ))
-                // TODO check if this response is ok
-                .apply { machine.markRequestAsSent(request.requestId, RequestType.TO_DEVICE, "{}") }
+            )).apply {
+                machine.markRequestAsSent(request.requestId, RequestType.TO_DEVICE, "{}")
+                logCrypt("Sent to-device event of type ${request.eventType} with id ${request.requestId}.")
+            }
+
+            is Request.SignatureUpload -> client.uploadKeys(request.body).apply {
+                machine.markRequestAsSent(request.requestId, RequestType.SIGNATURE_UPLOAD, json.encodeToString(this))
+                logCrypt("Uploaded Signature.")
+            }
+
             is Request.RoomMessage -> phone.apiRequests.sendMessageEvent(request.eventType, request.content, request.roomId.roomId())
+
+            is Request.KeysBackup -> TODO()
         }
+    }
+
+    private fun logCrypt(msg: String) {
+        if (phone.logLevel.level >= DialPhoneLogLevel.DEBUG.level) println("[CRYPTO] $msg")
     }
 }

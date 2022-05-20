@@ -20,7 +20,7 @@ suspend fun DialPhoneBuilder.useEncryption(pathToStore: String = "./", passphras
             phone = it,
             json = format,
         )
-        val roomEventEncryption = RoomEventEncryption(encryptionManager)
+        val roomEventEncryption = RoomEventEncryption(encryptionManager, it)
         it.beforeRoomEventListener { roomId, event ->
             roomEventEncryption.manageIncomingRoomEvent(roomId, event)
         }

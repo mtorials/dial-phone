@@ -26,7 +26,7 @@ class Synchronizer(
     private val logLevel: DialPhoneLogLevel,
 ) {
 
-    var beforeRoomEvent: (RoomId, MatrixEvent) -> MatrixEvent = { _, e -> e }
+    var beforeRoomEvent: suspend (RoomId, MatrixEvent) -> MatrixEvent = { _, e -> e }
 
     private val listeners: MutableList<GenericListener<DialPhoneApi>> = mutableListOf()
 

@@ -1,5 +1,6 @@
 package de.mtorials.dialphone.test.integration
 
+import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.core.entities.room.JoinedRoom
 import de.mtorials.dialphone.core.listeners.ListenerAdapter
@@ -26,10 +27,12 @@ class E2EETest {
             user1 = DialPhone(Configs.HOMESERVER_URL) {
                 asUser(Configs.TEST_USER, Configs.TEST_PWD, true)
                 useEncryption("../stores/one")
+                dialPhoneLogLevel = DialPhoneLogLevel.TRACE
             }
             user2 = DialPhone(Configs.HOMESERVER_URL) {
                 asUser(Configs.USER2_USER, Configs.USER2_PWD, true)
                 useEncryption("../stores/two")
+                dialPhoneLogLevel = DialPhoneLogLevel.TRACE
                 addListeners(ListenerAdapter {
                     onRoomInvited { it.room.join() }
                 })
@@ -56,6 +59,7 @@ class E2EETest {
                 }
             })
             room.sendTextMessage(text)
+            delay(5000)
         }
     }
 }

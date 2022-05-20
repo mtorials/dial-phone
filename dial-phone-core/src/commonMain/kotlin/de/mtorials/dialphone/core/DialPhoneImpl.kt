@@ -54,7 +54,7 @@ class DialPhoneImpl internal constructor(
     var beforeMessageEventPublish: suspend (JoinedRoom, String, EventContent) -> Pair<String, EventContent>
             = { _, s, eventContent ->  s to eventContent }
 
-    fun beforeRoomEventListener(block: (RoomId, MatrixEvent) -> MatrixEvent) {
+    fun beforeRoomEventListener(block: suspend (RoomId, MatrixEvent) -> MatrixEvent) {
         synchronizer.beforeRoomEvent = block
     }
 

@@ -12,8 +12,8 @@ class EncryptionListener(
 
     override fun onSyncResponse(syncResponse: SyncResponse, coroutineScope: CoroutineScope) {
         try {
-            encryptionManager.handleEvent(
-                events = syncResponse.toDevice?.events ?: emptyList(),
+            encryptionManager.handleEvents(
+                toDevice = syncResponse.toDevice,
                 syncResponse.deviceList,
                 keyCounts = syncResponse.deviceOneTimeKeysCount ?: emptyMap()
             )

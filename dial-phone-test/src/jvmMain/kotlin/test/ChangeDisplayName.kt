@@ -4,6 +4,7 @@ import de.mtorials.dialhone.bot.Command
 import de.mtorials.dialhone.bot.CommandListener
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.UserId
+import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.api.model.enums.Membership
 import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomMember
 import de.mtorials.dialphone.core.DialPhone
@@ -48,7 +49,8 @@ fun main() {
         val phone = DialPhone(MATRIX_SERVER) {
             withToken(changeConfig.token)
             addListeners(CommandListener("!", listOf(ping, changeName), ping))
-//                useEncryption()
+            dialPhoneLogLevel = DialPhoneLogLevel.TRACE
+            useEncryption("../store/changedisplay/")
         }
 //            val job = phone.sync()
 //                delay(10000)
