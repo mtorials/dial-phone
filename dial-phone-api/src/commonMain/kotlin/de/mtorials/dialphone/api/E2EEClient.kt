@@ -50,17 +50,6 @@ class E2EEClient(
         )
     }
 
-    suspend fun sendEventToDevice(
-        eventType: String,
-        content: String,
-    ) {
-        return request(
-            httpMethod = HttpMethod.Put,
-            path = "sendToDevice/$eventType/${random.nextInt()}",
-            bodyValue = content,
-        )
-    }
-
 //    /**
 //     * can't use normal serialization, because EventContents are not registered
 //     */

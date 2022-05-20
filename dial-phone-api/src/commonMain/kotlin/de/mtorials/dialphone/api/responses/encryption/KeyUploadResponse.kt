@@ -13,5 +13,5 @@ data class KeyUploadResponse(
      * the number of unclaimed one-time keys of that type currently held on the server for this device.
      */
     @SerialName("one_time_key_counts")
-    val oneTimeKeyCount: Map<String, String> = emptyMap(),
+    val oneTimeKeyCount: Map<String, Int> = emptyMap(),
 )

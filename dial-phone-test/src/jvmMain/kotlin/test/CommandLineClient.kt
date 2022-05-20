@@ -6,6 +6,7 @@ import de.mtorials.dialphone.core.entities.room.JoinedRoom
 import de.mtorials.dialphone.core.listeners.ListenerAdapter
 import de.mtorials.dialphone.core.sendTextMessage
 import de.mtorials.dialphone.encyption.useEncryption
+import io.ktor.client.plugins.logging.*
 import kotlinx.coroutines.runBlocking
 
 
@@ -23,6 +24,7 @@ fun main() = runBlocking {
             }
         })
         dialPhoneLogLevel = DialPhoneLogLevel.TRACE
+        ktorLogLevel = LogLevel.BODY
     }.apply { sync() }
 
     while(true) {

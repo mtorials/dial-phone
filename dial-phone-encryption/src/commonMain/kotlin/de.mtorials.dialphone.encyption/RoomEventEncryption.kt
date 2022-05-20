@@ -24,7 +24,7 @@ class RoomEventEncryption(
     }
 
     @Throws(EncryptionException::class)
-    fun manageOutgoingMessageEvent(room: JoinedRoom, type: String, content: EventContent) : Pair<String, EventContent> {
+    suspend fun manageOutgoingMessageEvent(room: JoinedRoom, type: String, content: EventContent) : Pair<String, EventContent> {
         if (!room.encrypted) {
             return type to content
         }
