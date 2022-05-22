@@ -13,8 +13,7 @@ Supported platforms are jvm and js, but testing is mostly done on the jvm.
 See my [dial-bot](https://github.com/mtorials/dialbot) repository for a reference bot implementation.
 (outdated currently)
 
-Basic e2ee is implemented, but very experimental, not secure, and it only works on the jvm. **The encryption module
-is exclusively licensed under the terms of the [AGPL v3](agpl.txt) and not the Apache 2.0 license.**
+Basic e2ee is implemented, but very experimental, not secure, and it only works on the jvm.
 
 ## Installation
 
@@ -43,6 +42,8 @@ implementation("de.mtorials.dail-phone:dial-phone-core:0.3.0")
 implementation("de.mtorials.dail-phone:dial-phone-encryption:0.3.0")
 // If you want to use bot features, not well-supported at the moment
 implementation("de.mtorials.dail-phone:dial-phone-bot:0.3.0")
+// If you are interested in the matrix-sdk-crypto bindings
+implementation("de.mtorials.dail-phone:dial-phone-olm-machine:0.3.0")
 // A ktor client of your choice, here okhttp
 // please check for a newer version!
 implementation("io.ktor:ktor-client-okhttp:1.5.0")
@@ -163,7 +164,7 @@ val m: Message // could be for instance event.message
 m.redact()
 ```
 
-To redact other types of events you have you have to use this function:
+To redact other types of events you have to use this function:
 
 ```kotlin
 val phone: DialPhone // phone is a property of every entity in the library
@@ -200,7 +201,8 @@ val inviteListener = ListenerAdapter {
 
 All packages depend on kotlinx.coroutines and kotlinx.serialization.
 
-The encryption package depends on the kotlin olm bindings by benculy's [trixnity](https://gitlab.com/benkuly/trixnity).
+I use the `rust-sdk-crypto-ffi` bindings for kotlin to use the olm state machine.
+See the [matrix-rus-sdk repo](https://github.com/matrix-org/matrix-rust-sdk).
 
 # Contact
 
@@ -210,4 +212,4 @@ You can of course also just open an issue.
 # Contributing
 
 Everyone is welcome to contribute.
-See the [CONTRIBUTING.md](https://github.com/mtorials/dial-phone/blob/master/CONTRIBUTING.md) for more information.
+See the [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
