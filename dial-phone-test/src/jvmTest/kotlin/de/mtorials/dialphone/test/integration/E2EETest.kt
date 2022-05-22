@@ -6,7 +6,6 @@ import de.mtorials.dialphone.core.entities.room.JoinedRoom
 import de.mtorials.dialphone.core.listeners.ListenerAdapter
 import de.mtorials.dialphone.core.sendTextMessage
 import de.mtorials.dialphone.encyption.useEncryption
-import de.mtorials.dialphone.test.Helper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -14,12 +13,11 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 class E2EETest {
-    private val text = "This is a hopefully encrypted message!"
 
     lateinit var user1: DialPhone
     lateinit var user2: DialPhone
 
-    lateinit var room: JoinedRoom
+    private lateinit var room: JoinedRoom
 
     @Before
     fun `register and login as user`() {
@@ -27,12 +25,12 @@ class E2EETest {
             user1 = DialPhone(Configs.HOMESERVER_URL) {
                 asUser(Configs.TEST_USER, Configs.TEST_PWD, true)
                 useEncryption("../stores/one")
-                dialPhoneLogLevel = DialPhoneLogLevel.TRACE
+                dialPhoneLogLevel = DialPhoneLogLevel.ALL_MESSAGE
             }
             user2 = DialPhone(Configs.HOMESERVER_URL) {
                 asUser(Configs.USER2_USER, Configs.USER2_PWD, true)
                 useEncryption("../stores/two")
-                dialPhoneLogLevel = DialPhoneLogLevel.TRACE
+                dialPhoneLogLevel = DialPhoneLogLevel.ALL_MESSAGE
                 addListeners(ListenerAdapter {
                     onRoomInvited { it.room.join() }
                 })
@@ -50,16 +48,30 @@ class E2EETest {
     }
 
     @Test
-    fun `send and receive`() {
-        runBlocking {
-            delay(2000)
-            user2.addListeners(ListenerAdapter {
-                onRoomMessageReceived {
-                    if (it.room.encrypted) assertEquals(it.message.content.body, text)
-                }
-            })
-            room.sendTextMessage(text)
-            delay(5000)
-        }
+    fun `send and receive`() : Unit = runBlocking {
+        delay(2000)
+        user2.addListeners(ListenerAdapter {
+            onRoomMessageReceived {
+                if (it.room.encrypted) assertEquals(it.message.content.body, TEXT)
+            }
+        })
+        room.sendTextMessage(TEXT)
+        delay(5000)
+    }
+
+    @Test
+    fun `send and receive reversed`(): Unit = runBlocking {
+        user2.addListeners(ListenerAdapter {
+            onRoomMessageReceived {
+                if (it.room.encrypted) assertEquals(it.message.content.body, TEXT_ANSWER)
+            }
+        })
+        user2.getJoinedRoomById(room.id)?.sendTextMessage(TEXT_ANSWER)
+        delay(5000)
+    }
+
+    companion object {
+        private const val TEXT = "This is a hopefully encrypted message!"
+        private const val TEXT_ANSWER = "This is an pls encrypted answer!"
     }
 }
