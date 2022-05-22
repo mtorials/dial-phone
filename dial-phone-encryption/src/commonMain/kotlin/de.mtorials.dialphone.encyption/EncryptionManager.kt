@@ -1,13 +1,10 @@
 package de.mtorials.dialphone.encyption
 
 import de.mtorials.dialphone.api.E2EEClient
-import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.model.mevents.EventContent
 import de.mtorials.dialphone.api.requests.encryption.*
-import de.mtorials.dialphone.core.DialPhone
 import de.mtorials.dialphone.api.ids.roomId
 import de.mtorials.dialphone.api.ids.userId
-import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomEncrypted
 import de.mtorials.dialphone.api.requests.SendToDeviceRequest
@@ -18,6 +15,8 @@ import de.mtorials.dialphone.olmmachine.bindings.DeviceLists
 import de.mtorials.dialphone.olmmachine.bindings.OlmMachineInterface
 import de.mtorials.dialphone.olmmachine.bindings.Request
 import de.mtorials.dialphone.olmmachine.bindings.RequestType
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
@@ -32,13 +31,10 @@ class EncryptionManager(
     private val json: Json,
 ) {
 
-//    private val sessionLock = Mutex()
-
-    var ready: Boolean = false
-        private set
+    private val missingSessionsLock = Mutex()
 
     suspend fun decryptEvent(room: JoinedRoom, event: MatrixEvent) : MatrixEvent {
-        // TODO only if necessary
+        // TODO only if necessary?
         establishSessions(room)
         // TODO check for the room key?
         machine.requestRoomKey(json.encodeToString(event), room.id.toString()).run {
@@ -77,7 +73,6 @@ class EncryptionManager(
 //                logCrypt("Got decrypted json: ${it.getTypeName()}")
 //            }
         }
-        ready = true
     }
 
     suspend fun update() {
@@ -88,8 +83,10 @@ class EncryptionManager(
     }
 
     private suspend fun establishSessions(room: JoinedRoom) {
-        machine.getMissingSessions(room.members.map { it.id.toString() })?.run {
-            handleRequest(this)
+        missingSessionsLock.withLock {
+            machine.getMissingSessions(room.members.map { it.id.toString() })?.run {
+                handleRequest(this)
+            }
         }
     }
 
