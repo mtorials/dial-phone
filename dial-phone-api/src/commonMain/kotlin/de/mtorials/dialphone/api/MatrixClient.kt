@@ -28,9 +28,10 @@ abstract class MatrixClient(
             url(newPath)
             method = httpMethod
             header("Authorization", "Bearer $token")
-            header("Content-Type", "application/json")
+            if (bodyValue is String) contentType(ContentType.Application.Any)
+            else contentType(ContentType.Application.Json)
             parameters.forEach { parameter(it.first, it.second) }
-            if (bodyValue != null) setBody(bodyValue)
+            setBody(bodyValue)
         }.body()
     }
 

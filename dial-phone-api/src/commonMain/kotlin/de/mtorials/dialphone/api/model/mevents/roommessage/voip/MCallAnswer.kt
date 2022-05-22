@@ -14,6 +14,8 @@ data class MCallAnswer(
     override val sender: UserId,
     override val id: EventId,
     override val content: MCallAnswerContent,
+    @SerialName("origin_server_ts")
+    override val originServerTs: Long? = null,
 ) : MatrixMessageEvent {
     @Serializable
     data class MCallAnswerContent(

@@ -4,6 +4,7 @@ import de.mtorials.dialhone.bot.Command
 import de.mtorials.dialhone.bot.CommandListener
 import de.mtorials.dialphone.api.ids.RoomId
 import de.mtorials.dialphone.api.ids.UserId
+import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.api.model.enums.Membership
 import de.mtorials.dialphone.api.model.mevents.roomstate.MRoomMember
 import de.mtorials.dialphone.core.DialPhone
@@ -22,7 +23,7 @@ import java.util.*
 const val MATRIX_SERVER = "https://matrix.mtorials.de"
 
 @kotlinx.serialization.Serializable
-data class ChangeConfig(val token: String)
+data class ChangeConfig(val token: String, val username: String, val password: String)
 val changeConfig : ChangeConfig = Json.decodeFromString(File("config.json").readText())
 
 val ping = Command("ping", "ping the bot", "ping") {
@@ -46,17 +47,17 @@ val changeName = Command("cname", "change my display name in this room", "cname 
 fun main() {
     runBlocking {
         val phone = DialPhone(MATRIX_SERVER) {
-            withToken(changeConfig.token)
+            asUser(changeConfig.username, changeConfig.password)
             addListeners(CommandListener("!", listOf(ping, changeName), ping))
-            useEncryption()
-//                useEncryption()
+            dialPhoneLogLevel = DialPhoneLogLevel.ALL_MESSAGE
+            useEncryption("../store/changedisplay/")
         }
 //            val job = phone.sync()
 //                delay(10000)
         println("Hello")
 //            delay(5000)
         println(phone.getJoinedRooms().map { it.name })
-        val trium = phone.getJoinedRoomByName("temp trium machina") ?: error("404")
+        val trium = phone.getJoinedRoomByName("test3") ?: error("404")
 //            trium.sendStateEvent(MRoomMember.Content(
 //                Membership.JOIN,
 //                null,

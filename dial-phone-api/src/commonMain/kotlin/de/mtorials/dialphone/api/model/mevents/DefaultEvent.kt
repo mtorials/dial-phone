@@ -1,6 +1,7 @@
 package de.mtorials.dialphone.api.model.mevents
 
 import de.mtorials.dialphone.api.ids.UserId
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable

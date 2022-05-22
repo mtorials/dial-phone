@@ -13,7 +13,9 @@ class MRoomRedaction(
     override val id: EventId,
     override val content: Content,
     @SerialName("redacts")
-    val redactionEventId: String
+    val redactionEventId: String,
+    @SerialName("origin_server_ts")
+    override val originServerTs: Long? = null,
 ) : MatrixMessageEvent {
     @Serializable
     data class Content(

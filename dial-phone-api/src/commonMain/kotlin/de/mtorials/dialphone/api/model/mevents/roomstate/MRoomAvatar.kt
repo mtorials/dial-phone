@@ -18,7 +18,9 @@ class MRoomAvatar(
     override val stateKey: String,
     @SerialName("prev_content")
     @Serializable
-    override val prevContent: Content? = null
+    override val prevContent: Content? = null,
+    @SerialName("origin_server_ts")
+    override val originServerTs: Long? = null,
 ) : MatrixStateEvent {
     @Serializable
     data class Content(

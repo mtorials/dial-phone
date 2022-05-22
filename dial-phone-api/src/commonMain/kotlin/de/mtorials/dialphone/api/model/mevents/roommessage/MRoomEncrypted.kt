@@ -1,9 +1,10 @@
-package de.mtorials.dialphone.api.model.mevents
+package de.mtorials.dialphone.api.model.mevents.roommessage
 
 import de.mtorials.dialphone.api.ids.EventId
 import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.model.enums.MessageEncryptionAlgorithm
-import de.mtorials.dialphone.api.model.mevents.roommessage.MessageEventContent
+import de.mtorials.dialphone.api.model.mevents.MatrixEvent
+import de.mtorials.dialphone.api.model.mevents.MatrixRoomEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -14,8 +15,10 @@ class MRoomEncrypted(
     override val sender: UserId,
     @SerialName("event_id")
     val id: EventId? = null,
-    override val content: MRoomEncryptedContent
-) : MatrixEvent {
+    override val content: MRoomEncryptedContent,
+    @SerialName("origin_server_ts")
+    override val originServerTs: Long? = null,
+) : MatrixRoomEvent {
     @Serializable
     data class MRoomEncryptedContent(
         @SerialName("sender_key")

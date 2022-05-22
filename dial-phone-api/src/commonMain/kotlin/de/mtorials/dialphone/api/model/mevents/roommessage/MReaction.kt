@@ -17,7 +17,9 @@ class MReaction(
     override val sender: UserId,
     @SerialName("event_id")
     override val id: EventId,
-    override val content: Content
+    override val content: Content,
+    @SerialName("origin_server_ts")
+    override val originServerTs: Long? = null,
 ) : MatrixMessageEvent {
     @Serializable
     data class Content(

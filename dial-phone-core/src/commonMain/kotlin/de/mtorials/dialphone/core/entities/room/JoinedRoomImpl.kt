@@ -6,12 +6,12 @@ import de.mtorials.dialphone.api.ids.UserId
 import de.mtorials.dialphone.api.ids.userId
 import de.mtorials.dialphone.api.model.enums.JoinRule
 import de.mtorials.dialphone.api.model.enums.Membership
-import de.mtorials.dialphone.api.model.mevents.MRoomEncrypted
 import de.mtorials.dialphone.api.model.mevents.roommessage.MRoomMessage
 import de.mtorials.dialphone.api.model.mevents.roommessage.MessageEventContent
 import de.mtorials.dialphone.api.model.mevents.roomstate.*
 import de.mtorials.dialphone.core.DialPhoneImpl
 import de.mtorials.dialphone.core.entities.*
+import de.mtorials.dialphone.core.exceptions.UnableToSendException
 
 class JoinedRoomImpl internal constructor(
     override val phone: DialPhoneImpl,
@@ -47,12 +47,16 @@ class JoinedRoomImpl internal constructor(
     override val stateEvents: List<MatrixStateEvent>
         get() = phone.cache.state.getRoomStateEvents(roomId = id)
 
+    @Throws(UnableToSendException::class)
     override suspend fun sendMessageEvent(content: MessageEventContent, eventType: String) : EventId {
-        return phone.sendMessageEvent(
-            type = eventType,
-            roomId = id,
-            content = content
-        )
+        try {
+            val (type, cont) = phone.beforeMessageEventPublish(this, eventType, content)
+            return phone.sendMessageEvent(
+                type = type,
+                roomId = id,
+                content = cont
+            )
+        } catch (e: Exception) { throw UnableToSendException(e) }
     }
 
     override suspend fun sendStateEvent(content: StateEventContent, eventType: String, stateKey: String): EventId {

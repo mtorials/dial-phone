@@ -25,6 +25,7 @@ kotlin {
                 // MODULES
                 implementation(project(":dial-phone-api"))
                 implementation(project(":dial-phone-core"))
+                implementation(project(":dial-phone-olm-machine"))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
@@ -35,7 +36,12 @@ kotlin {
 
 //                implementation("io.github.matrixkt:olm:0.1.8")
                 implementation(trixnity("olm"))
+
+
             }
         }
     }
 }
+
+
+

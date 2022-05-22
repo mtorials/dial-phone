@@ -1,11 +1,19 @@
 package de.mtorials.dialphone.api.logging
 
-enum class DialPhoneLogLevel(
-    val level: Int,
+data class DialPhoneLogLevel(
+    val sync: LoggingPolicy,
+    val crypto: LoggingPolicy,
 ) {
-    NONE(0),
-    ERROR(5),
-    SYNC_EXCEPTIONS(10),
-    DEBUG(15),
-    TRACE(20),
+    data class LoggingPolicy(val message: Boolean, val traces: Boolean)
+
+    companion object {
+        val ALL_MESSAGE = DialPhoneLogLevel(
+            sync = LoggingPolicy(true, false),
+            crypto = LoggingPolicy(true, false),
+        )
+        val NONE = DialPhoneLogLevel(
+            sync = LoggingPolicy(false, false),
+            crypto = LoggingPolicy(false, false),
+        )
+    }
 }

@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class KeyQueryRequest(
+data class KeyQueryRequest  (
     /**
      * A map from user ID, to a list of device IDs,
      * or to an empty list to indicate all devices for the corresponding user.

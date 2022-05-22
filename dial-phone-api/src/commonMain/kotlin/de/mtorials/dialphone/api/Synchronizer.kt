@@ -2,6 +2,7 @@ package de.mtorials.dialphone.api
 
 import de.mtorials.dialphone.api.exceptions.SyncException
 import de.mtorials.dialphone.api.ids.RoomId
+import de.mtorials.dialphone.api.ids.roomId
 import de.mtorials.dialphone.api.listeners.GenericListener
 import de.mtorials.dialphone.api.logging.DialPhoneLogLevel
 import de.mtorials.dialphone.api.model.mevents.MatrixEvent
@@ -11,6 +12,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.util.reflect.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonObject
@@ -25,7 +27,7 @@ class Synchronizer(
     private val logLevel: DialPhoneLogLevel,
 ) {
 
-    var beforeRoomEvent: (MatrixEvent) -> MatrixEvent = { it }
+    var beforeRoomEvent: suspend (RoomId, MatrixEvent) -> MatrixEvent = { _, e -> e }
 
     private val listeners: MutableList<GenericListener<DialPhoneApi>> = mutableListOf()
 
@@ -42,8 +44,9 @@ class Synchronizer(
     ) = coroutineScope.launch {
         do {
             val res : SyncResponse = getSyncResponse()
-            if (logLevel.level >= DialPhoneLogLevel.TRACE.level) println("[Synchronizer] Got sync response")
+            if (logLevel.sync.message) println("[Synchronizer] Got sync response with next batch ${res.nextBatch}.")
             lastTimeBatch = res.nextBatch
+            listeners.forEach { it.onSyncResponse(res, coroutineScope) }
             // Joined
             res.rooms?.join?.forEach { (roomID, roomEvents) ->
                 roomEvents.timeline.events.forEach {
@@ -93,10 +96,10 @@ class Synchronizer(
             launch {
                 try {
                     val e: MatrixEvent = phone.format.decodeFromJsonElement(event)
-                    val eventAfter = beforeRoomEvent(e)
+                    val eventAfter = beforeRoomEvent(roomId.roomId(), e)
                     it.callback(eventAfter, RoomId(roomId))
-                } catch (e: RuntimeException) {
-                    if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()
+                } catch (e: Exception) {
+                    if (logLevel.sync.traces) e.printStackTrace()
                 }
             }
         }
@@ -108,8 +111,8 @@ class Synchronizer(
                 try {
                     val e: MatrixEvent = phone.format.decodeFromJsonElement(event)
                     it.onToDeviceEvent(e, phone, initialSync)
-                } catch (e: RuntimeException) {
-                    if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()
+                } catch (e: Exception) {
+                    if (logLevel.sync.traces) e.printStackTrace()
                 }
             }
         }
@@ -122,8 +125,8 @@ class Synchronizer(
                     val e : MatrixEvent = phone.format.decodeFromJsonElement(event)
                     it.onPresenceEvent(e, phone, initialSync)
                 }
-                catch (e: RuntimeException) {
-                    if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()
+                catch (e: Exception) {
+                    if (logLevel.sync.traces) e.printStackTrace()
                 }
             }
         }

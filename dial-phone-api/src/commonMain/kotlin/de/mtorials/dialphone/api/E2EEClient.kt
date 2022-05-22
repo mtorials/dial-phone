@@ -25,11 +25,15 @@ class E2EEClient(
     suspend fun uploadKeys(request: KeyUploadRequest) : KeyUploadResponse =
         request(HttpMethod.Post, "keys/upload", bodyValue = request)
 
+    suspend fun uploadKeys(request: String) : KeyUploadResponse =
+        request(HttpMethod.Post, "keys/upload", bodyValue = request)
+
     /**
      * https://spec.matrix.org/v1.1/client-server-api/#post_matrixclientv3keysclaim
      */
     suspend fun claimKeys(request: KeyClaimRequest) : KeyClaimResponse =
         request(HttpMethod.Post, "keys/claim", bodyValue = request)
+
 
     suspend fun queryKeys(request: KeyQueryRequest) : KeyQueryResponse =
         request(HttpMethod.Post, "keys/query", bodyValue = request)

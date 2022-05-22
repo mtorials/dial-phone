@@ -15,7 +15,9 @@ class MRoomCreate(
     @SerialName("state_key")
     override val stateKey: String,
     @SerialName("prev_content")
-    override val prevContent: Content? = null
+    override val prevContent: Content? = null,
+    @SerialName("origin_server_ts")
+    override val originServerTs: Long? = null,
 ) : MatrixStateEvent {
     @Serializable
     data class Content(
