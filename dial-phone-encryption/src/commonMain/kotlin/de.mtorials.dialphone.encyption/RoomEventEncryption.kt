@@ -18,7 +18,7 @@ class RoomEventEncryption(
 ) {
 
     suspend fun manageIncomingRoomEvent(roomId: RoomId, event: MatrixEvent): MatrixEvent {
-        if (event !is MRoomEncrypted) return event
+        if (event !is MRoomEncrypted || !manager.ready) return event
         return when (event.content.algorithm) {
             OLM_V1_CURVE25519_AES_SHA1 -> throw UnexpectedEncryptionAlgorithmException(eventType = "room message event")
             // TODO optimize room

@@ -23,7 +23,7 @@ fun main() = runBlocking {
                 it.run { println("${room.name} :: ${message.author.displayName ?: message.author.id} :: ${message.content.body}") }
             }
         })
-        dialPhoneLogLevel = DialPhoneLogLevel.TRACE
+        dialPhoneLogLevel = DialPhoneLogLevel.ALL_MESSAGE
         ktorLogLevel = LogLevel.BODY
     }.apply { sync() }
 

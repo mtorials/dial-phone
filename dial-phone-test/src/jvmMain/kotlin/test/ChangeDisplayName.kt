@@ -47,9 +47,9 @@ val changeName = Command("cname", "change my display name in this room", "cname 
 fun main() {
     runBlocking {
         val phone = DialPhone(MATRIX_SERVER) {
-            withToken(changeConfig.token)
+            asUser(changeConfig.username, changeConfig.password)
             addListeners(CommandListener("!", listOf(ping, changeName), ping))
-            dialPhoneLogLevel = DialPhoneLogLevel.TRACE
+            dialPhoneLogLevel = DialPhoneLogLevel.ALL_MESSAGE
             useEncryption("../store/changedisplay/")
         }
 //            val job = phone.sync()
@@ -57,7 +57,7 @@ fun main() {
         println("Hello")
 //            delay(5000)
         println(phone.getJoinedRooms().map { it.name })
-        val trium = phone.getJoinedRoomByName("temp trium machina") ?: error("404")
+        val trium = phone.getJoinedRoomByName("test3") ?: error("404")
 //            trium.sendStateEvent(MRoomMember.Content(
 //                Membership.JOIN,
 //                null,

@@ -12,6 +12,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.util.reflect.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonObject
@@ -43,7 +44,7 @@ class Synchronizer(
     ) = coroutineScope.launch {
         do {
             val res : SyncResponse = getSyncResponse()
-            if (logLevel.level >= DialPhoneLogLevel.TRACE.level) println("[Synchronizer] Got sync response")
+            if (logLevel.sync.message) println("[Synchronizer] Got sync response with next batch ${res.nextBatch}.")
             lastTimeBatch = res.nextBatch
             listeners.forEach { it.onSyncResponse(res, coroutineScope) }
             // Joined
@@ -98,7 +99,7 @@ class Synchronizer(
                     val eventAfter = beforeRoomEvent(roomId.roomId(), e)
                     it.callback(eventAfter, RoomId(roomId))
                 } catch (e: Exception) {
-                    if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()
+                    if (logLevel.sync.traces) e.printStackTrace()
                 }
             }
         }
@@ -111,7 +112,7 @@ class Synchronizer(
                     val e: MatrixEvent = phone.format.decodeFromJsonElement(event)
                     it.onToDeviceEvent(e, phone, initialSync)
                 } catch (e: Exception) {
-                    if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()
+                    if (logLevel.sync.traces) e.printStackTrace()
                 }
             }
         }
@@ -125,7 +126,7 @@ class Synchronizer(
                     it.onPresenceEvent(e, phone, initialSync)
                 }
                 catch (e: Exception) {
-                    if (logLevel.level >= DialPhoneLogLevel.SYNC_EXCEPTIONS.level) e.printStackTrace()
+                    if (logLevel.sync.traces) e.printStackTrace()
                 }
             }
         }

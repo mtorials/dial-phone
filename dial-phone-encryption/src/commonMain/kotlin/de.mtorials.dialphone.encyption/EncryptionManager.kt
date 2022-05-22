@@ -34,6 +34,9 @@ class EncryptionManager(
 
 //    private val sessionLock = Mutex()
 
+    var ready: Boolean = false
+        private set
+
     suspend fun decryptEvent(room: JoinedRoom, event: MatrixEvent) : MatrixEvent {
         // TODO only if necessary
         establishSessions(room)
@@ -67,12 +70,21 @@ class EncryptionManager(
                 DeviceLists(this?.changed ?: emptyList(), this?.left ?: emptyList()) },
             keyCounts = keyCounts,
             unusedFallbackKeys = null,
-        )
+        ).run {
+            if (!phone.logLevel.crypto.message || equals("{}")) return@run
+            logCrypt("Got json: $this")
+//            json.decodeFromString<List<MatrixEvent>>(this).forEach {
+//                logCrypt("Got decrypted json: ${it.getTypeName()}")
+//            }
+        }
+        ready = true
     }
 
     suspend fun update() {
-        logCrypt("Making outgoing request...")
-        machine.outgoingRequests().forEach { handleRequest(it) }
+        machine.outgoingRequests().forEach {
+            logCrypt("Making outgoing request $it")
+            handleRequest(it)
+        }
     }
 
     private suspend fun establishSessions(room: JoinedRoom) {
@@ -122,6 +134,6 @@ class EncryptionManager(
     }
 
     private fun logCrypt(msg: String) {
-        if (phone.logLevel.level >= DialPhoneLogLevel.DEBUG.level) println("[CRYPTO] $msg")
+        if (phone.logLevel.crypto.message) println("[CRYPTO] $msg")
     }
 }

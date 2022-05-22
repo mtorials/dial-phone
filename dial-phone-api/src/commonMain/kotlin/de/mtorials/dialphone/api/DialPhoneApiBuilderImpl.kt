@@ -27,7 +27,7 @@ open class DialPhoneApiBuilderImpl(
 ) : DialPhoneApiBuilder {
 
     override var ktorLogLevel = LogLevel.NONE
-    override var dialPhoneLogLevel: DialPhoneLogLevel = DialPhoneLogLevel.ERROR
+    override var dialPhoneLogLevel: DialPhoneLogLevel = DialPhoneLogLevel.NONE
 
     var token: String? = null
     var ownId: UserId? = null
