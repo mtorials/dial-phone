@@ -15,3 +15,4 @@ config2.json
 */ChangeDisplayName.kt
 matrix-sdk-crypto
 stores
+dial-phone-olm-machine/src/jvmMain/resources/libuniffi_olm.so
