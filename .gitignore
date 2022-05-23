@@ -16,3 +16,4 @@ config2.json
 matrix-sdk-crypto
 stores
 dial-phone-olm-machine/src/jvmMain/resources/libuniffi_olm.so
+dial-phone-olm-machine/sdk
