@@ -44,7 +44,7 @@ open class RustBuffer : Structure() {
 
     companion object {
         internal fun alloc(size: Int = 0) = rustCall() { status ->
-            _UniFFILib.INSTANCE.ffi_olm_eb49_rustbuffer_alloc(size, status).also {
+            _UniFFILib.INSTANCE.ffi_olm_8dab_rustbuffer_alloc(size, status).also {
                 if (it.data == null) {
                     throw RuntimeException("RustBuffer.alloc() returned null data pointer (size=$size)")
                 }
@@ -52,7 +52,7 @@ open class RustBuffer : Structure() {
         }
 
         internal fun free(buf: RustBuffer.ByValue) = rustCall() { status ->
-            _UniFFILib.INSTANCE.ffi_olm_eb49_rustbuffer_free(buf, status)
+            _UniFFILib.INSTANCE.ffi_olm_8dab_rustbuffer_free(buf, status)
         }
     }
 
@@ -264,12 +264,12 @@ internal interface _UniFFILib : Library {
         }
     }
 
-    fun ffi_olm_eb49_OlmMachine_object_free(
+    fun ffi_olm_8dab_OlmMachine_object_free(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_OlmMachine_new(
+    fun olm_8dab_OlmMachine_new(
         user_id: RustBuffer.ByValue,
         device_id: RustBuffer.ByValue,
         path: RustBuffer.ByValue,
@@ -277,22 +277,22 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus
     ): Pointer
 
-    fun olm_eb49_OlmMachine_identity_keys(
+    fun olm_8dab_OlmMachine_identity_keys(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_user_id(
+    fun olm_8dab_OlmMachine_user_id(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_device_id(
+    fun olm_8dab_OlmMachine_device_id(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_receive_sync_changes(
+    fun olm_8dab_OlmMachine_receive_sync_changes(
         ptr: Pointer,
         events: RustBuffer.ByValue,
         device_changes: RustBuffer.ByValue,
@@ -301,12 +301,12 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_outgoing_requests(
+    fun olm_8dab_OlmMachine_outgoing_requests(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_mark_request_as_sent(
+    fun olm_8dab_OlmMachine_mark_request_as_sent(
         ptr: Pointer,
         request_id: RustBuffer.ByValue,
         request_type: RustBuffer.ByValue,
@@ -314,14 +314,14 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_OlmMachine_decrypt_room_event(
+    fun olm_8dab_OlmMachine_decrypt_room_event(
         ptr: Pointer,
         event: RustBuffer.ByValue,
         room_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_encrypt(
+    fun olm_8dab_OlmMachine_encrypt(
         ptr: Pointer,
         room_id: RustBuffer.ByValue,
         event_type: RustBuffer.ByValue,
@@ -329,98 +329,98 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_get_identity(
+    fun olm_8dab_OlmMachine_get_identity(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_verify_identity(
+    fun olm_8dab_OlmMachine_verify_identity(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_get_device(
+    fun olm_8dab_OlmMachine_get_device(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         device_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_mark_device_as_trusted(
+    fun olm_8dab_OlmMachine_mark_device_as_trusted(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         device_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_OlmMachine_verify_device(
+    fun olm_8dab_OlmMachine_verify_device(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         device_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_get_user_devices(
+    fun olm_8dab_OlmMachine_get_user_devices(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_is_user_tracked(
+    fun olm_8dab_OlmMachine_is_user_tracked(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Byte
 
-    fun olm_eb49_OlmMachine_update_tracked_users(
+    fun olm_8dab_OlmMachine_update_tracked_users(
         ptr: Pointer,
         users: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_OlmMachine_get_missing_sessions(
+    fun olm_8dab_OlmMachine_get_missing_sessions(
         ptr: Pointer,
         users: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_share_room_key(
+    fun olm_8dab_OlmMachine_share_room_key(
         ptr: Pointer,
         room_id: RustBuffer.ByValue,
         users: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_receive_unencrypted_verification_event(
+    fun olm_8dab_OlmMachine_receive_unencrypted_verification_event(
         ptr: Pointer,
         event: RustBuffer.ByValue,
         room_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_OlmMachine_get_verification_requests(
+    fun olm_8dab_OlmMachine_get_verification_requests(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_get_verification_request(
-        ptr: Pointer,
-        user_id: RustBuffer.ByValue,
-        flow_id: RustBuffer.ByValue,
-        _uniffi_out_err: RustCallStatus
-    ): RustBuffer.ByValue
-
-    fun olm_eb49_OlmMachine_get_verification(
+    fun olm_8dab_OlmMachine_get_verification_request(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         flow_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_request_verification(
+    fun olm_8dab_OlmMachine_get_verification(
+        ptr: Pointer,
+        user_id: RustBuffer.ByValue,
+        flow_id: RustBuffer.ByValue,
+        _uniffi_out_err: RustCallStatus
+    ): RustBuffer.ByValue
+
+    fun olm_8dab_OlmMachine_request_verification(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         room_id: RustBuffer.ByValue,
@@ -429,20 +429,20 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_verification_request_content(
+    fun olm_8dab_OlmMachine_verification_request_content(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         methods: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_request_self_verification(
+    fun olm_8dab_OlmMachine_request_self_verification(
         ptr: Pointer,
         methods: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_request_verification_with_device(
+    fun olm_8dab_OlmMachine_request_verification_with_device(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         device_id: RustBuffer.ByValue,
@@ -450,7 +450,7 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_accept_verification_request(
+    fun olm_8dab_OlmMachine_accept_verification_request(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         flow_id: RustBuffer.ByValue,
@@ -458,14 +458,14 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_confirm_verification(
+    fun olm_8dab_OlmMachine_confirm_verification(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         flow_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_cancel_verification(
+    fun olm_8dab_OlmMachine_cancel_verification(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         flow_id: RustBuffer.ByValue,
@@ -473,49 +473,49 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_start_sas_with_device(
+    fun olm_8dab_OlmMachine_start_sas_with_device(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         device_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_start_sas_verification(
+    fun olm_8dab_OlmMachine_start_sas_verification(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         flow_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_accept_sas_verification(
+    fun olm_8dab_OlmMachine_accept_sas_verification(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         flow_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_get_emoji_index(
+    fun olm_8dab_OlmMachine_get_emoji_index(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         flow_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_get_decimals(
+    fun olm_8dab_OlmMachine_get_decimals(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         flow_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_start_qr_verification(
+    fun olm_8dab_OlmMachine_start_qr_verification(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         flow_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_scan_qr_code(
+    fun olm_8dab_OlmMachine_scan_qr_code(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         flow_id: RustBuffer.ByValue,
@@ -523,28 +523,28 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_generate_qr_code(
+    fun olm_8dab_OlmMachine_generate_qr_code(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         flow_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_request_room_key(
+    fun olm_8dab_OlmMachine_request_room_key(
         ptr: Pointer,
         event: RustBuffer.ByValue,
         room_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_export_keys(
+    fun olm_8dab_OlmMachine_export_keys(
         ptr: Pointer,
         passphrase: RustBuffer.ByValue,
         rounds: Int,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_import_keys(
+    fun olm_8dab_OlmMachine_import_keys(
         ptr: Pointer,
         keys: RustBuffer.ByValue,
         passphrase: RustBuffer.ByValue,
@@ -552,144 +552,144 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_import_decrypted_keys(
+    fun olm_8dab_OlmMachine_import_decrypted_keys(
         ptr: Pointer,
         keys: RustBuffer.ByValue,
         progress_listener: Long,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_discard_room_key(
+    fun olm_8dab_OlmMachine_discard_room_key(
         ptr: Pointer,
         room_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_OlmMachine_cross_signing_status(
+    fun olm_8dab_OlmMachine_cross_signing_status(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_bootstrap_cross_signing(
+    fun olm_8dab_OlmMachine_bootstrap_cross_signing(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_export_cross_signing_keys(
+    fun olm_8dab_OlmMachine_export_cross_signing_keys(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_import_cross_signing_keys(
+    fun olm_8dab_OlmMachine_import_cross_signing_keys(
         ptr: Pointer,
         export: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_OlmMachine_is_identity_verified(
+    fun olm_8dab_OlmMachine_is_identity_verified(
         ptr: Pointer,
         user_id: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Byte
 
-    fun olm_eb49_OlmMachine_sign(
+    fun olm_8dab_OlmMachine_sign(
         ptr: Pointer,
         message: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_enable_backup_v1(
+    fun olm_8dab_OlmMachine_enable_backup_v1(
         ptr: Pointer,
         key: RustBuffer.ByValue,
         version: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_OlmMachine_disable_backup(
+    fun olm_8dab_OlmMachine_disable_backup(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_OlmMachine_backup_room_keys(
+    fun olm_8dab_OlmMachine_backup_room_keys(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_save_recovery_key(
+    fun olm_8dab_OlmMachine_save_recovery_key(
         ptr: Pointer,
         key: RustBuffer.ByValue,
         version: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_OlmMachine_room_key_counts(
+    fun olm_8dab_OlmMachine_room_key_counts(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_get_backup_keys(
+    fun olm_8dab_OlmMachine_get_backup_keys(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_OlmMachine_backup_enabled(
+    fun olm_8dab_OlmMachine_backup_enabled(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): Byte
 
-    fun olm_eb49_OlmMachine_verify_backup(
+    fun olm_8dab_OlmMachine_verify_backup(
         ptr: Pointer,
         auth_data: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Byte
 
-    fun ffi_olm_eb49_BackupRecoveryKey_object_free(
+    fun ffi_olm_8dab_BackupRecoveryKey_object_free(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_BackupRecoveryKey_new(
+    fun olm_8dab_BackupRecoveryKey_new(
         _uniffi_out_err: RustCallStatus
     ): Pointer
 
-    fun olm_eb49_BackupRecoveryKey_from_passphrase(
+    fun olm_8dab_BackupRecoveryKey_from_passphrase(
         passphrase: RustBuffer.ByValue,
         salt: RustBuffer.ByValue,
         rounds: Int,
         _uniffi_out_err: RustCallStatus
     ): Pointer
 
-    fun olm_eb49_BackupRecoveryKey_new_from_passphrase(
+    fun olm_8dab_BackupRecoveryKey_new_from_passphrase(
         passphrase: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Pointer
 
-    fun olm_eb49_BackupRecoveryKey_from_base64(
+    fun olm_8dab_BackupRecoveryKey_from_base64(
         key: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Pointer
 
-    fun olm_eb49_BackupRecoveryKey_from_base58(
+    fun olm_8dab_BackupRecoveryKey_from_base58(
         key: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Pointer
 
-    fun olm_eb49_BackupRecoveryKey_to_base58(
+    fun olm_8dab_BackupRecoveryKey_to_base58(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_BackupRecoveryKey_to_base64(
+    fun olm_8dab_BackupRecoveryKey_to_base64(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_BackupRecoveryKey_megolm_v1_public_key(
+    fun olm_8dab_BackupRecoveryKey_megolm_v1_public_key(
         ptr: Pointer,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun olm_eb49_BackupRecoveryKey_decrypt_v1(
+    fun olm_8dab_BackupRecoveryKey_decrypt_v1(
         ptr: Pointer,
         ephemeral_key: RustBuffer.ByValue,
         mac: RustBuffer.ByValue,
@@ -697,22 +697,22 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun ffi_olm_eb49_Logger_init_callback(
+    fun ffi_olm_8dab_Logger_init_callback(
         callback_stub: ForeignCallback,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun ffi_olm_eb49_ProgressListener_init_callback(
+    fun ffi_olm_8dab_ProgressListener_init_callback(
         callback_stub: ForeignCallback,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_set_logger(
+    fun olm_8dab_set_logger(
         logger: Long,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun olm_eb49_migrate(
+    fun olm_8dab_migrate(
         data: RustBuffer.ByValue,
         path: RustBuffer.ByValue,
         passphrase: RustBuffer.ByValue,
@@ -720,22 +720,22 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun ffi_olm_eb49_rustbuffer_alloc(
+    fun ffi_olm_8dab_rustbuffer_alloc(
         size: Int,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun ffi_olm_eb49_rustbuffer_from_bytes(
+    fun ffi_olm_8dab_rustbuffer_from_bytes(
         bytes: ForeignBytes.ByValue,
         _uniffi_out_err: RustCallStatus
     ): RustBuffer.ByValue
 
-    fun ffi_olm_eb49_rustbuffer_free(
+    fun ffi_olm_8dab_rustbuffer_free(
         buf: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus
     ): Unit
 
-    fun ffi_olm_eb49_rustbuffer_reserve(
+    fun ffi_olm_8dab_rustbuffer_reserve(
         buf: RustBuffer.ByValue,
         additional: Int,
         _uniffi_out_err: RustCallStatus
@@ -1030,7 +1030,7 @@ class BackupRecoveryKey(
     constructor() :
         this(
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_BackupRecoveryKey_new(_status)
+                _UniFFILib.INSTANCE.olm_8dab_BackupRecoveryKey_new(_status)
             }
         )
 
@@ -1044,14 +1044,14 @@ class BackupRecoveryKey(
      */
     protected override fun freeRustArcPtr() {
         rustCall() { status ->
-            _UniFFILib.INSTANCE.ffi_olm_eb49_BackupRecoveryKey_object_free(this.pointer, status)
+            _UniFFILib.INSTANCE.ffi_olm_8dab_BackupRecoveryKey_object_free(this.pointer, status)
         }
     }
 
     override fun toBase58(): String =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_BackupRecoveryKey_to_base58(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_BackupRecoveryKey_to_base58(it, _status)
             }
         }.let {
             FfiConverterString.lift(it)
@@ -1059,7 +1059,7 @@ class BackupRecoveryKey(
     override fun toBase64(): String =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_BackupRecoveryKey_to_base64(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_BackupRecoveryKey_to_base64(it, _status)
             }
         }.let {
             FfiConverterString.lift(it)
@@ -1067,7 +1067,7 @@ class BackupRecoveryKey(
     override fun megolmV1PublicKey(): MegolmV1BackupKey =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_BackupRecoveryKey_megolm_v1_public_key(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_BackupRecoveryKey_megolm_v1_public_key(it, _status)
             }
         }.let {
             FfiConverterTypeMegolmV1BackupKey.lift(it)
@@ -1076,7 +1076,7 @@ class BackupRecoveryKey(
     @Throws(PkDecryptionException::class)override fun decryptV1(ephemeralKey: String, mac: String, ciphertext: String): String =
         callWithPointer {
             rustCallWithError(PkDecryptionException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_BackupRecoveryKey_decrypt_v1(it, FfiConverterString.lower(ephemeralKey), FfiConverterString.lower(mac), FfiConverterString.lower(ciphertext), _status)
+                _UniFFILib.INSTANCE.olm_8dab_BackupRecoveryKey_decrypt_v1(it, FfiConverterString.lower(ephemeralKey), FfiConverterString.lower(mac), FfiConverterString.lower(ciphertext), _status)
             }
         }.let {
             FfiConverterString.lift(it)
@@ -1086,25 +1086,25 @@ class BackupRecoveryKey(
         fun fromPassphrase(passphrase: String, salt: String, rounds: Int): BackupRecoveryKey =
             BackupRecoveryKey(
                 rustCall() { _status ->
-                    _UniFFILib.INSTANCE.olm_eb49_BackupRecoveryKey_from_passphrase(FfiConverterString.lower(passphrase), FfiConverterString.lower(salt), FfiConverterInt.lower(rounds), _status)
+                    _UniFFILib.INSTANCE.olm_8dab_BackupRecoveryKey_from_passphrase(FfiConverterString.lower(passphrase), FfiConverterString.lower(salt), FfiConverterInt.lower(rounds), _status)
                 }
             )
         fun newFromPassphrase(passphrase: String): BackupRecoveryKey =
             BackupRecoveryKey(
                 rustCall() { _status ->
-                    _UniFFILib.INSTANCE.olm_eb49_BackupRecoveryKey_new_from_passphrase(FfiConverterString.lower(passphrase), _status)
+                    _UniFFILib.INSTANCE.olm_8dab_BackupRecoveryKey_new_from_passphrase(FfiConverterString.lower(passphrase), _status)
                 }
             )
         fun fromBase64(key: String): BackupRecoveryKey =
             BackupRecoveryKey(
                 rustCallWithError(DecodeException) { _status ->
-                    _UniFFILib.INSTANCE.olm_eb49_BackupRecoveryKey_from_base64(FfiConverterString.lower(key), _status)
+                    _UniFFILib.INSTANCE.olm_8dab_BackupRecoveryKey_from_base64(FfiConverterString.lower(key), _status)
                 }
             )
         fun fromBase58(key: String): BackupRecoveryKey =
             BackupRecoveryKey(
                 rustCallWithError(DecodeException) { _status ->
-                    _UniFFILib.INSTANCE.olm_eb49_BackupRecoveryKey_from_base58(FfiConverterString.lower(key), _status)
+                    _UniFFILib.INSTANCE.olm_8dab_BackupRecoveryKey_from_base58(FfiConverterString.lower(key), _status)
                 }
             )
     }
@@ -1139,7 +1139,7 @@ class OlmMachine(
     constructor(userId: String, deviceId: String, path: String, passphrase: String?) :
         this(
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_new(FfiConverterString.lower(userId), FfiConverterString.lower(deviceId), FfiConverterString.lower(path), FfiConverterOptionalString.lower(passphrase), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_new(FfiConverterString.lower(userId), FfiConverterString.lower(deviceId), FfiConverterString.lower(path), FfiConverterOptionalString.lower(passphrase), _status)
             }
         )
 
@@ -1153,14 +1153,14 @@ class OlmMachine(
      */
     protected override fun freeRustArcPtr() {
         rustCall() { status ->
-            _UniFFILib.INSTANCE.ffi_olm_eb49_OlmMachine_object_free(this.pointer, status)
+            _UniFFILib.INSTANCE.ffi_olm_8dab_OlmMachine_object_free(this.pointer, status)
         }
     }
 
     override fun identityKeys(): Map<String, String> =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_identity_keys(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_identity_keys(it, _status)
             }
         }.let {
             FfiConverterMapStringString.lift(it)
@@ -1168,7 +1168,7 @@ class OlmMachine(
     override fun userId(): String =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_user_id(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_user_id(it, _status)
             }
         }.let {
             FfiConverterString.lift(it)
@@ -1176,7 +1176,7 @@ class OlmMachine(
     override fun deviceId(): String =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_device_id(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_device_id(it, _status)
             }
         }.let {
             FfiConverterString.lift(it)
@@ -1185,7 +1185,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun receiveSyncChanges(events: String, deviceChanges: DeviceLists, keyCounts: Map<String, Int>, unusedFallbackKeys: List<String>?): String =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_receive_sync_changes(it, FfiConverterString.lower(events), FfiConverterTypeDeviceLists.lower(deviceChanges), FfiConverterMapStringInt.lower(keyCounts), FfiConverterOptionalSequenceString.lower(unusedFallbackKeys), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_receive_sync_changes(it, FfiConverterString.lower(events), FfiConverterTypeDeviceLists.lower(deviceChanges), FfiConverterMapStringInt.lower(keyCounts), FfiConverterOptionalSequenceString.lower(unusedFallbackKeys), _status)
             }
         }.let {
             FfiConverterString.lift(it)
@@ -1194,7 +1194,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun outgoingRequests(): List<Request> =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_outgoing_requests(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_outgoing_requests(it, _status)
             }
         }.let {
             FfiConverterSequenceTypeRequest.lift(it)
@@ -1203,14 +1203,14 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun markRequestAsSent(requestId: String, requestType: RequestType, response: String) =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_mark_request_as_sent(it, FfiConverterString.lower(requestId), FfiConverterTypeRequestType.lower(requestType), FfiConverterString.lower(response), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_mark_request_as_sent(it, FfiConverterString.lower(requestId), FfiConverterTypeRequestType.lower(requestType), FfiConverterString.lower(response), _status)
             }
         }
 
     @Throws(DecryptionException::class)override fun decryptRoomEvent(event: String, roomId: String): DecryptedEvent =
         callWithPointer {
             rustCallWithError(DecryptionException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_decrypt_room_event(it, FfiConverterString.lower(event), FfiConverterString.lower(roomId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_decrypt_room_event(it, FfiConverterString.lower(event), FfiConverterString.lower(roomId), _status)
             }
         }.let {
             FfiConverterTypeDecryptedEvent.lift(it)
@@ -1219,7 +1219,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun encrypt(roomId: String, eventType: String, content: String): String =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_encrypt(it, FfiConverterString.lower(roomId), FfiConverterString.lower(eventType), FfiConverterString.lower(content), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_encrypt(it, FfiConverterString.lower(roomId), FfiConverterString.lower(eventType), FfiConverterString.lower(content), _status)
             }
         }.let {
             FfiConverterString.lift(it)
@@ -1228,7 +1228,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun getIdentity(userId: String): UserIdentity? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_get_identity(it, FfiConverterString.lower(userId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_get_identity(it, FfiConverterString.lower(userId), _status)
             }
         }.let {
             FfiConverterOptionalTypeUserIdentity.lift(it)
@@ -1237,7 +1237,7 @@ class OlmMachine(
     @Throws(SignatureException::class)override fun verifyIdentity(userId: String): SignatureUploadRequest =
         callWithPointer {
             rustCallWithError(SignatureException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_verify_identity(it, FfiConverterString.lower(userId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_verify_identity(it, FfiConverterString.lower(userId), _status)
             }
         }.let {
             FfiConverterTypeSignatureUploadRequest.lift(it)
@@ -1246,7 +1246,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun getDevice(userId: String, deviceId: String): Device? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_get_device(it, FfiConverterString.lower(userId), FfiConverterString.lower(deviceId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_get_device(it, FfiConverterString.lower(userId), FfiConverterString.lower(deviceId), _status)
             }
         }.let {
             FfiConverterOptionalTypeDevice.lift(it)
@@ -1255,14 +1255,14 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun markDeviceAsTrusted(userId: String, deviceId: String) =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_mark_device_as_trusted(it, FfiConverterString.lower(userId), FfiConverterString.lower(deviceId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_mark_device_as_trusted(it, FfiConverterString.lower(userId), FfiConverterString.lower(deviceId), _status)
             }
         }
 
     @Throws(SignatureException::class)override fun verifyDevice(userId: String, deviceId: String): SignatureUploadRequest =
         callWithPointer {
             rustCallWithError(SignatureException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_verify_device(it, FfiConverterString.lower(userId), FfiConverterString.lower(deviceId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_verify_device(it, FfiConverterString.lower(userId), FfiConverterString.lower(deviceId), _status)
             }
         }.let {
             FfiConverterTypeSignatureUploadRequest.lift(it)
@@ -1271,7 +1271,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun getUserDevices(userId: String): List<Device> =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_get_user_devices(it, FfiConverterString.lower(userId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_get_user_devices(it, FfiConverterString.lower(userId), _status)
             }
         }.let {
             FfiConverterSequenceTypeDevice.lift(it)
@@ -1280,7 +1280,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun isUserTracked(userId: String): Boolean =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_is_user_tracked(it, FfiConverterString.lower(userId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_is_user_tracked(it, FfiConverterString.lower(userId), _status)
             }
         }.let {
             FfiConverterBoolean.lift(it)
@@ -1288,14 +1288,14 @@ class OlmMachine(
     override fun updateTrackedUsers(users: List<String>) =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_update_tracked_users(it, FfiConverterSequenceString.lower(users), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_update_tracked_users(it, FfiConverterSequenceString.lower(users), _status)
             }
         }
 
     @Throws(CryptoStoreException::class)override fun getMissingSessions(users: List<String>): Request? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_get_missing_sessions(it, FfiConverterSequenceString.lower(users), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_get_missing_sessions(it, FfiConverterSequenceString.lower(users), _status)
             }
         }.let {
             FfiConverterOptionalTypeRequest.lift(it)
@@ -1304,7 +1304,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun shareRoomKey(roomId: String, users: List<String>): List<Request> =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_share_room_key(it, FfiConverterString.lower(roomId), FfiConverterSequenceString.lower(users), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_share_room_key(it, FfiConverterString.lower(roomId), FfiConverterSequenceString.lower(users), _status)
             }
         }.let {
             FfiConverterSequenceTypeRequest.lift(it)
@@ -1313,14 +1313,14 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun receiveUnencryptedVerificationEvent(event: String, roomId: String) =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_receive_unencrypted_verification_event(it, FfiConverterString.lower(event), FfiConverterString.lower(roomId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_receive_unencrypted_verification_event(it, FfiConverterString.lower(event), FfiConverterString.lower(roomId), _status)
             }
         }
 
     override fun getVerificationRequests(userId: String): List<VerificationRequest> =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_get_verification_requests(it, FfiConverterString.lower(userId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_get_verification_requests(it, FfiConverterString.lower(userId), _status)
             }
         }.let {
             FfiConverterSequenceTypeVerificationRequest.lift(it)
@@ -1328,7 +1328,7 @@ class OlmMachine(
     override fun getVerificationRequest(userId: String, flowId: String): VerificationRequest? =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_get_verification_request(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_get_verification_request(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
             }
         }.let {
             FfiConverterOptionalTypeVerificationRequest.lift(it)
@@ -1336,7 +1336,7 @@ class OlmMachine(
     override fun getVerification(userId: String, flowId: String): Verification? =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_get_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_get_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
             }
         }.let {
             FfiConverterOptionalTypeVerification.lift(it)
@@ -1345,7 +1345,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun requestVerification(userId: String, roomId: String, eventId: String, methods: List<String>): VerificationRequest? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_request_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(roomId), FfiConverterString.lower(eventId), FfiConverterSequenceString.lower(methods), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_request_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(roomId), FfiConverterString.lower(eventId), FfiConverterSequenceString.lower(methods), _status)
             }
         }.let {
             FfiConverterOptionalTypeVerificationRequest.lift(it)
@@ -1354,7 +1354,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun verificationRequestContent(userId: String, methods: List<String>): String? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_verification_request_content(it, FfiConverterString.lower(userId), FfiConverterSequenceString.lower(methods), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_verification_request_content(it, FfiConverterString.lower(userId), FfiConverterSequenceString.lower(methods), _status)
             }
         }.let {
             FfiConverterOptionalString.lift(it)
@@ -1363,7 +1363,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun requestSelfVerification(methods: List<String>): RequestVerificationResult? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_request_self_verification(it, FfiConverterSequenceString.lower(methods), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_request_self_verification(it, FfiConverterSequenceString.lower(methods), _status)
             }
         }.let {
             FfiConverterOptionalTypeRequestVerificationResult.lift(it)
@@ -1372,7 +1372,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun requestVerificationWithDevice(userId: String, deviceId: String, methods: List<String>): RequestVerificationResult? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_request_verification_with_device(it, FfiConverterString.lower(userId), FfiConverterString.lower(deviceId), FfiConverterSequenceString.lower(methods), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_request_verification_with_device(it, FfiConverterString.lower(userId), FfiConverterString.lower(deviceId), FfiConverterSequenceString.lower(methods), _status)
             }
         }.let {
             FfiConverterOptionalTypeRequestVerificationResult.lift(it)
@@ -1380,7 +1380,7 @@ class OlmMachine(
     override fun acceptVerificationRequest(userId: String, flowId: String, methods: List<String>): OutgoingVerificationRequest? =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_accept_verification_request(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), FfiConverterSequenceString.lower(methods), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_accept_verification_request(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), FfiConverterSequenceString.lower(methods), _status)
             }
         }.let {
             FfiConverterOptionalTypeOutgoingVerificationRequest.lift(it)
@@ -1389,7 +1389,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun confirmVerification(userId: String, flowId: String): ConfirmVerificationResult? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_confirm_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_confirm_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
             }
         }.let {
             FfiConverterOptionalTypeConfirmVerificationResult.lift(it)
@@ -1397,7 +1397,7 @@ class OlmMachine(
     override fun cancelVerification(userId: String, flowId: String, cancelCode: String): OutgoingVerificationRequest? =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_cancel_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), FfiConverterString.lower(cancelCode), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_cancel_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), FfiConverterString.lower(cancelCode), _status)
             }
         }.let {
             FfiConverterOptionalTypeOutgoingVerificationRequest.lift(it)
@@ -1406,7 +1406,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun startSasWithDevice(userId: String, deviceId: String): StartSasResult? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_start_sas_with_device(it, FfiConverterString.lower(userId), FfiConverterString.lower(deviceId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_start_sas_with_device(it, FfiConverterString.lower(userId), FfiConverterString.lower(deviceId), _status)
             }
         }.let {
             FfiConverterOptionalTypeStartSasResult.lift(it)
@@ -1415,7 +1415,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun startSasVerification(userId: String, flowId: String): StartSasResult? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_start_sas_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_start_sas_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
             }
         }.let {
             FfiConverterOptionalTypeStartSasResult.lift(it)
@@ -1423,7 +1423,7 @@ class OlmMachine(
     override fun acceptSasVerification(userId: String, flowId: String): OutgoingVerificationRequest? =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_accept_sas_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_accept_sas_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
             }
         }.let {
             FfiConverterOptionalTypeOutgoingVerificationRequest.lift(it)
@@ -1431,7 +1431,7 @@ class OlmMachine(
     override fun getEmojiIndex(userId: String, flowId: String): List<Int>? =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_get_emoji_index(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_get_emoji_index(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
             }
         }.let {
             FfiConverterOptionalSequenceInt.lift(it)
@@ -1439,7 +1439,7 @@ class OlmMachine(
     override fun getDecimals(userId: String, flowId: String): List<Int>? =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_get_decimals(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_get_decimals(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
             }
         }.let {
             FfiConverterOptionalSequenceInt.lift(it)
@@ -1448,7 +1448,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun startQrVerification(userId: String, flowId: String): QrCode? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_start_qr_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_start_qr_verification(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
             }
         }.let {
             FfiConverterOptionalTypeQrCode.lift(it)
@@ -1456,7 +1456,7 @@ class OlmMachine(
     override fun scanQrCode(userId: String, flowId: String, data: String): ScanResult? =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_scan_qr_code(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), FfiConverterString.lower(data), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_scan_qr_code(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), FfiConverterString.lower(data), _status)
             }
         }.let {
             FfiConverterOptionalTypeScanResult.lift(it)
@@ -1464,7 +1464,7 @@ class OlmMachine(
     override fun generateQrCode(userId: String, flowId: String): String? =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_generate_qr_code(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_generate_qr_code(it, FfiConverterString.lower(userId), FfiConverterString.lower(flowId), _status)
             }
         }.let {
             FfiConverterOptionalString.lift(it)
@@ -1473,7 +1473,7 @@ class OlmMachine(
     @Throws(DecryptionException::class)override fun requestRoomKey(event: String, roomId: String): KeyRequestPair =
         callWithPointer {
             rustCallWithError(DecryptionException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_request_room_key(it, FfiConverterString.lower(event), FfiConverterString.lower(roomId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_request_room_key(it, FfiConverterString.lower(event), FfiConverterString.lower(roomId), _status)
             }
         }.let {
             FfiConverterTypeKeyRequestPair.lift(it)
@@ -1482,7 +1482,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun exportKeys(passphrase: String, rounds: Int): String =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_export_keys(it, FfiConverterString.lower(passphrase), FfiConverterInt.lower(rounds), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_export_keys(it, FfiConverterString.lower(passphrase), FfiConverterInt.lower(rounds), _status)
             }
         }.let {
             FfiConverterString.lift(it)
@@ -1491,7 +1491,7 @@ class OlmMachine(
     @Throws(KeyImportException::class)override fun importKeys(keys: String, passphrase: String, progressListener: ProgressListener): KeysImportResult =
         callWithPointer {
             rustCallWithError(KeyImportException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_import_keys(it, FfiConverterString.lower(keys), FfiConverterString.lower(passphrase), FfiConverterTypeProgressListener.lower(progressListener), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_import_keys(it, FfiConverterString.lower(keys), FfiConverterString.lower(passphrase), FfiConverterTypeProgressListener.lower(progressListener), _status)
             }
         }.let {
             FfiConverterTypeKeysImportResult.lift(it)
@@ -1500,7 +1500,7 @@ class OlmMachine(
     @Throws(KeyImportException::class)override fun importDecryptedKeys(keys: String, progressListener: ProgressListener): KeysImportResult =
         callWithPointer {
             rustCallWithError(KeyImportException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_import_decrypted_keys(it, FfiConverterString.lower(keys), FfiConverterTypeProgressListener.lower(progressListener), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_import_decrypted_keys(it, FfiConverterString.lower(keys), FfiConverterTypeProgressListener.lower(progressListener), _status)
             }
         }.let {
             FfiConverterTypeKeysImportResult.lift(it)
@@ -1509,14 +1509,14 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun discardRoomKey(roomId: String) =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_discard_room_key(it, FfiConverterString.lower(roomId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_discard_room_key(it, FfiConverterString.lower(roomId), _status)
             }
         }
 
     override fun crossSigningStatus(): CrossSigningStatus =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_cross_signing_status(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_cross_signing_status(it, _status)
             }
         }.let {
             FfiConverterTypeCrossSigningStatus.lift(it)
@@ -1525,7 +1525,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun bootstrapCrossSigning(): BootstrapCrossSigningResult =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_bootstrap_cross_signing(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_bootstrap_cross_signing(it, _status)
             }
         }.let {
             FfiConverterTypeBootstrapCrossSigningResult.lift(it)
@@ -1533,7 +1533,7 @@ class OlmMachine(
     override fun exportCrossSigningKeys(): CrossSigningKeyExport? =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_export_cross_signing_keys(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_export_cross_signing_keys(it, _status)
             }
         }.let {
             FfiConverterOptionalTypeCrossSigningKeyExport.lift(it)
@@ -1542,14 +1542,14 @@ class OlmMachine(
     @Throws(SecretImportException::class)override fun importCrossSigningKeys(export: CrossSigningKeyExport) =
         callWithPointer {
             rustCallWithError(SecretImportException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_import_cross_signing_keys(it, FfiConverterTypeCrossSigningKeyExport.lower(export), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_import_cross_signing_keys(it, FfiConverterTypeCrossSigningKeyExport.lower(export), _status)
             }
         }
 
     @Throws(CryptoStoreException::class)override fun isIdentityVerified(userId: String): Boolean =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_is_identity_verified(it, FfiConverterString.lower(userId), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_is_identity_verified(it, FfiConverterString.lower(userId), _status)
             }
         }.let {
             FfiConverterBoolean.lift(it)
@@ -1557,7 +1557,7 @@ class OlmMachine(
     override fun sign(message: String): Map<String, Map<String, String>> =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_sign(it, FfiConverterString.lower(message), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_sign(it, FfiConverterString.lower(message), _status)
             }
         }.let {
             FfiConverterMapStringMapStringString.lift(it)
@@ -1566,21 +1566,21 @@ class OlmMachine(
     @Throws(DecodeException::class)override fun enableBackupV1(key: MegolmV1BackupKey, version: String) =
         callWithPointer {
             rustCallWithError(DecodeException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_enable_backup_v1(it, FfiConverterTypeMegolmV1BackupKey.lower(key), FfiConverterString.lower(version), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_enable_backup_v1(it, FfiConverterTypeMegolmV1BackupKey.lower(key), FfiConverterString.lower(version), _status)
             }
         }
 
     @Throws(CryptoStoreException::class)override fun disableBackup() =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_disable_backup(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_disable_backup(it, _status)
             }
         }
 
     @Throws(CryptoStoreException::class)override fun backupRoomKeys(): Request? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_backup_room_keys(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_backup_room_keys(it, _status)
             }
         }.let {
             FfiConverterOptionalTypeRequest.lift(it)
@@ -1589,14 +1589,14 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun saveRecoveryKey(key: String?, version: String?) =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_save_recovery_key(it, FfiConverterOptionalString.lower(key), FfiConverterOptionalString.lower(version), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_save_recovery_key(it, FfiConverterOptionalString.lower(key), FfiConverterOptionalString.lower(version), _status)
             }
         }
 
     @Throws(CryptoStoreException::class)override fun roomKeyCounts(): RoomKeyCounts =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_room_key_counts(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_room_key_counts(it, _status)
             }
         }.let {
             FfiConverterTypeRoomKeyCounts.lift(it)
@@ -1605,7 +1605,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun getBackupKeys(): BackupKeys? =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_get_backup_keys(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_get_backup_keys(it, _status)
             }
         }.let {
             FfiConverterOptionalTypeBackupKeys.lift(it)
@@ -1613,7 +1613,7 @@ class OlmMachine(
     override fun backupEnabled(): Boolean =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_backup_enabled(it, _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_backup_enabled(it, _status)
             }
         }.let {
             FfiConverterBoolean.lift(it)
@@ -1622,7 +1622,7 @@ class OlmMachine(
     @Throws(CryptoStoreException::class)override fun verifyBackup(authData: String): Boolean =
         callWithPointer {
             rustCallWithError(CryptoStoreException) { _status ->
-                _UniFFILib.INSTANCE.olm_eb49_OlmMachine_verify_backup(it, FfiConverterString.lower(authData), _status)
+                _UniFFILib.INSTANCE.olm_8dab_OlmMachine_verify_backup(it, FfiConverterString.lower(authData), _status)
             }
         }.let {
             FfiConverterBoolean.lift(it)
@@ -3070,7 +3070,7 @@ public object FfiConverterTypeLogger : FfiConverterCallbackInterface<Logger>(
 ) {
     override fun register(lib: _UniFFILib) {
         rustCall() { status ->
-            lib.ffi_olm_eb49_Logger_init_callback(this.foreignCallback, status)
+            lib.ffi_olm_8dab_Logger_init_callback(this.foreignCallback, status)
         }
     }
 }
@@ -3128,7 +3128,7 @@ public object FfiConverterTypeProgressListener : FfiConverterCallbackInterface<P
 ) {
     override fun register(lib: _UniFFILib) {
         rustCall() { status ->
-            lib.ffi_olm_eb49_ProgressListener_init_callback(this.foreignCallback, status)
+            lib.ffi_olm_8dab_ProgressListener_init_callback(this.foreignCallback, status)
         }
     }
 }
@@ -3974,11 +3974,11 @@ public object FfiConverterMapStringMapStringListString : FfiConverterRustBuffer<
 } fun setLogger(logger: Logger) =
 
     rustCall() { _status ->
-        _UniFFILib.INSTANCE.olm_eb49_set_logger(FfiConverterTypeLogger.lower(logger), _status)
+        _UniFFILib.INSTANCE.olm_8dab_set_logger(FfiConverterTypeLogger.lower(logger), _status)
     }
 
 @Throws(MigrationException::class)fun migrate(data: MigrationData, path: String, passphrase: String?, progressListener: ProgressListener) =
 
     rustCallWithError(MigrationException) { _status ->
-        _UniFFILib.INSTANCE.olm_eb49_migrate(FfiConverterTypeMigrationData.lower(data), FfiConverterString.lower(path), FfiConverterOptionalString.lower(passphrase), FfiConverterTypeProgressListener.lower(progressListener), _status)
+        _UniFFILib.INSTANCE.olm_8dab_migrate(FfiConverterTypeMigrationData.lower(data), FfiConverterString.lower(path), FfiConverterOptionalString.lower(passphrase), FfiConverterTypeProgressListener.lower(progressListener), _status)
     }
